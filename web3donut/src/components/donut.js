@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
+import logo from '../libs/raidGuildLogo.png';
 const protocolsData = require("../libs/eth-ecosystem");
-const logo = require("../libs/raidGuildLogo.png");
 const d3 = require("d3");
 
 function Donut() {
@@ -65,21 +65,14 @@ function Donut() {
         .attr("transform", d => labelTransform(d.current))
         .text(d => d.data.name);
 
-    const parent = g.append("circle")
-        .datum(root)
-        .attr("r", radius)
-        .attr("fill", "none")
+    const parent = g.append("image")
         .attr("pointer-events", "all")
-        .on("click", clicked);
-        //for image
-        // .append('svg:image')
-        // .attr({
-        //   'xlink:href': '../libs/raidGuildLogo.png',
-        //   x: 0,
-        //   y: 0,
-        //   width: 10,
-        //   height: 10
-        // });
+        .on("click", clicked)
+          .attr("xlink:href",logo)
+          .attr("width", 160)
+          .attr("height", 160)
+          .attr('x',-80)
+          .attr('y',-80)
 
     function clicked(event, p) {
       parent.datum(p.parent || root);
@@ -143,7 +136,8 @@ function Donut() {
           margin: "10vh auto",
         }}
       >
-      <svg><img src={logo} alt="Raid Guild"></img></svg>
+      <svg></svg>
+
       </div>
 
   );
