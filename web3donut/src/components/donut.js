@@ -1,11 +1,12 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import logo from '../libs/raidGuildLogo.png';
 import SearchBar from './searchBar';
 
-const protocolsData = require("../libs/eth-ecosystem");
 const d3 = require("d3");
+const protocolsData = require("../libs/eth-ecosystem");
 
-function Donut() {
+function Donut(props) {
+  const [dataGraphed, setDataGraphed] = useState();
   const width = 932;
   const radius = width / 6
   const format = d3.format(",d")
@@ -16,7 +17,13 @@ function Donut() {
   .padRadius(radius * 1.5)
   .innerRadius(d => d.y0 * radius)
   .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
-  const data = protocolsData;
+  let data;
+  if(!dataGraphed || dataGraphed.children.length === 0){
+    data = protocolsData;
+  }else{
+    data = dataGraphed;
+    // hande center click (undefined) to retrieve the biggest DB
+  }
 
   const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))
   const partition = data => {
@@ -77,11 +84,12 @@ function Donut() {
           .attr('x',-80)
           .attr('y',-80)
 
+    // if(p === undefined){
+    //   console.log('ya se gil!')
+    //   chart();
+    // }
     function clicked(event, p) {
-      // console.log(event)
-      // console.log(p)
       parent.datum(p.parent || root);
-
       root.each(d => d.target = {
         x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
         x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
@@ -122,13 +130,13 @@ function Donut() {
       const y = (d.y0 + d.y1) / 2 * radius;
       return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
     }
-
-
     return svg.node();
   }
+
   useEffect(() => {
+    d3.selectAll("svg > *").remove();
     chart(); //useRef()?
-  });
+  },[dataGraphed]);
 
 
   return (
@@ -141,7 +149,12 @@ function Donut() {
           margin:"0vh auto"
         }}
         id='environment'>
-        <SearchBar protocolsData={protocolsData} />
+        {props.searchBar?
+          <SearchBar
+            protocolsData={protocolsData}
+            setDataGraphed = {setDataGraphed}
+             />
+        :null}
         </div>
         <div
           id="3d-graph"

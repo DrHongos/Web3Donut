@@ -4,7 +4,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-      <Donut />
+      <Donut
+        searchBar = {true}
+      />
       </header>
     </div>
   );

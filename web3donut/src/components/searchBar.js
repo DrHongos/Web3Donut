@@ -16,21 +16,21 @@ function SearchBar(props) {
     })
   }
 
-  // function hasChildren(node) {
-  //   return (typeof node === 'object')
-  //       && (typeof node.children !== 'undefined')
-  //       && (node.children.length > 0);
-  // }
 
   function findResults(arr,term){
     let matches = [];
     if (!Array.isArray(arr)) return matches;
+    if (term === '') return arr;
     exploreTree(arr, term, matches);
     setResults(matches);
+    if(matches !== results){
+      props.setDataGraphed(treeSearch(matches))
+      }
     return matches;
   }
 
   function clearResults(){
+    props.setDataGraphed('')
     setResults([]);
   }
 
@@ -40,12 +40,17 @@ function SearchBar(props) {
       }else{
         clearResults();
       }
-  },[search, props]);
+  },[search]);
 
-  // function getFlat({ name, children = [] }) {
+  // function getFlat({ name, children = [] }) { // get all names in a tree obj
   //   return [name].concat(...children.map(getFlat));
   // }
-
+  // function hasChildren(node) {
+    //   return (typeof node === 'object')
+    //       && (typeof node.children !== 'undefined')
+    //       && (node.children.length > 0);
+    // }
+  const treeSearch = (res) => {return {name:"ethereum", children:res}};
 
   return (
       <div
@@ -56,21 +61,13 @@ function SearchBar(props) {
         }}
       >
       <input onChange={(e)=>setSearch(e.target.value)}></input>
-{/*
-        <button onClick={()=>getLastItems(results[0])}
-      //   results.forEach((item) =>{
-      //   let test = getFlat(item)
-      //   console.log(test)
-      // })}
-      >Tests</button>
-*/}
-      {results?
+      {/*results?
         <ul>
           {results.map(x=>{return <li key={x.name}>{x&&x.children?
-            <button onClick={()=>setSelection(x)}>{x.name}/{x.children[0].name}</button>
+            <button onClick={()=>console.log(x)}>{x.name}/{x.children[0].name}</button>
             :x.name}</li>})}
         </ul>
-      :null}
+      :null*/}
       {selection?
         <div>
           <h3>{selection.name}</h3>
