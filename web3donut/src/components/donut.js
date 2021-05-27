@@ -1,5 +1,7 @@
 import React, {useEffect} from "react";
 import logo from '../libs/raidGuildLogo.png';
+import SearchBar from './searchBar';
+
 const protocolsData = require("../libs/eth-ecosystem");
 const d3 = require("d3");
 
@@ -63,6 +65,7 @@ function Donut() {
         .attr("dy", "0.35em")
         .attr("fill-opacity", d => +labelVisible(d.current))
         .attr("transform", d => labelTransform(d.current))
+        .style('fill', 'white')
         .text(d => d.data.name);
 
     const parent = g.append("image")
@@ -75,6 +78,8 @@ function Donut() {
           .attr('y',-80)
 
     function clicked(event, p) {
+      // console.log(event)
+      // console.log(p)
       parent.datum(p.parent || root);
 
       root.each(d => d.target = {
@@ -84,7 +89,7 @@ function Donut() {
         y1: Math.max(0, d.y1 - p.depth)
       });
 
-      const t = g.transition().duration(750);
+      const t = g.transition().duration(350);
 
       path.transition(t)
           .tween("data", d => {
@@ -127,19 +132,30 @@ function Donut() {
 
 
   return (
+    <div>
       <div
-        id="3d-graph"
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          margin: "10vh auto",
+          display:'flex',
+          justifyContent:'top',
+          alignItems:'left',
+          margin:"0vh auto"
         }}
-      >
-      <svg></svg>
+        id='environment'>
+        <SearchBar protocolsData={protocolsData} />
+        </div>
+        <div
+          id="3d-graph"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "5vh auto",
+          }}
+        >
+        <svg></svg>
 
       </div>
-
+    </div>
   );
 }
 
