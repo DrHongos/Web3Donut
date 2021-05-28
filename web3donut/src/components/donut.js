@@ -70,9 +70,9 @@ function Donut(props) {
       div.transition()
       .duration(200)
       .style("opacity", .9);
-      div.html(d.originalTarget.__data__.data.name + "<br/>" + d.originalTarget.__data__.data.url)//  + d.data.url)
-      .style("right", "100px") //(d3.event.pageX) +
-      .style("top",  "20px");//(d3.event.pageY - 28) +
+      div.html(`<span>name: ${d.originalTarget.__data__.data.name} </span><br/><span>url: ${d.originalTarget.__data__.data.url}</span>`)
+      .style("right", "100px")
+      .style("top",  "1px");
     })
     .on("mouseout", function(d) {
       div.transition()
