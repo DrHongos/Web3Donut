@@ -40,9 +40,7 @@ function Donut(props) {
 
   let chart = () => {
     const root = partition(data);
-    // let pageX = d3.event.pageX;
-    // let pageY = d3.event.pageY;
-    console.log(d3)
+
     root.each(d => d.current = d);
 
     const svg = d3.select("svg")
@@ -84,6 +82,10 @@ function Donut(props) {
         .style("cursor", "pointer")
         .on("click", clicked)
 
+    path.filter(d => !d.children)
+        .style("cursor","crosshair")
+        .on("click", goto)
+
     path.append("title")
         .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
 
@@ -112,9 +114,13 @@ function Donut(props) {
     //   console.log('ya se gil!')
     //   chart();
     // }
+
+    function goto(event, p){
+      const url = p.data.url;
+      if(url) window.open(url, '_blank').focus();
+    }
+
     function clicked(event, p) {
-      console.log(event)
-      console.log(p)
       parent.datum(p.parent || root);
       root.each(d => d.target = {
         x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
