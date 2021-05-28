@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import logo from '../libs/raidGuildLogo.png';
 import SearchBar from './searchBar';
+import '../App.css';
 
 const d3 = require("d3");
 const protocolsData = require("../libs/eth-ecosystem");
@@ -39,7 +40,9 @@ function Donut(props) {
 
   let chart = () => {
     const root = partition(data);
-
+    // let pageX = d3.event.pageX;
+    // let pageY = d3.event.pageY;
+    console.log(d3)
     root.each(d => d.current = d);
 
     const svg = d3.select("svg")
@@ -49,6 +52,12 @@ function Donut(props) {
     const g = svg.append("g")
         .attr("transform", `translate(${width / 2},${width / 2})`);
 
+
+    // Define the div for the tooltip
+    const div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("color", 'white');
+
 //
     const path = g.append("g")
     .selectAll("path")
@@ -56,11 +65,24 @@ function Donut(props) {
     .join("path")
     .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
     .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
-    .attr("d", d => arc(d.current));
+    .attr("d", d => arc(d.current))
+    .on("mouseover", function(d) {
+      div.transition()
+      .duration(200)
+      .style("opacity", .9);
+      div.html(d.originalTarget.__data__.data.name + "<br/>" + d.originalTarget.__data__.data.url)//  + d.data.url)
+      .style("right", "100px") //(d3.event.pageX) +
+      .style("top",  "20px");//(d3.event.pageY - 28) +
+    })
+    .on("mouseout", function(d) {
+      div.transition()
+      .duration(500)
+      .style("opacity", 0)
+    });
 
     path.filter(d => d.children)
         .style("cursor", "pointer")
-        .on("click", clicked);
+        .on("click", clicked)
 
     path.append("title")
         .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
@@ -91,6 +113,8 @@ function Donut(props) {
     //   chart();
     // }
     function clicked(event, p) {
+      console.log(event)
+      console.log(p)
       parent.datum(p.parent || root);
       root.each(d => d.target = {
         x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
