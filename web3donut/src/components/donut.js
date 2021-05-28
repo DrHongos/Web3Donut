@@ -25,7 +25,6 @@ function Donut(props) {
     data = protocolsData;
   }else{
     data = dataGraphed;
-    // handle center click (undefined) to retrieve the biggest DB
   }
 
   const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))
@@ -50,13 +49,10 @@ function Donut(props) {
     const g = svg.append("g")
         .attr("transform", `translate(${width / 2},${width / 2})`);
 
-
-    // Define the div for the tooltip
     const div = d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("color", 'white');
 
-//
     const path = g.append("g")
     .selectAll("path")
     .data(root.descendants().slice(1))
@@ -69,7 +65,7 @@ function Donut(props) {
       .duration(200)
       .style("opacity", .9);
       div.html(`<span>name: ${d.originalTarget.__data__.data.name} </span><br/><span>url: ${d.originalTarget.__data__.data.url}</span>`)
-      .style("right", "100px")
+      .style("right", "1px")
       .style("top",  "1px");
     })
     .on("mouseout", function(d) {
@@ -90,7 +86,7 @@ function Donut(props) {
         .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
 
     const label = g.append("g")
-        .attr("pointer-events", "none")
+        .attr("pointer-events", "all")
         .attr("text-anchor", "middle")
         .style("user-select", "none")
       .selectAll("text")
@@ -100,7 +96,18 @@ function Donut(props) {
         .attr("fill-opacity", d => +labelVisible(d.current))
         .attr("transform", d => labelTransform(d.current))
         .style('fill', 'white')
-        .text(d => d.data.name);
+        .text(d => d.data.name)
+        // .on("mouseover", d => {
+        //   label.transition()
+        //   .duration(100)
+        //   .style("font-size", "20px");
+        //
+        // })
+        // .on("mouseout", function(d) {
+        //   label.transition()
+        //   .duration(100)
+        //   .style("font-size", "10px");
+        // })
 
     const parent = g.append("image")
         .attr("pointer-events", "all")
@@ -110,10 +117,6 @@ function Donut(props) {
           .attr("height", 160)
           .attr('x',-80)
           .attr('y',-80)
-    // if(p === undefined){
-    //   console.log('ya se gil!')
-    //   chart();
-    // }
 
     function goto(event, p){
       const url = p.data.url;
@@ -121,6 +124,7 @@ function Donut(props) {
     }
 
     function clicked(event, p) {
+      if(!p) return;
       parent.datum(p.parent || root);
       root.each(d => d.target = {
         x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
@@ -165,13 +169,10 @@ function Donut(props) {
     return svg.node();
   }
 
-
   useEffect(() => {
     d3.selectAll("svg > *").remove();
     chart(); //useRef()?
   },[dataGraphed]);// eslint-disable-line react-hooks/exhaustive-deps
-
-
 
   return (
     <div>
