@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from "react";
 
 function SearchBar(props) {
-  const [selection, setSelection] = useState();
+  // const [selection, setSelection] = useState();
   const [search, setSearch] = useState();
   const [results, setResults] = useState([]);
+
   function exploreTree(arr, term, matches){
     arr.forEach(function(i) {
         if (i.name.toLowerCase().includes(term.toLowerCase())) {
@@ -15,7 +16,6 @@ function SearchBar(props) {
         }
     })
   }
-
 
   function findResults(arr,term){
     let matches = [];
@@ -40,7 +40,8 @@ function SearchBar(props) {
       }else{
         clearResults();
       }
-  },[search]);
+  },[search]); // eslint-disable-line react-hooks/exhaustive-deps
+  //
 
   // function getFlat({ name, children = [] }) { // get all names in a tree obj
   //   return [name].concat(...children.map(getFlat));
@@ -68,12 +69,12 @@ function SearchBar(props) {
             :x.name}</li>})}
         </ul>
       :null*/}
-      {selection?
+      {/*selection?
         <div>
           <h3>{selection.name}</h3>
           <a>{selection.url}</a>
         </div>
-      :null}
+      :null*/}
       </div>
 
   );

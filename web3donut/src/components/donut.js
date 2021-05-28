@@ -17,12 +17,14 @@ function Donut(props) {
   .padRadius(radius * 1.5)
   .innerRadius(d => d.y0 * radius)
   .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
+
   let data;
-  if(!dataGraphed || dataGraphed.children.length === 0){
+  const dataOriginal = !dataGraphed || dataGraphed.children.length === 0;
+  if(dataOriginal){
     data = protocolsData;
   }else{
     data = dataGraphed;
-    // hande center click (undefined) to retrieve the biggest DB
+    // handle center click (undefined) to retrieve the biggest DB
   }
 
   const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))
@@ -47,13 +49,14 @@ function Donut(props) {
     const g = svg.append("g")
         .attr("transform", `translate(${width / 2},${width / 2})`);
 
+//
     const path = g.append("g")
-      .selectAll("path")
-      .data(root.descendants().slice(1))
-      .join("path")
-        .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-        .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
-        .attr("d", d => arc(d.current));
+    .selectAll("path")
+    .data(root.descendants().slice(1))
+    .join("path")
+    .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+    .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
+    .attr("d", d => arc(d.current));
 
     path.filter(d => d.children)
         .style("cursor", "pointer")
@@ -83,7 +86,6 @@ function Donut(props) {
           .attr("height", 160)
           .attr('x',-80)
           .attr('y',-80)
-
     // if(p === undefined){
     //   console.log('ya se gil!')
     //   chart();
@@ -133,10 +135,12 @@ function Donut(props) {
     return svg.node();
   }
 
+
   useEffect(() => {
     d3.selectAll("svg > *").remove();
     chart(); //useRef()?
-  },[dataGraphed]);
+  },[dataGraphed]);// eslint-disable-line react-hooks/exhaustive-deps
+
 
 
   return (
