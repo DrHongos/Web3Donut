@@ -64,7 +64,7 @@ function Donut(props) {
       div.transition()
       .duration(200)
       .style("opacity", .9);
-      div.html(`<span>name: ${d.originalTarget.__data__.data.name} </span><br/><span>url: ${d.originalTarget.__data__.data.url}</span>`)
+      div.html(`<span>name: ${d.target.__data__ .data.name} </span><br/><span>url: ${d.target.__data__.data.url}</span>`)
       .style("right", "1px")
       .style("top",  "1px");
     })
