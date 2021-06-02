@@ -33,6 +33,12 @@ function Systems () {
     }
   }
 
+  async function initDatabases(){
+    fetchDB('/orbitdb/zdpuArkzsrwpHS7ptLh4wq6YV2HfQEKSxPZGEmfNuWw8H8QYC/DBLOGS')
+    fetchDB("/orbitdb/zdpuAwtDbBCfDK7sDpxZn7Jgzj9WxfPgS8STaxWadKtnmTwrk/access.manager",'requests')
+      // "/orbitdb/zdpuAyFL4s5i1LTNUsP1e6nZhUcv2uGDoMQZTRgukD1DwkmDn/Web3Donut")// old original
+  }
+
   // useEffect(() => {
   //   fetchDB(address)
   // }, [dispatch, address]) //fetchDB as callback?
@@ -46,9 +52,7 @@ function Systems () {
         dispatch({ type: actions.SYSTEMS.SET_ORBITDB, orbitdbStatus: 'Started' })
 
         //initDatabases
-        fetchDB('/orbitdb/zdpuArkzsrwpHS7ptLh4wq6YV2HfQEKSxPZGEmfNuWw8H8QYC/DBLOGS')
-        fetchDB("/orbitdb/zdpuAwtDbBCfDK7sDpxZn7Jgzj9WxfPgS8STaxWadKtnmTwrk/access.manager",'requests')
-          // "/orbitdb/zdpuAyFL4s5i1LTNUsP1e6nZhUcv2uGDoMQZTRgukD1DwkmDn/Web3Donut")// old original
+        await initDatabases()
 
       })
     })
@@ -77,7 +81,7 @@ function Systems () {
               <span>Connected</span>
               : <span>Not</span>
             }{' '}
-            <button onClick={()=>fetchDB('/orbitdb/zdpuArkzsrwpHS7ptLh4wq6YV2HfQEKSxPZGEmfNuWw8H8QYC/DBLOGS')}>Update</button>
+            <button onClick={()=>initDatabases()}>Update</button>
           </div>
     </div>
   )
