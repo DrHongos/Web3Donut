@@ -109,9 +109,7 @@ function DatabaseForm(props) {
     let msg = document.getElementById('requestMsg').value;
     let ids = appState.db.identity._id;
       await db.set(name,{name:name, msg:msg, id:ids})
-    // let requests = await sendRequest({name:name, msg:msg, id:ids})
-    console.log('sended!')
-    const entries = Object.keys(appState.db.all).map(e => ({ payload: { value: {key: e, value: appState.db.get(e)} } }))
+    const entries = Object.keys(db.all).map(e => ({ payload: { value: {key: e, value: db.get(e)} } }))
     dispatch({ type: actions.DBREQUESTS.SET_DBREQUESTS, db, entries })
   }
 
