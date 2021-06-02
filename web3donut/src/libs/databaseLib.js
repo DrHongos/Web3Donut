@@ -1,6 +1,7 @@
 import IPFS from 'ipfs'
 import Config from './config'
 import OrbitDB from 'orbit-db'
+const CID = require('cids')
 
 // const OrbitDB = require('orbit-db')
 // const IpfsClient = require('ipfs-http-client')
@@ -101,20 +102,25 @@ export const createDatabase = async (name, type, permissions) => {
 
 export const getPublicKey = async () =>{
   let ipfsId = await ipfsNode.id();
-  console.log(ipfsId.publicKey)
+  return ipfsId.publicKey;
+}
+
+export const getDagCid = async (cid, path) =>{
+  const properCid = new CID(cid);// cid should be a correct object, NOT cid.toString()!!
+  let dataR = (await ipfsNode.dag.get(properCid, {path}))
+  if(dataR){
+      let res = JSON.stringify(dataR)
+      console.log(res)
+      return res;
+    }
+    else{
+        console.log('error! data is undefined')
+      }
+
 }
 
 export const getDagObject = async (cid) =>{
-  // console.log('searching for cid: ',cid) // get doesnt work for objects? test cids!
-  // let dataR = (await ipfsNode.dag.get(cid)).value //, {path:'/value', pin:true}
-  // if(dataR){
-  //   return JSON.stringify(dataR);
-  // }
-  // else{
-  //   console.log('error! data is undefined')
-  // }
-
-  //from nfticket
+// difference between cat and get?? study deep!!
   for await (const result of ipfsNode.cat(cid.toString())) {
     console.log(result)
     return result
@@ -122,6 +128,7 @@ export const getDagObject = async (cid) =>{
 }
 
 export const dagPreparation = async (data) =>{
+  // in put {pin:true}
   let cid = await ipfsNode.dag.put(data);
   return cid;
 }
