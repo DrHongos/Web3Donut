@@ -3,56 +3,49 @@ import Config from './config'
 import OrbitDB from 'orbit-db'
 const CID = require('cids')
 
-// const OrbitDB = require('orbit-db')
-// const IpfsClient = require('ipfs-http-client')
+// const IpfsClient = require('ipfs-http-client') // for ipfs daemon cases??
 
 // OrbitDB instance
 let orbitdb
 let ipfsNode
 // Databases
-let programs
-
+// let programs //? will i use this?
+//else
+export const hardcodedDatabases = {
+  dbData: '/orbitdb/zdpuAsrXXBwzeqLJ1hp7f6zhqPXesTDx1fzYBiegmJDmdkugV/Registry', //log
+  counter: '/orbitdb/zdpuAzpyjbGpnzf1cZVf4dD45zCgMV6TopRxzs5yYtkFGbkn9/toolsCounter', //counter
+  writeRequests: "/orbitdb/zdpuAwtDbBCfDK7sDpxZn7Jgzj9WxfPgS8STaxWadKtnmTwrk/access.manager", //keyvalue
+}
 // Start IPFS
 export const initIPFS = async () => {
-  //control center style
-  // ipfsNode = await IPFS.create(Config.ipfs) // add repo?
-  // return ipfsNode;
-
 //test with ipfs-http-client
   // const ipfsNode = await IpfsClient.create(Config.ipfs)
   // return ipfsNode
 
-// medium post style https://medium.com/tallylab/pushing-the-limits-of-ipfs-and-orbitdb-c86c8512ef2f
  ipfsNode = await IPFS.create(Config.ipfs)
  return ipfsNode;
-
 }
 
 // Start OrbitDB
 export const initOrbitDB = async (ipfs) => {
-//Control center
-  // orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB'}) // add different repo from ipfs or its conflict
-// medium article
+// add different repo from ipfs or its conflict
   orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB'})
-  // window.globaldb = await window.orbitdb.log(ipfsId.publicKey);
-  // await globaldb.load();
-
   return orbitdb
 }
 
-export const getAllDatabases = async () => {
-  if (!programs && orbitdb) {
-    // Load programs database
-    programs = await orbitdb.feed('network.programs', {
-      accessController: { write: [orbitdb.identity.id] },
-      create: true
-    })
-    await programs.load()
-  }
-  return programs
-    ? programs.iterator({ limit: -1 }).collect()
-    : []
-}
+// export const getAllDatabases = async () => {
+//   if (!programs && orbitdb) {
+//     // Load programs database
+//     programs = await orbitdb.feed('network.programs', {
+//       accessController: { write: [orbitdb.identity.id] },
+//       create: true
+//     })
+//     await programs.load()
+//   }
+//   return programs
+//     ? programs.iterator({ limit: -1 }).collect()
+//     : []
+// }
 
 export const getDB = async (address) => {
   let db
@@ -60,17 +53,17 @@ export const getDB = async (address) => {
     db = await orbitdb.open(address)
     await db.load()
     db.events.on('replicated', () => {
-      console.log(db)
-      const result = db.iterator({ limit: -1 }).collect().map(e => e.payload.value)
+      console.log('replicated',db)
+      const result = db.iterator({ limit: -1 }).collect().map(e => e.payload.value) // gives an error
       console.log(result.join('\n'))
     })
   }
   return db
 }
 
-export const addDatabase = async (address) => {
+export const addDatabase = async (address) => { //searched
   const db = await orbitdb.open(address)
-  return programs.add({
+  return ({
     name: db.dbname,
     type: db.type,
     address: address,
@@ -91,7 +84,7 @@ export const createDatabase = async (name, type, permissions) => {
 
   const db = await orbitdb.create(name, type, { accessController })
 
-  return programs.add({
+  return ({
     name,
     type,
     address: db.address.toString(),
@@ -105,11 +98,16 @@ export const getPublicKey = async () =>{
   return ipfsId.publicKey;
 }
 
-export const getDagCid = async (cid, path) =>{
+export const recreateCid = (cid) =>{
   const properCid = new CID(cid);// cid should be a correct object, NOT cid.toString()!!
+  return properCid;
+}
+
+export const getDagCid = async (cid, path) =>{
+  let properCid = recreateCid(cid)
   let dataR = (await ipfsNode.dag.get(properCid, {path}))
   if(dataR){
-      let res = JSON.stringify(dataR)
+      let res = dataR //JSON.stringify()
       console.log(res)
       return res;
     }
@@ -122,7 +120,7 @@ export const getDagCid = async (cid, path) =>{
 export const getDagObject = async (cid) =>{
 // difference between cat and get?? study deep!!
   for await (const result of ipfsNode.cat(cid.toString())) {
-    console.log(result)
+    // console.log(result)
     return result
   }
 }
@@ -133,6 +131,48 @@ export const dagPreparation = async (data) =>{
   return cid;
 }
 
+export const addToBlock = async (data) =>{
+  let cid = await ipfsNode.add(data);
+  console.log(cid)
+  return cid.cid;
+}
+
+export const getTreeIpfs = async (cid, path) =>{
+  let properCid = recreateCid(cid)
+  let tree = await ipfsNode.dag.tree(properCid, {path});
+  for await (const item of tree) {
+    console.log(item)
+  }
+  return tree;
+}
+
+export const getFromIpfs = async (cid) =>{
+  const stream = ipfsNode.cat(cid)
+  let data = ''
+  for await (const chunk of stream) {
+    // chunks of data are returned as a Buffer, convert it back to a string // it doesn't work!
+    data += chunk.toString()
+  }
+  console.log(data)
+}
+
+// export const sendRequest = async (obj) =>{
+//   let requestDB;
+//   try{
+//     requestDB = await getDB("/orbitdb/zdpuAwtDbBCfDK7sDpxZn7Jgzj9WxfPgS8STaxWadKtnmTwrk/access.manager")
+//   }catch{
+//     console.log('There was an error!')
+//   }
+//   if(requestDB){
+//     console.log('connected to requests database!')
+//     requestDB.set('request',obj)
+//   }else{
+//     console.log('Database doesnt exists!')
+//   }
+//   return requestDB;
+// }
+
 export const removeDatabase = async (hash) => {
-  return programs.remove(hash)
+  console.log('Unpin DB!')
+  return (hash)
 }

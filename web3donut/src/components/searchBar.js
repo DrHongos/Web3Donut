@@ -60,8 +60,9 @@ function SearchBar(props) {
           justifyContent: "left",
           alignItems: "left",
         }}
+
       >
-      <input onChange={(e)=>setSearch(e.target.value)}></input>
+      <input placeholder='Search' onChange={(e)=>setSearch(e.target.value)}></input>
       {/*results?
         <ul>
           {results.map(x=>{return <li key={x.name}>{x&&x.children?

@@ -2,12 +2,16 @@ import React, {useEffect, useState} from "react";
 import logo from '../libs/raidGuildLogo.png';
 import SearchBar from './searchBar';
 import '../App.css';
+// import {useStateValue } from '../state';
+
+// import {getDagObject} from '../libs/databaseLib';
 
 const d3 = require("d3");
 const protocolsData = require("../libs/eth-ecosystem");
 
 function Donut(props) {
   const [dataGraphed, setDataGraphed] = useState();
+  const [dbMode, setDbMode] = useState('local');
   const width = 932;
   const radius = width / 6
   const format = d3.format(",d")
@@ -19,11 +23,22 @@ function Donut(props) {
   .innerRadius(d => d.y0 * radius)
   .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
 
+  // async function getDag(cid){
+  //   let data = await getDagObject(cid)
+  //   setResults(data.value);
+  // }
+
   let data;
   const dataOriginal = !dataGraphed || dataGraphed.children.length === 0;
-  if(dataOriginal){
+  if(dataOriginal && dbMode === 'local'){
     data = protocolsData;
-  }else{
+  }
+  // else if(dataOriginal && props.dbMode === 'ipfsObject'){
+  //   data = results;
+  //   let results = getDag('bafyreihom2dpjh3tl2ofwfu35v7f6o2rmwyntyd64bzjmxyzjmyhybtnwu')
+  //   console.log('fetch DB and display ',results);
+  // }
+  else{
     data = dataGraphed;
   }
 
@@ -64,7 +79,7 @@ function Donut(props) {
       div.transition()
       .duration(200)
       .style("opacity", .9);
-      div.html(`<span>name: ${d.target.__data__ .data.name} </span><br/><span>url: ${d.target.__data__.data.url}</span>`)
+      div.html(`<span>name: ${d.target.__data__.data.name}</span><br/><span>url: ${d.target.__data__.data.url}</span>`)
       .style("right", "1px")
       .style("top",  "1px");
     })
@@ -97,6 +112,7 @@ function Donut(props) {
         .attr("transform", d => labelTransform(d.current))
         .style('fill', 'white')
         .text(d => d.data.name)
+        // test for improve letters and visibility (currently affects all label objects!)
         // .on("mouseover", d => {
         //   label.transition()
         //   .duration(100)
@@ -176,6 +192,13 @@ function Donut(props) {
 
   return (
     <div>
+      <hr class="solid"></hr>
+
+      Database type:
+      <button onClick={()=>{setDbMode('local')}}>local</button>
+      <button disabled onClick={()=>{setDbMode('ipfsObject')}}>ipfsObject</button>
+      <button disabled onClick={()=>{setDbMode('ipfsDag')}}>ipfsDAG</button><br />
+      <hr class="solid"></hr>
       <div
         style={{
           display:'flex',
