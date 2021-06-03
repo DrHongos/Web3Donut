@@ -12,7 +12,8 @@ function DatabaseForm(props) {
   const [createLogModal, setCreateLogModal] = useState(false);
   const [createDag, setCreateDag] = useState(false);
   const [requestPermission, setRequestPermission] = useState(false);
-  const [loading, setLoading] = React.useState(false)
+  const [uploadJson, setUploadJson] = useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   // async function addIpfs(data){
   //   let results = await addToBlock(data);
@@ -78,9 +79,14 @@ function DatabaseForm(props) {
     let result = await getFromIpfs(cid);
     return result;
   }
-  async function createLog(){
+  async function createLog(pos){
     const db = appState.db
-    let value = document.getElementById('logValue').value;
+    let value
+    if(pos){
+        value = pos;
+    } else{
+      value = document.getElementById('logValue').value;
+    }
     let creator = await getPublicKey();
     let timestamp = new Date();
     // test of Cid inside Cid (DAG)
@@ -103,6 +109,25 @@ function DatabaseForm(props) {
     return cid;
   }
 
+
+  async function wrapAndLog(obj){
+    let cid = await dagPreparation(obj)
+    console.log('cid obj',cid.toString())
+    await createLog(cid.toString())
+  }
+
+  async function uploadJsonDB(){
+    const selectedFile = document.getElementById('jsonInput').files[0];
+    let obj
+    let reader = new FileReader();
+    reader.readAsText(selectedFile);
+    reader.onloadend = function () {
+        console.log('Readed!', reader.readyState); // readyState will be 2
+        obj = reader.result //JSON.parse()?
+        wrapAndLog(obj);
+      };
+    }
+
   async function requestWritePermission(){
     let db = appState.dbrequests;
     let name = document.getElementById('requestName').value;
@@ -123,7 +148,7 @@ function DatabaseForm(props) {
           :null}
         <div>
           <ul>
-          {appState?.entries?
+          {appState?.entries?.length > 0?
             <div>
             <hr class="solid"></hr>
             <h3>Logs</h3>
@@ -137,13 +162,13 @@ function DatabaseForm(props) {
               <button onClick={()=>getTreeIpfs(x.payload.value.value)}>get Dag Tree</button>
               </li>)})}
             </div>
-            :null}
+            :<p>DB is not replicated, please wait and/or update databases</p>}
           </ul>
         </div>
 
         <div>
-          <ul>
-          {appState?.entriesReq?
+          {appState?.entriesReq?.length > 0?
+            <ul>
             <div>
             <hr class="solid"></hr>
             <h3>Requests</h3>
@@ -152,11 +177,11 @@ function DatabaseForm(props) {
               {x.payload.value.value.id.slice(0,4)}..
                {' '}-{' '}
                {x.payload.value.value.name}{' '}-{' '}{x.payload.value.value.msg}{' '}
-              <button onClick={()=>console.log('Authorize it!')}>Give access</button>
+              <button onClick={()=>console.log('Authorize it in next DB: ',x.payload.value.value.id)}>Give access</button>
               </li>)})}
             </div>
-            :null}
           </ul>
+          : <span>Permissions DB is not replicated, please wait and/or update databases</span>}
         </div>
         <hr class="solid"></hr>
         <div>
@@ -204,7 +229,7 @@ function DatabaseForm(props) {
             <button onClick={()=>{uploadDag()}}>Add to dag</button><br />
             </div>
           :null}
-          <button onClick={()=>setRequestPermission(!requestPermission)}>request permissions</button>
+          <button disabled={appState.entriesReq.length === 0} onClick={()=>setRequestPermission(!requestPermission)}>request permissions</button>
           {requestPermission?
             <div>
             <input id='requestName' placeholder='name'></input><br />
@@ -212,8 +237,18 @@ function DatabaseForm(props) {
             <button onClick={()=>{requestWritePermission()}}>Send!</button><br />
             </div>
           :null}
-
-
+          <button onClick={()=>setUploadJson(!uploadJson)}>Add a new DB object (JSON)</button>
+          {uploadJson?
+              <div>
+                <input type="file"
+                  id="jsonInput"
+                  accept=".json">
+               </input>
+               <div>
+                <button onClick={()=>uploadJsonDB()}>Upload!</button>
+              </div>
+              </div>
+         :null}
         </div>
 {/*
   Model 1 : Data as an object, root CID update<br />

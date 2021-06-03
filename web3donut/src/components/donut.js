@@ -2,16 +2,15 @@ import React, {useEffect, useState} from "react";
 import logo from '../libs/raidGuildLogo.png';
 import SearchBar from './searchBar';
 import '../App.css';
-// import {useStateValue } from '../state';
-
-// import {getDagObject} from '../libs/databaseLib';
+import {useStateValue } from '../state';
+import {getDagObject} from '../libs/databaseLib';
 
 const d3 = require("d3");
 const protocolsData = require("../libs/eth-ecosystem");
-
 function Donut(props) {
   const [dataGraphed, setDataGraphed] = useState();
   const [dbMode, setDbMode] = useState('local');
+  const [appState] = useStateValue();
   const width = 932;
   const radius = width / 6
   const format = d3.format(",d")
@@ -30,7 +29,7 @@ function Donut(props) {
 
   let data;
   const dataOriginal = !dataGraphed || dataGraphed.children.length === 0;
-  if(dataOriginal && dbMode === 'local'){
+  if(dataOriginal ){
     data = protocolsData;
   }
   // else if(dataOriginal && props.dbMode === 'ipfsObject'){
@@ -40,6 +39,20 @@ function Donut(props) {
   // }
   else{
     data = dataGraphed;
+  }
+
+  async function getLatestDB(){
+    // As Object
+    let dataCid = await getDagObject(appState.entries[0].payload.value.value)
+    let dagOb = await getDagObject(dataCid.value)
+    let result = JSON.parse(dagOb)
+    // console.log('Object retrieval: ',dagOb)
+    // As DAG
+    // let dagC = (await  getDagCid(dataCid2.value.value)).value
+    // console.log('Cid retrieval: ',dagC)
+    setDbMode('ipfsObject')
+    setDataGraphed(result)
+    
   }
 
   const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))
@@ -195,8 +208,11 @@ function Donut(props) {
       <hr class="solid"></hr>
 
       Database type:
-      <button onClick={()=>{setDbMode('local')}}>local</button>
-      <button disabled onClick={()=>{setDbMode('ipfsObject')}}>ipfsObject</button>
+      <button onClick={()=>{
+        setDataGraphed()
+        setDbMode('local')
+      }}>local</button>
+      <button onClick={()=>{getLatestDB('ipfsObject')}}>ipfsObject</button>
       <button disabled onClick={()=>{setDbMode('ipfsDag')}}>ipfsDAG</button><br />
       <hr class="solid"></hr>
       <div
@@ -207,7 +223,7 @@ function Donut(props) {
           margin:"0vh auto"
         }}
         id='environment'>
-        {props.searchBar?
+        {props.searchBar && dbMode === 'local'?
           <SearchBar
             protocolsData={protocolsData}
             setDataGraphed = {setDataGraphed}

@@ -9,8 +9,6 @@ const CID = require('cids')
 let orbitdb
 let ipfsNode
 // Databases
-// let programs //? will i use this?
-//else
 export const hardcodedDatabases = {
   dbData: '/orbitdb/zdpuAsrXXBwzeqLJ1hp7f6zhqPXesTDx1fzYBiegmJDmdkugV/Registry', //log
   counter: '/orbitdb/zdpuAzpyjbGpnzf1cZVf4dD45zCgMV6TopRxzs5yYtkFGbkn9/toolsCounter', //counter
@@ -32,6 +30,8 @@ export const initOrbitDB = async (ipfs) => {
   orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB'})
   return orbitdb
 }
+
+
 
 // export const getAllDatabases = async () => {
 //   if (!programs && orbitdb) {
@@ -104,8 +104,11 @@ export const recreateCid = (cid) =>{
 }
 
 export const getDagCid = async (cid, path) =>{
-  let properCid = recreateCid(cid)
-  let dataR = (await ipfsNode.dag.get(properCid, {path}))
+  if(!CID.isCID(cid)){
+    let properCid = recreateCid(cid)
+    cid = properCid
+  }
+  let dataR = (await ipfsNode.dag.get(cid, {path}))
   if(dataR){
       let res = dataR //JSON.stringify()
       console.log(res)
@@ -114,8 +117,8 @@ export const getDagCid = async (cid, path) =>{
     else{
         console.log('error! data is undefined')
       }
-
 }
+
 
 export const getDagObject = async (cid) =>{
 // difference between cat and get?? study deep!!
