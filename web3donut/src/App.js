@@ -18,10 +18,8 @@ function App() {
     entriesReq:[],
     orbitdbStatus: 'Starting',
     ipfsStatus: 'Starting',
-    loading: {
-      programs: false
-    }
   }
+
 
   const reducer = (state, action) => {
     switch (action.type) {
