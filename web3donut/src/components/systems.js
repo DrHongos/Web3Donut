@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { initIPFS, initOrbitDB,  getDB } from '../libs/databaseLib'
+import { initIPFS, initOrbitDB,  getDB, getPublicKey } from '../libs/databaseLib'
 import { actions, useStateValue } from '../state'
 
 function Systems () {
@@ -8,7 +8,6 @@ function Systems () {
 
   const fetchDB = async (address, type) => {
     setLoading(true)
-    console.log('opening DB ',address)
     const db = await getDB(address)
     if (db) {
       let entries
@@ -22,22 +21,33 @@ function Systems () {
         entries = db.query(e => e !== null, {fullOp: true}).reverse()
       else
         entries = [{ payload: { value: "TODO" } }]
-      if(type === 'requests'){
+    switch (type) {
+      case 'requests':
         dispatch({ type: actions.DBREQUESTS.SET_DBREQUESTS, db, entries })
-      }else{
+        break;
+      case 'DAGTest':
+        dispatch({ type: actions.DBDAGTEST.SET_DBDAGTEST, db, entries })
+        break;
+      case 'trash':
+        dispatch({ type: actions.DBTRASH.SET_DBTRASH, db, entries })
+        break;
+      default:
         dispatch({ type: actions.DB.SET_DB, db, entries })
-      }
-      setLoading(false)
+        break;
+    }
+    // console.log('DB ',type,'retrieved!  ')
+    setLoading(false)
     }else{
       console.log(address, ' couldnt be found')
     }
   }
 
   async function initDatabases(){
-    fetchDB('/orbitdb/zdpuArkzsrwpHS7ptLh4wq6YV2HfQEKSxPZGEmfNuWw8H8QYC/DBLOGS')
-    fetchDB("/orbitdb/zdpuAwtDbBCfDK7sDpxZn7Jgzj9WxfPgS8STaxWadKtnmTwrk/access.manager",'requests')
-      // "/orbitdb/zdpuAyFL4s5i1LTNUsP1e6nZhUcv2uGDoMQZTRgukD1DwkmDn/Web3Donut")// old original
-  }
+    await fetchDB('/orbitdb/zdpuArkzsrwpHS7ptLh4wq6YV2HfQEKSxPZGEmfNuWw8H8QYC/DBLOGS')
+    await fetchDB('/orbitdb/zdpuApTdrZtdtUQ4xrqydQ1MgfcC41RGScm5wvCYPuWom6fJh/DAGTest.logs', 'DAGTest')
+    await fetchDB("/orbitdb/zdpuAwtDbBCfDK7sDpxZn7Jgzj9WxfPgS8STaxWadKtnmTwrk/access.manager",'requests')
+    await fetchDB('/orbitdb/zdpuB2HtaiTPDEqPidv5tv66s8SL8UAowGLXLpcKtm7AaHRF6/test.stuff', 'trash')
+    }
 
   // useEffect(() => {
   //   fetchDB(address)
@@ -51,7 +61,8 @@ function Systems () {
       initOrbitDB(ipfs).then(async (databases) => {
         dispatch({ type: actions.SYSTEMS.SET_ORBITDB, orbitdbStatus: 'Started' })
 
-        //initDatabases
+        let publicKey = await getPublicKey();
+        dispatch({type: actions.USER.SET_USER, publicKey})
         await initDatabases()
 
       })

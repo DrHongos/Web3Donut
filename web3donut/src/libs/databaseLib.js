@@ -8,12 +8,7 @@ const CID = require('cids')
 // OrbitDB instance
 let orbitdb
 let ipfsNode
-// Databases
-export const hardcodedDatabases = {
-  dbData: '/orbitdb/zdpuAsrXXBwzeqLJ1hp7f6zhqPXesTDx1fzYBiegmJDmdkugV/Registry', //log
-  counter: '/orbitdb/zdpuAzpyjbGpnzf1cZVf4dD45zCgMV6TopRxzs5yYtkFGbkn9/toolsCounter', //counter
-  writeRequests: "/orbitdb/zdpuAwtDbBCfDK7sDpxZn7Jgzj9WxfPgS8STaxWadKtnmTwrk/access.manager", //keyvalue
-}
+
 // Start IPFS
 export const initIPFS = async () => {
 //test with ipfs-http-client
@@ -24,28 +19,13 @@ export const initIPFS = async () => {
  return ipfsNode;
 }
 
+
 // Start OrbitDB
 export const initOrbitDB = async (ipfs) => {
 // add different repo from ipfs or its conflict
   orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB'})
   return orbitdb
 }
-
-
-
-// export const getAllDatabases = async () => {
-//   if (!programs && orbitdb) {
-//     // Load programs database
-//     programs = await orbitdb.feed('network.programs', {
-//       accessController: { write: [orbitdb.identity.id] },
-//       create: true
-//     })
-//     await programs.load()
-//   }
-//   return programs
-//     ? programs.iterator({ limit: -1 }).collect()
-//     : []
-// }
 
 export const getDB = async (address) => {
   let db
@@ -61,7 +41,7 @@ export const getDB = async (address) => {
   return db
 }
 
-export const addDatabase = async (address) => { //searched
+export const addDatabase = async (address) => { //searched or added externally
   const db = await orbitdb.open(address)
   return ({
     name: db.dbname,
@@ -99,7 +79,7 @@ export const getPublicKey = async () =>{
 }
 
 export const recreateCid = (cid) =>{
-  const properCid = new CID(cid);// cid should be a correct object, NOT cid.toString()!!
+  const properCid = new CID(cid);//
   return properCid;
 }
 

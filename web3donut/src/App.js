@@ -12,10 +12,14 @@ function App() {
   const initialState = {
     user: null,
     db: null,
-    dbrequests:null,
-    programs: [],
     entries: [],
+    dbrequests:null,
     entriesReq:[],
+    dbTrash:null,
+    entriesTrash:[],
+    dbDAGtest:null,
+    entriesDAGtest:[],
+    programs: [],
     orbitdbStatus: 'Starting',
     ipfsStatus: 'Starting',
   }
@@ -23,6 +27,12 @@ function App() {
 
   const reducer = (state, action) => {
     switch (action.type) {
+      case actions.USER.SET_USER:
+        return {
+          ...state,
+          user: action.user
+        }
+
       case actions.SYSTEMS.SET_ORBITDB:
         return {
           ...state,
@@ -45,6 +55,18 @@ function App() {
           dbrequests: action.db,
           entriesReq: action.entries,
         }
+      case actions.DBTRASH.SET_DBTRASH:
+        return {
+          ...state,
+          dbTrash: action.db,
+          entriesTrash: action.entries,
+        }
+      case actions.DBDAGTEST.SET_DBDAGTEST:
+        return {
+          ...state,
+          dbDAGtest: action.db,
+          entriesDAGtest: action.entries,
+        }
       default:
         return state
     }
@@ -61,7 +83,7 @@ function App() {
     <div className="App">
       <header className="App-header">
       <Systems />
-      <button onClick={()=>setFormModal(!formModal)}>Form Modal</button>
+      <button onClick={()=>setFormModal(!formModal)}>Databases</button>
       {formModal?
         <DatabaseForm
         />

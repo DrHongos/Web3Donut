@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import {useStateValue, actions } from '../state';
-import { dagPreparation, createDatabase, getDagObject, getPublicKey, getDagCid, getFromIpfs, getTreeIpfs } from '../libs/databaseLib'; //getPublicKey
+import DBCard from './databaseCard';
+
+import { dagPreparation, createDatabase, getDagObject, getPublicKey, getDagCid, getFromIpfs, getTreeIpfs } from '../libs/databaseLib';
 // const protocolsData = require("../libs/eth-ecosystem");
 
 // when i f*ck up DB i have to open control center, generate one, then create the same one from the browser, now its replicated (it will say that is already created!)
@@ -21,16 +23,6 @@ function DatabaseForm(props) {
   //     console.log(cid.toString())
   //   }
   //   return results;
-  // }
-
-  // <button onClick={()=>{getDataB()}}>Retrieve database manually</button><br />
-  // async function getDataB(){
-  //   dispatch({ type: actions.PROGRAMS.SET_PROGRAMS_LOADING, loading: true })
-  //   const programs =  await getDB(address);
-  //   dispatch({ type: actions.PROGRAMS.SET_PROGRAMS, programs: programs})
-  //   dispatch({ type: actions.PROGRAMS.SET_PROGRAMS_LOADING, loading: false })
-  //   console.log(programs)
-  //   return programs
   // }
 
   function ipldExplorer(address) {
@@ -71,7 +63,7 @@ function DatabaseForm(props) {
     let type = document.getElementById('type').value
     let permissions = document.getElementById('permissions').value
     let newDB = await createDatabase(nameDB,type,permissions)
-    console.log('new database ',nameDB,' created in /orbitdb/',newDB,'/',nameDB)
+    console.log('new database ',nameDB,' created in ',newDB.address)
   }
 
   async function getFromIPFS(){
@@ -79,26 +71,36 @@ function DatabaseForm(props) {
     let result = await getFromIpfs(cid);
     return result;
   }
-  async function createLog(pos){
-    const db = appState.db
-    let value
-    if(pos){
-        value = pos;
-    } else{
+
+  async function createLog(value, db){
+    // Create log has to manage multiple db's!
+    if(!db){
+      db = appState.dbTrash
+    }
+
+    // this to manage the add log button.. data is also introduced in args
+    if(!value){
       value = document.getElementById('logValue').value;
     }
+
+//  Metadata of the log
     let creator = await getPublicKey();
     let timestamp = new Date();
-    // test of Cid inside Cid (DAG)
-    let eventCid = await dagPreparation({creator: creator, timestamp:timestamp})
-    let ipfsCid = await dagPreparation({value:value, event:eventCid})
-
-    if (db.type !== 'eventlog') {
+// Creates the ipfs block (is it a block?)
+    let ipfsCid = await dagPreparation({value:value, creator: creator, timestamp:timestamp})
+// catch error in input for eventlogs (remember CRUD functions are different)
+    if (db.type === 'eventlog') {
+      await db.add({value:ipfsCid.string})
+    }else if(db.type === 'keyvalue'){
+      await db.set('msg',{value:value, creator:creator})
+    }
+    else{
       throw new Error('This component can only handle eventlogs!')
     }
-    await db.add({value:ipfsCid.string})
-    const entries = await db.iterator({ limit: 10 }).collect().reverse()
-    dispatch({ type: actions.DB.SET_DB, db, entries })
+    // const entries = await db.iterator({ limit: 5 }).collect().reverse()
+    // and then dispatch specific call
+      // dispatch({ type: actions.DB.SET_DB, db, entries })
+      // dispatch({ type: actions.DBTRASH.SET_DBTRASH, db, entries })
     console.log('Saved!')
   }
 
@@ -110,21 +112,26 @@ function DatabaseForm(props) {
   }
 
 
-  async function wrapAndLog(obj){
+  async function wrapAndLog(obj, db){ // wrap and return..
+    if(!db){
+      db = appState.db
+    }
     let cid = await dagPreparation(obj)
     console.log('cid obj',cid.toString())
-    await createLog(cid.toString())
+    return cid;
   }
 
   async function uploadJsonDB(){
     const selectedFile = document.getElementById('jsonInput').files[0];
     let obj
+    let cid
     let reader = new FileReader();
     reader.readAsText(selectedFile);
     reader.onloadend = function () {
         console.log('Readed!', reader.readyState); // readyState will be 2
-        obj = reader.result //JSON.parse()?
-        wrapAndLog(obj);
+        obj = JSON.parse(reader.result);
+        cid = wrapAndLog(obj);
+        createLog(cid.toString(), appState.db) // add db as arg
       };
     }
 
@@ -146,43 +153,32 @@ function DatabaseForm(props) {
             <p>Loading.. (data not replicated!)</p>
           <hr class="solid"></hr></div>
           :null}
-        <div>
-          <ul>
-          {appState?.entries?.length > 0?
-            <div>
-            <hr class="solid"></hr>
-            <h3>Logs</h3>
-            {appState.entries.map(x=>
-              {return (<li key={x.payload.value.value}>From:
-              <button onClick={()=>{console.log(appState.db.get(x.payload.value.key))}}>{x.payload.value.key}</button>
-               to
-              <button onClick={()=>getDag(x.payload.value.value)}>{x.payload?.value?.value? x.payload.value.value.slice(0,4) : 'loading'}...</button>
-              <button onClick={()=>ipldExplorer(x.payload.value.value)}>Explorer</button>
-              <button onClick={()=>getDagCid(x.payload.value.value)}>get Dag Cid</button>
-              <button onClick={()=>getTreeIpfs(x.payload.value.value)}>get Dag Tree</button>
-              </li>)})}
-            </div>
-            :<p>DB is not replicated, please wait and/or update databases</p>}
-          </ul>
-        </div>
 
-        <div>
-          {appState?.entriesReq?.length > 0?
-            <ul>
-            <div>
-            <hr class="solid"></hr>
-            <h3>Requests</h3>
-            {appState.entriesReq.map(x=>
-              {return (<li key={x.payload.value.value.id}>From:
-              {x.payload.value.value.id.slice(0,4)}..
-               {' '}-{' '}
-               {x.payload.value.value.name}{' '}-{' '}{x.payload.value.value.msg}{' '}
-              <button onClick={()=>console.log('Authorize it in next DB: ',x.payload.value.value.id)}>Give access</button>
-              </li>)})}
-            </div>
-          </ul>
-          : <span>Permissions DB is not replicated, please wait and/or update databases</span>}
-        </div>
+        <DBCard
+          name = 'Logs'
+          db = {appState.db}
+          entries = {appState.entries}
+        />
+
+        <DBCard
+          name = 'Requests'
+          db = {appState.dbrequests}
+          entries = {appState.entriesReq}
+        />
+
+        <DBCard
+          name = 'DAG Tests'
+          db = {appState.dbDAGtest}
+          entries = {appState.entriesDAGtest}
+        />
+
+        <DBCard
+          name = 'Trash'
+          db = {appState.dbTrash}
+          entries = {appState.entriesTrash}
+        />
+
+
         <hr class="solid"></hr>
         <div>
           <h3> Tool's</h3>
@@ -220,6 +216,7 @@ function DatabaseForm(props) {
             <div>
             <input id='logValue' placeholder='new DB CID'></input><br />
             <button onClick={()=>{createLog()}}>make a log!</button>
+            <p> Can i? public/access control</p>
             </div>
           :null}
           <button onClick={()=>setCreateDag(!createDag)}>simple DAG</button>

@@ -11,11 +11,20 @@ export const StateProvider = ({ reducer, initialState, children }) => (
 export const useStateValue = () => useContext(StateContext)
 
 export const actions = {
+  USER: {
+    SET_USER: 'SET_USER'
+  },
   DB: {
     SET_DB: 'SET_DB'
   },
   DBREQUESTS:{
     SET_DBREQUESTS:'SET_DBREQUESTS'
+  },
+  DBTRASH:{
+    SET_DBTRASH:'SET_DBTRASH'
+  },
+  DBDAGTEST:{
+    SET_DBDAGTEST:'SET_DBDAGTEST'
   },
   SYSTEMS: {
     SET_IPFS: 'SET_IPFS',
