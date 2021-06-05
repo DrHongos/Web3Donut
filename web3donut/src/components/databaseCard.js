@@ -85,6 +85,7 @@ function DBCard(props) {
                   <button onClick={()=>ipldExplorer(x.payload.value.value)}>Explorer</button>
                   <button onClick={()=>retrieve('dag', x.payload.value.value)}>DAG.GET</button>
                   <button onClick={()=>retrieve('tree',x.payload.value.value)}>DAG.TREE</button>
+                  <button onClick={()=>retrieve('tree',x.payload.value.value)}>DAG.TREE</button>
                   </span>
                 :null}
                 </li>)})}

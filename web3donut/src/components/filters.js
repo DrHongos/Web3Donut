@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import Donut from "./donut";
-import {getDagObject} from '../libs/databaseLib';
+import {getDagObject, getTreeIpfs} from '../libs/databaseLib';
 import {useStateValue } from '../state';
 const protocolsData = require("../libs/eth-ecosystem");
 
@@ -12,21 +12,59 @@ function Filters(props) {
   const [results, setResults] = useState([]);
   const [dataGraphed, setDataGraphed] = useState();
 
-  async function getLatestDB(){ // this should handle different DBs
-    if(!appState.entries[0]){ // and so entries wouldn't be the only choice
-      return
+  const dataCid = async (cid) => {return getDagObject(cid)}
+
+  async function getLatestDB(type){ // this should handle different DBs
+    let entries;
+    let cid;
+    let dagObj;
+    let result;
+    switch (type) {
+      case 'ipfsDag':
+        let children = []
+        entries = appState.entriesDAGtest[0]
+        cid = await getDagObject(entries.payload.value.value)
+        console.log('datacid',cid)
+        dagObj = await getDagObject(cid.value)
+        console.log('dagOb', dagObj)
+        let dagTree = await getTreeIpfs(cid.value)
+        console.log('obj tree', dagTree)
+        for(let branch in dagObj){
+          if(branch !== 'name'){
+            console.log(dagObj[branch])
+            let obj = await getDagObject(dagObj[branch])
+            children.push(obj.children[0])
+          }
+        }
+
+
+        result = {name:dagObj.name,children:children}
+        break;
+      case 'ipfsObject':
+        entries = appState.entries[0] // [0] is the last log
+        cid = await dataCid(entries.payload.value.value)
+        dagObj = await dataCid(cid.value)
+        console.log('dagOb', dagObj)
+        result = dagObj
+
+        break;
+      default:
+          return
     }
+    console.log(entries)
+    setData(result)
+    return result;
+
+    // if(!entries){ // and so entries wouldn't be the only choice
+    //   return
+    // }
     // As Object
-    let dataCid = await getDagObject(appState.entries[0].payload.value.value)
-    let dagOb = await getDagObject(dataCid.value)
-    let result = dagOb
     // As DAG (data in a CID inside the DB CID)
     // let dagC = (await  getDagCid(dataCid2.value.value)).value
     // console.log('Cid retrieval: ',dagC)
-
-    setData(result)
-    return result;
   }
+
+// const current = (await ipfs.dag.get(cid)).value // to get internal searches of cid's
 
 
   function exploreTree(arr, term, matches){
@@ -92,8 +130,8 @@ function Filters(props) {
       <button onClick={()=>{
         setData(protocolsData)
       }}>local</button>
-      <button onClick={()=>{getLatestDB('ipfsObject')}}>ipfsObject</button>
-      <button disabled onClick={()=>{console.log('ipfsDag')}}>ipfsDAG</button><br />
+      <button disabled={!appState.entries.length >0} onClick={()=>{getLatestDB('ipfsObject')}}>ipfsObject</button>
+      <button disabled={!appState.entriesDAGtest.length >0} onClick={()=>{getLatestDB('ipfsDag')}}>ipfsDAG</button><br />
       <hr class="solid"></hr>
       <div
         style={{

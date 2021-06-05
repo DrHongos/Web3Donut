@@ -29,10 +29,15 @@ function IPFSTools(props) {
 
 
   async function uploadDag(){
-    let value = document.getElementById('dagData').value;
-    let cid = await dagPreparation(value);
-    console.log(cid.toString())
-    return cid;
+    let value = document.getElementById('dagData').value.toString();
+    try{
+      let cid = await dagPreparation(JSON.parse(value));
+      console.log(cid.toString())
+      console.log('Now is your responsability to make something cool!')
+      return cid;
+    }catch{
+      console.log('Error in JSON.parse! please use a json format')
+    }
   }
 
   async function addFileIpfs(){

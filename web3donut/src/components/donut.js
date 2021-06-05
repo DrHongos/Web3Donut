@@ -17,7 +17,6 @@ function Donut(props) {
   .innerRadius(d => d.y0 * radius)
   .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
 
-
   let data;
 
   const dataOriginal = !props.dataGraphed || props.dataGraphed.children.length === 0;

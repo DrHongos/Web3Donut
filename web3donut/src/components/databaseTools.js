@@ -13,13 +13,11 @@ function DBTools(props) {
 
   // converge all input functions! manage different databases and inputs
 
-  async function createLog(value, db){
+  async function createLog(value){
     // if (event) event.preventDefault()
     // if (value.length === 0) return
     // Create log has to manage multiple db's! and inputs..
-    if(!db){
-      db = appState.dbTrash
-    }
+    let db = props.db;
     // this to manage the add log button.. data is also introduced in args
     if(!value){
       value = document.getElementById('logValue').value;
@@ -28,6 +26,7 @@ function DBTools(props) {
     let timestamp = new Date(); // but not timing.. this goes by orbitdb
 // Creates the ipfs block (is it a block?)
     let ipfsCid = await dagPreparation({value:value,  timestamp:timestamp}) //comment: comment,
+    console.log(ipfsCid.toString())
 // catch error in input for eventlogs (remember CRUD functions are different)
     if (db.type === 'eventlog') {
       await db.add({key:'db',value:ipfsCid.string})
@@ -38,7 +37,7 @@ function DBTools(props) {
       throw new Error('This component can only handle eventlog/key-values!.. finish it!')
     }
     // const entries = await db.iterator({ limit: 5 }).collect().reverse()
-    // and then dispatch specific call
+    // and then dispatch specific call (switch?)
       // dispatch({ type: actions.DB.SET_DB, db, entries })
       // dispatch({ type: actions.DBTRASH.SET_DBTRASH, db, entries })
     console.log('Saved!')
@@ -76,7 +75,7 @@ function DBTools(props) {
       db = appState.db
     }
     let cid = await dagPreparation(obj)
-    createLog(cid.toString(), props.db)
+    createLog(cid.toString())
     console.log('cid obj',cid.toString())
     return cid;
   }
@@ -102,7 +101,7 @@ function DBTools(props) {
       <button disabled={!props.canWrite || props.db._type !== 'eventlog'} onClick={()=>setCreateLogModal(!createLogModal)}>Add log</button>
       <button disabled={!props.canWrite || props.db._type !== 'eventlog'} onClick={()=>setUploadJson(!uploadJson)}>Add a new DB object</button>
       {/*<button disabled={appState.entriesReq.length === 0} onClick={()=>setRequestPermission(!requestPermission)}>request permissions</button>*/}
-
+      
       {createKv?
         <div>
           <input id='key' placeholder='key'></input><br />
