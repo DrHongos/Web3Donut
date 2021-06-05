@@ -3,7 +3,7 @@ import './App.css';
 import { actions, StateProvider } from './state'
 
 import Systems from './components/systems';
-import Donut from './components/donut';
+import Filters from './components/filters';
 import DatabaseForm from './components/databaseForm';
 
 
@@ -95,9 +95,7 @@ function App() {
       {formModal?
         <DatabaseForm />
         :null}
-      <Donut
-        searchBar = {true}
-      />
+      <Filters />
       </header>
     </div>
     </StateProvider>

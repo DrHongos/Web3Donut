@@ -59,14 +59,13 @@ function DBTools(props) {
     let key = document.getElementById('key').value
     let value = document.getElementById('value').value
     // let timestamp = new Date();
-    // test of Cid inside Cid (DAG)
     // let eventCid = await dagPreparation({creator: appState.user, timestamp:timestamp})
     // let ipfsCid = await dagPreparation({key:key,value:value, event:eventCid}) // all as a DAG?
     if (db.type !== 'keyvalue') {
       throw new Error('This component can only handle Key-Value databases')
     }
     await db.set(key,{value:value}) // if i send a complete CID, i got signature errors
-    console.log('guardado!')
+    console.log('saved!')
     setCreateKv(false);
     // const entries = Object.keys(db.all).map(e => ({ payload: { value: {key: e, value: db.get(e)} } }))
     // dispatch({ type: actions.DB.SET_DB, db, entries }) // handle different actions

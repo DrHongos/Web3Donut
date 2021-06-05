@@ -1,16 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import logo from '../libs/raidGuildLogo.png';
-import SearchBar from './searchBar';
 import '../App.css';
-import {useStateValue } from '../state';
-import {getDagObject} from '../libs/databaseLib';
 
 const d3 = require("d3");
-const protocolsData = require("../libs/eth-ecosystem");
+
 function Donut(props) {
-  const [dataGraphed, setDataGraphed] = useState();
-  const [dbMode, setDbMode] = useState('local');
-  const [appState] = useStateValue();
+
   const width = 932;
   const radius = width / 6
   const format = d3.format(",d")
@@ -22,40 +17,16 @@ function Donut(props) {
   .innerRadius(d => d.y0 * radius)
   .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
 
-  // async function getDag(cid){
-  //   let data = await getDagObject(cid)
-  //   setResults(data.value);
-  // }
 
   let data;
-  const dataOriginal = !dataGraphed || dataGraphed.children.length === 0;
+
+  const dataOriginal = !props.dataGraphed || props.dataGraphed.children.length === 0;
   if(dataOriginal ){
-    data = protocolsData;
-  }
-  // else if(dataOriginal && props.dbMode === 'ipfsObject'){
-  //   data = results;
-  //   let results = getDag('bafyreihom2dpjh3tl2ofwfu35v7f6o2rmwyntyd64bzjmxyzjmyhybtnwu')
-  //   console.log('fetch DB and display ',results);
-  // }
-  else{
-    data = dataGraphed;
+    data  = props.data;
+  }else{
+    data = props.dataGraphed;
   }
 
-  async function getLatestDB(){
-    if(!appState.entries[0]){
-      return
-    }
-    // As Object
-    let dataCid = await getDagObject(appState.entries[0].payload.value.value)
-    let dagOb = await getDagObject(dataCid.value)
-    let result = dagOb
-    // As DAG (data in a CID inside the DB CID)
-    // let dagC = (await  getDagCid(dataCid2.value.value)).value
-    // console.log('Cid retrieval: ',dagC)
-    setDbMode('ipfsObject')
-    setDataGraphed(result)
-
-  }
 
   const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1)) // this kills the color palette in ipfs_API
   const partition = data => {
@@ -203,35 +174,11 @@ function Donut(props) {
   useEffect(() => {
     d3.selectAll("svg > *").remove();
     chart(); //useRef()?
-  },[dataGraphed]);// eslint-disable-line react-hooks/exhaustive-deps
+  },[props.dataGraphed, props.data]);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
-      <hr class="solid"></hr>
 
-      Database type:
-      <button onClick={()=>{
-        setDataGraphed()
-        setDbMode('local')
-      }}>local</button>
-      <button onClick={()=>{getLatestDB('ipfsObject')}}>ipfsObject</button>
-      <button disabled onClick={()=>{setDbMode('ipfsDag')}}>ipfsDAG</button><br />
-      <hr class="solid"></hr>
-      <div
-        style={{
-          display:'flex',
-          justifyContent:'top',
-          alignItems:'left',
-          margin:"0vh auto"
-        }}
-        id='environment'>
-        {props.searchBar && dbMode === 'local'?
-          <SearchBar
-            protocolsData={protocolsData}
-            setDataGraphed = {setDataGraphed}
-             />
-        :null}
-        </div>
         <div
           id="3d-graph"
           style={{
