@@ -19,6 +19,8 @@ function App() {
     entriesTrash:[],
     dbDAGtest:null,
     entriesDAGtest:[],
+    dbUsers:null,
+    entriesUsers:[],
     programs: [],
     orbitdbStatus: 'Starting',
     ipfsStatus: 'Starting',
@@ -30,7 +32,7 @@ function App() {
       case actions.USER.SET_USER:
         return {
           ...state,
-          user: action.user
+          user: action.publicKey
         }
 
       case actions.SYSTEMS.SET_ORBITDB:
@@ -67,6 +69,12 @@ function App() {
           dbDAGtest: action.db,
           entriesDAGtest: action.entries,
         }
+      case actions.DBUSERS.SET_DBUSERS:
+        return {
+          ...state,
+          dbUsers: action.db,
+          entriesUsers: action.entries,
+        }
       default:
         return state
     }
@@ -83,10 +91,9 @@ function App() {
     <div className="App">
       <header className="App-header">
       <Systems />
-      <button onClick={()=>setFormModal(!formModal)}>Databases</button>
+      <button  onClick={()=>setFormModal(!formModal)}>Databases</button>
       {formModal?
-        <DatabaseForm
-        />
+        <DatabaseForm />
         :null}
       <Donut
         searchBar = {true}

@@ -42,20 +42,22 @@ function Donut(props) {
   }
 
   async function getLatestDB(){
+    if(!appState.entries[0]){
+      return
+    }
     // As Object
     let dataCid = await getDagObject(appState.entries[0].payload.value.value)
     let dagOb = await getDagObject(dataCid.value)
-    let result = JSON.parse(dagOb)
-    // console.log('Object retrieval: ',dagOb)
-    // As DAG
+    let result = dagOb
+    // As DAG (data in a CID inside the DB CID)
     // let dagC = (await  getDagCid(dataCid2.value.value)).value
     // console.log('Cid retrieval: ',dagC)
     setDbMode('ipfsObject')
     setDataGraphed(result)
-    
+
   }
 
-  const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))
+  const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1)) // this kills the color palette in ipfs_API
   const partition = data => {
     const root = d3.hierarchy(data)
         .sum(d => d.value)
@@ -92,7 +94,7 @@ function Donut(props) {
       div.transition()
       .duration(200)
       .style("opacity", .9);
-      div.html(`<span>name: ${d.target.__data__.data.name}</span><br/><span>url: ${d.target.__data__.data.url}</span>`)
+      div.html(`<span>name: ${d.target.__data__.data.name}</span><br/><span>url: ${d.target.__data__.data.url}</span><br/><span>description: ${d.target.__data__.data.description}</span>`)
       .style("right", "1px")
       .style("top",  "1px");
     })

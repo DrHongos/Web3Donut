@@ -26,6 +26,9 @@ export const actions = {
   DBDAGTEST:{
     SET_DBDAGTEST:'SET_DBDAGTEST'
   },
+  DBUSERS:{
+    SET_DBUSERS:'SET_DBUSERS'
+  },
   SYSTEMS: {
     SET_IPFS: 'SET_IPFS',
     SET_ORBITDB: 'SET_ORBITDB'

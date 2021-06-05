@@ -78,8 +78,8 @@ export const getPublicKey = async () =>{
   return ipfsId.publicKey;
 }
 
-export const recreateCid = (cid) =>{
-  const properCid = new CID(cid);//
+const recreateCid = (cid) =>{
+  const properCid = new CID(cid);
   return properCid;
 }
 
@@ -90,7 +90,7 @@ export const getDagCid = async (cid, path) =>{
   }
   let dataR = (await ipfsNode.dag.get(cid, {path}))
   if(dataR){
-      let res = dataR //JSON.stringify()
+      let res = dataR
       console.log(res)
       return res;
     }
@@ -99,13 +99,15 @@ export const getDagCid = async (cid, path) =>{
       }
 }
 
-
 export const getDagObject = async (cid) =>{
-// difference between cat and get?? study deep!!
   for await (const result of ipfsNode.cat(cid.toString())) {
-    // console.log(result)
     return result
   }
+}
+
+export const getIpfs = async (cid) =>{
+  let res = await ipfsNode.get(cid);
+  return res;
 }
 
 export const dagPreparation = async (data) =>{
@@ -114,19 +116,24 @@ export const dagPreparation = async (data) =>{
   return cid;
 }
 
-export const addToBlock = async (data) =>{
+export const addIpfs = async (data) =>{
   let cid = await ipfsNode.add(data);
   console.log(cid)
   return cid.cid;
 }
 
 export const getTreeIpfs = async (cid, path) =>{
-  let properCid = recreateCid(cid)
-  let tree = await ipfsNode.dag.tree(properCid, {path});
-  for await (const item of tree) {
-    console.log(item)
+  if(!CID.isCID(cid)){
+    let properCid = recreateCid(cid)
+    cid = properCid
   }
-  return tree;
+  let results = []
+  let tree = await ipfsNode.dag.tree(cid, {path});
+  for await (const item of tree) {
+    // console.log(item)
+    results.push(item)
+  }
+  return results;
 }
 
 export const getFromIpfs = async (cid) =>{
@@ -136,24 +143,13 @@ export const getFromIpfs = async (cid) =>{
     // chunks of data are returned as a Buffer, convert it back to a string // it doesn't work!
     data += chunk.toString()
   }
-  console.log(data)
-}
+  if(data !== ''){
+    return data;
+  }else{
+    return 'nothing was found in '+cid.toString()
+  }
 
-// export const sendRequest = async (obj) =>{
-//   let requestDB;
-//   try{
-//     requestDB = await getDB("/orbitdb/zdpuAwtDbBCfDK7sDpxZn7Jgzj9WxfPgS8STaxWadKtnmTwrk/access.manager")
-//   }catch{
-//     console.log('There was an error!')
-//   }
-//   if(requestDB){
-//     console.log('connected to requests database!')
-//     requestDB.set('request',obj)
-//   }else{
-//     console.log('Database doesnt exists!')
-//   }
-//   return requestDB;
-// }
+}
 
 export const removeDatabase = async (hash) => {
   console.log('Unpin DB!')
