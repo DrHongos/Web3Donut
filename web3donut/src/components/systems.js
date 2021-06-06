@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { initIPFS, initOrbitDB,  getDB } from '../libs/databaseLib'
+import { initIPFS, initOrbitDB,  getDB, getAllDatabases } from '../libs/databaseLib'
 import { actions, useStateValue } from '../state'
 
 function Systems () {
@@ -45,6 +45,8 @@ function Systems () {
     }
   }
 
+
+
   async function initDatabases(){
     await fetchDB('/orbitdb/zdpuArkzsrwpHS7ptLh4wq6YV2HfQEKSxPZGEmfNuWw8H8QYC/DBLOGS', 'DBLOGS')
     await fetchDB('/orbitdb/zdpuApTdrZtdtUQ4xrqydQ1MgfcC41RGScm5wvCYPuWom6fJh/DAGTest.logs', 'DAGTest.logs')
@@ -52,6 +54,7 @@ function Systems () {
     await fetchDB('/orbitdb/zdpuB2HtaiTPDEqPidv5tv66s8SL8UAowGLXLpcKtm7AaHRF6/test.stuff', 'test.stuff')
     await fetchDB('/orbitdb/zdpuB1HfZEqMk4Fu2M72Zef7tx3tpFJzcNdsUVCjfng6MtunB/kvTests', 'kvTests')
     }
+
 
   // useEffect(() => {
   //   fetchDB(address)
@@ -69,6 +72,9 @@ function Systems () {
         let publicKey = databases.identity.id;
         dispatch({type: actions.USER.SET_USER, publicKey})
         await initDatabases()
+        const programs = await getAllDatabases()
+        dispatch({ type: actions.PROGRAMS.SET_PROGRAMS, programs: programs.reverse() })
+        dispatch({ type: actions.PROGRAMS.SET_PROGRAMS_LOADING, loading: false })
 
       })
     })

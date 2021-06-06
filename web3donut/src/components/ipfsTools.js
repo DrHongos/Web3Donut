@@ -1,11 +1,10 @@
 import React, {useState} from "react";
-import { dagPreparation, createDatabase, getFromIpfs, addIpfs, getIpfs } from '../libs/databaseLib';
+import { dagPreparation, getFromIpfs, addIpfs, getIpfs } from '../libs/databaseLib';
 // import { actions, useStateValue } from '../state'
 
 function IPFSTools(props) {
   const [open, setOpen] = useState(false);
   // const [appState, dispatch] = useStateValue();
-  const [createDB, setCreateDB] = useState(false);
   const [getFromIpfsModal, setGetFromIpfsModal] = useState(false);
   const [getFileIpfsModal, setGetFileIpfsModal] = useState(false);
   const [createDag, setCreateDag] = useState(false);
@@ -60,46 +59,19 @@ function IPFSTools(props) {
   }
 
 
-  async function createNewDB(){ //first it wont find my hardcoded db.. once runned this one.. all works good!
-    let nameDB = document.getElementById('nameDB').value
-    let type = document.getElementById('type').value
-    let permissions = document.getElementById('permissions').value
-    let newDB = await createDatabase(nameDB,type,permissions)
-    console.log('new database ',nameDB,' created in ',newDB.address)
-    console.log('For now on.. you are responsible of it!')
-  }
-
-
 
   return (
     <div>
       <button onClick={()=>{setOpen(!open)}}>Other tool's</button>
       {open?
         <div>
-          {/*management*/}
-          <button onClick={()=>setCreateDB(!createDB)}>Create DB</button>
+
           {/* IPFS various */}
           <button onClick={()=>setCreateDag(!createDag)}>create DAG</button>
           <button onClick={()=>setGetFromIpfsModal(!getFromIpfsModal)}>Get ipfs</button>
           <button onClick={()=>setGetFileIpfsModal(!getFileIpfsModal)}>Get file</button>
           <button onClick={()=>setAddIpfsModal(!addIpfsModal)}>Add file to ipfs</button>
 
-          {createDB?
-            <div>
-            <input id='nameDB' placeholder='name'></input><br />
-            <select id="type">
-              <option value="eventlog">EventLog</option>
-              <option value="keyvalue" selected>Key:Value</option>
-              <option value="docstore">Docstore</option>
-              <option value="counter">Counter</option>
-            </select>
-            <select id="permissions">
-              <option value="public">Public</option>
-              <option value="" selected>Only me</option>
-            </select>
-            <button onClick={()=>{createNewDB()}}>create!</button>
-            </div>
-            :null}
           {getFromIpfsModal?
             <div>
             <input id='getIpfs' placeholder='Qm..'></input><br />

@@ -33,6 +33,13 @@ export const actions = {
     SET_IPFS: 'SET_IPFS',
     SET_ORBITDB: 'SET_ORBITDB'
   },
+  PROGRAMS: {
+    SET_PROGRAMS: 'SET_PROGRAMS',
+    SET_PROGRAMS_LOADING: 'SET_PROGRAMS_LOADING',
+    SET_PROGRAM: 'SET_PROGRAM',
+    SET_PROGRAM_LOADING: 'SET_PROGRAM_LOADING'
+  }
+  
 }
 
 export const loadingState = 'loading'

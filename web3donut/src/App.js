@@ -1,11 +1,12 @@
 import React,{useState} from "react";
 import './App.css';
-import { actions, StateProvider } from './state'
+import { actions, StateProvider, loadingState  } from './state'
 
 import Systems from './components/systems';
 import Filters from './components/filters';
 import DatabaseForm from './components/databaseForm';
-
+import DatabaseCreate from './components/databaseCreate';
+import DatabaseLocal from './components/databaseLocal';
 
 function App() {
   const [formModal, setFormModal]=useState(false);
@@ -24,8 +25,11 @@ function App() {
     programs: [],
     orbitdbStatus: 'Starting',
     ipfsStatus: 'Starting',
+    program: false,
+    loading: {
+      programs: false
+    }
   }
-
 
   const reducer = (state, action) => {
     switch (action.type) {
@@ -34,7 +38,6 @@ function App() {
           ...state,
           user: action.publicKey
         }
-
       case actions.SYSTEMS.SET_ORBITDB:
         return {
           ...state,
@@ -75,6 +78,27 @@ function App() {
           dbUsers: action.db,
           entriesUsers: action.entries,
         }
+      case actions.PROGRAMS.SET_PROGRAM:
+        return {
+          ...state,
+          program: action.program
+        }
+      case actions.PROGRAMS.SET_PROGRAM_LOADING:
+        return {
+          ...state,
+          program: loadingState
+        }
+      case actions.PROGRAMS.SET_PROGRAMS:
+        return {
+          ...state,
+          programs: action.programs
+        }
+      case actions.PROGRAMS.SET_PROGRAMS_LOADING:
+        return {
+          ...state,
+          loading: { ...state.loading, programs: action.loading }
+        }
+
       default:
         return state
     }
@@ -94,7 +118,10 @@ function App() {
       <button  onClick={()=>setFormModal(!formModal)}>Databases</button>
       {formModal?
         <DatabaseForm />
+
         :null}
+      <DatabaseCreate />
+      <DatabaseLocal />
       <Filters />
       </header>
     </div>

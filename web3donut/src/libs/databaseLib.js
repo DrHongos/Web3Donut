@@ -9,6 +9,8 @@ const CID = require('cids')
 let orbitdb
 let ipfsNode
 
+// for personal DB's
+let programs;
 // Start IPFS
 export const initIPFS = async () => {
 //test with ipfs-http-client
@@ -25,6 +27,21 @@ export const initOrbitDB = async (ipfs) => {
 // add different repo from ipfs or its conflict
   orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB'})
   return orbitdb
+}
+
+export const getAllDatabases = async () => {
+  if (!programs && orbitdb) {
+    // Load programs database
+    programs = await orbitdb.feed('browser.programs', {
+      accessController: { write: [orbitdb.identity.id] },
+      create: true
+    })
+    await programs.load()
+  }
+  console.log('cargaus! ',programs)
+  return programs
+    ? programs.iterator({ limit: -1 }).collect()
+    : []
 }
 
 export const getDB = async (address) => {
@@ -64,7 +81,7 @@ export const createDatabase = async (name, type, permissions) => {
 
   const db = await orbitdb.create(name, type, { accessController })
 
-  return ({
+  return programs.add({
     name,
     type,
     address: db.address.toString(),
