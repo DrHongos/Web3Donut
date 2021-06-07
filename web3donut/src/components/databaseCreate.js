@@ -1,12 +1,9 @@
 import React, {useState} from "react";
 import {createDatabase, getAllDatabases} from "../libs/databaseLib";
-// import { useStateValue, actions } from '../state'
 
 function DatabaseCreate(props) {
-  // const [appState, dispatch] = useStateValue();
   const [openCreate, setOpenCreate] = useState(false);
   const [createDB, setCreateDB] = useState(false);
-  // const [open, setOpen] = useState(false);
 
   async function createNewDB(){
     let nameDB = document.getElementById('nameDB').value
@@ -16,6 +13,7 @@ function DatabaseCreate(props) {
       console.log("Created", hash)
       getAllDatabases().then((data) => {
         console.log("Loaded programs", data)
+        setOpenCreate(false);
       })
     })
   }
@@ -29,8 +27,6 @@ function DatabaseCreate(props) {
             <h3>Create your Database</h3>
             <p>You create a DB for your DB's, its on your browser.. to improve security, copy its address wherever else</p>
             <p>Your user (signer) of the DB also could be deleted from browser.. for that we need to improve wiht <b>identity</b></p>
-            <hr class="solid"></hr>
-            {/*management*/}
             <button onClick={()=>setCreateDB(!createDB)}>Create new</button>
             {createDB?
               <div>

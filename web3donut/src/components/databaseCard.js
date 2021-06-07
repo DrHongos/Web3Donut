@@ -17,7 +17,6 @@ function DBCard(props) {
 
 // continue debugging databaseTools for usage of DBs
   async function retrieve(type, cid, path){
-      console.log('show different ways to get data, include tree and path exploration')
       let mod = ''
       let text = ''
       let data
@@ -84,8 +83,7 @@ function DBCard(props) {
                   <button onClick={()=>retrieve('dagCat',x.payload.value.value)}>CAT</button>
                   <button onClick={()=>ipldExplorer(x.payload.value.value)}>Explorer</button>
                   <button onClick={()=>retrieve('dag', x.payload.value.value)}>DAG.GET</button>
-                  <button onClick={()=>retrieve('tree',x.payload.value.value)}>DAG.TREE</button>
-                  <button onClick={()=>retrieve('tree',x.payload.value.value)}>DAG.TREE</button>
+                  <button onClick={()=>retrieve('tree',x.payload.value.value)}>DAG.TREE</button> 
                   </span>
                 :null}
                 </li>)})}

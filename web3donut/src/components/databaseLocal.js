@@ -1,17 +1,29 @@
-import React, {useState} from "react";
-import {getAllDatabases} from "../libs/databaseLib";
+import React, {useState, useEffect} from "react";
+import {getAllDatabases,  removeDatabase} from "../libs/databaseLib";
 import { useStateValue } from '../state'
-// import DBCard from './databaseCard'; // not usable.. had to adapt!
+import EditModal from './editMode';
+import DatabaseCreate from './databaseCreate';
+import DatabaseImport from './databaseImport';
+import burn from '../libs/burn.png';
+import edit from '../libs/edit.png';
 
+// import DBCard from './databaseCard'; // not usable.. had to adapt!
+import '../App.css';
 function DatabaseLocal(props) {
   const [appState] = useStateValue();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState(appState.programs);
+  const [editModal, setEditModal] = useState(false);
 
   async function refresh(){
     let allPrograms = await getAllDatabases()
-    console.log(allPrograms)
+    setItems(allPrograms)
   }
 
+  useEffect(()=>{
+    refresh()
+  },[open,appState.programs,props.db])
 
   return (
       <div>
@@ -20,14 +32,38 @@ function DatabaseLocal(props) {
             <div>
             <hr class="solid"></hr>
             My databases {'   '}
-            <button onClick={()=>refresh()}>Refresh</button>
-            <hr class="solid"></hr>
-            {appState?.programs?.length > 0 ?
-              <ul>
-                {appState.programs.map(x => {return(
-                  <li key={x.hash}>{x.payload.value.name}</li>
-                )})}
-              </ul>
+            <button onClick={()=>refresh()}>Refresh</button><br />
+            <DatabaseCreate />
+            <DatabaseImport />
+            <hr class="solid"></hr> {/*Have to difference counter DB's.*/}
+            {appState?.programs?.length !== 0 ?
+              <div>
+                <table>
+                  <tr>
+                    <th>name</th>
+                    <th>Type</th>
+                    <th>Address</th>
+                    <th>Functions</th>
+                  </tr>
+                  {items.map(x => {return(
+                  <tr >
+                   <td>{x.payload.value.name}</td>
+                   <td>{x.payload.value.type}</td>
+                   <td>{x.payload.value.address}</td>
+                   <td>
+                    <button onClick={()=>setEditModal(x.payload.value.address)}><img src={edit} alt='open&edit' width="20" height="23"></img></button>
+                    <button onClick={()=>removeDatabase(x)}><img src={burn} alt='delete' width="20" height="23"></img></button>
+                    </td>
+                  </tr>
+                 )})}
+                 </table>
+                 {editModal?
+                 <EditModal
+                    user = {appState.user}
+                    address = {editModal}
+                 />
+                 :null}
+              </div>
             :'You dont have any yet. Create your first!'}
             </div>
           :null}

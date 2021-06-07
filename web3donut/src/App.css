@@ -28,6 +28,11 @@
   color: #61dafb;
 }
 
+table, th, td {
+  align-items: center;
+  border: 1px solid white;
+  border-collapse: collapse;
+}
 
 div.tooltip {
     position: absolute;

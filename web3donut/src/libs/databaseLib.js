@@ -38,7 +38,6 @@ export const getAllDatabases = async () => {
     })
     await programs.load()
   }
-  console.log('cargaus! ',programs)
   return programs
     ? programs.iterator({ limit: -1 }).collect()
     : []
@@ -58,9 +57,11 @@ export const getDB = async (address) => {
   return db
 }
 
-export const addDatabase = async (address) => { //searched or added externally
-  const db = await orbitdb.open(address)
-  return ({
+export const addDatabase = async (address) => {
+  console.log(address)
+  const db = await getDB(address)
+  console.log(db)
+  return programs.add({
     name: db.dbname,
     type: db.type,
     address: address,
@@ -167,8 +168,7 @@ export const getFromIpfs = async (cid) =>{
   }
 
 }
-
 export const removeDatabase = async (hash) => {
-  console.log('Unpin DB!')
-  return (hash)
+  console.log(hash.hash)
+  return programs.remove(hash.hash)
 }

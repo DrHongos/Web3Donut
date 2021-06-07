@@ -5,7 +5,6 @@ import { actions, StateProvider, loadingState  } from './state'
 import Systems from './components/systems';
 import Filters from './components/filters';
 import DatabaseForm from './components/databaseForm';
-import DatabaseCreate from './components/databaseCreate';
 import DatabaseLocal from './components/databaseLocal';
 
 function App() {
@@ -120,7 +119,6 @@ function App() {
         <DatabaseForm />
 
         :null}
-      <DatabaseCreate />
       <DatabaseLocal />
       <Filters />
       </header>

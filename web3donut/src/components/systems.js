@@ -98,9 +98,16 @@ function Systems () {
             }
           </div>
           <div>
+            <span>User:  </span>
+            {appState.user?
+            <span>{appState.user.slice(0,7)}..</span>
+              : <span>Not connected</span>
+            }
+          </div>
+          <div>
             <span>Databases - </span>
             {appState.db?
-              <span>Connected - user: {appState.user.slice(0,7)}..</span>
+              <span>Connected</span>
               : <span>Not</span>
             }
               <button onClick={()=>initDatabases()}>Update</button>

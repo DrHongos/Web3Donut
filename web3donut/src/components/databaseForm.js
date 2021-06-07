@@ -28,20 +28,20 @@ function DatabaseForm(props) {
           setLoading = {setLoading}
         />
         :null}
+        {appState.dbDAGtest?
+          <DBCard
+          name = 'DAG Tests'
+          db = {appState.dbDAGtest}
+          entries = {appState.entriesDAGtest}
+          user = {appState.user}
+          setLoading = {setLoading}
+          />
+          :null}
         {appState.dbrequests?
         <DBCard
           name = 'Requests'
           db = {appState.dbrequests}
           entries = {appState.entriesReq}
-          user = {appState.user}
-          setLoading = {setLoading}
-        />
-        :null}
-        {appState.dbDAGtest?
-        <DBCard
-          name = 'DAG Tests'
-          db = {appState.dbDAGtest}
-          entries = {appState.entriesDAGtest}
           user = {appState.user}
           setLoading = {setLoading}
         />
