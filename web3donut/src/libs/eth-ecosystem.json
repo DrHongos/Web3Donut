@@ -256,7 +256,7 @@
         { "name": "Math wallet", "img": "https://assets.coingecko.com/coins/images/11335/small/2020-05-19-token-200.png?1589940590", "url": "https://mathwallet.org/", "value": 10},
         { "name": "MEW", "img": "", "url": "https://www.myetherwallet.com/", "value": 10},
         { "name": "Metamask", "img": "", "value": 10, "children": [
-          {"name": "website", "img": "", "url": "https://twitter.com/MetaMask", "value": 1},
+          {"name": "website", "img": "", "url": "https://metamask.io/", "value": 1},
           {"name": "twitter", "img": "", "url": "https://twitter.com/MetaMask", "value": 1},
           {"name": "support twitter", "img": "", "url": "https://twitter.com/MetamaskSupport", "value": 1},
           {"name": "support website", "img": "", "url": "https://metamask.zendesk.com/hc/en-us", "value": 1},

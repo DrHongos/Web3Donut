@@ -45,18 +45,12 @@ function CollapsibleTree(props) {
     const gNode = svg.append("g")
         .attr("cursor", "pointer")
         .attr("pointer-events", "all");
-    // const lNode = svg.append("g") // for leaf nodes? ()
-    //     .style("cursor","crosshair")
-    //     .on("click", goto)
 
 
     function update(source) {
       const duration = d3.event && d3.event.altKey ? 2500 : 250;
       const nodes = root.descendants().reverse();
-      // const cNodes = nodes.filter(x=>x.children);
-      // const lNodes = nodes.filter(x=>!x.children); // doesnt work. gets children of current node, not the ones at the leafs
       const links = root.links();
-
 
       // Compute the new tree layout.
       tree(root);
@@ -79,19 +73,31 @@ function CollapsibleTree(props) {
       const node = gNode.selectAll("g")
         .data(nodes, d => d.id);
 
+
+      function goto(url){
+        console.log(url)
+        // const url = p.data.url;
+        if(url) window.open(url, '_blank').focus();
+      }
+
+
       // Enter any new nodes at the parent's previous position.
       const nodeEnter = node.enter().append("g")
           .attr("transform", d => `translate(${source.y0},${source.x0})`)
           .attr("fill-opacity", 0)
           .attr("stroke-opacity", 0)
           .on("click", (event, d) => {
-            d.children = d.children ? null : d._children;
-            update(d);
+            if(d._children){
+              d.children = d.children ? null : d._children;
+              update(d);
+            }else{
+              goto(d.data.url)
+            }
           });
 
       nodeEnter.append("circle")
           .attr("r", 2.5)
-          .attr("fill", d => d._children ? "#555" : "#999")
+          .attr("fill", d => d._children ? "#ff5733" : "#999")
           .attr("stroke-width", 10);
 
       nodeEnter.append("text")
@@ -99,6 +105,17 @@ function CollapsibleTree(props) {
           .attr("x", d => d._children ? -6 : 6)
           .attr("text-anchor", d => d._children ? "end" : "start")
           .text(d => d.data.name)
+          .on("mouseover", function (d) {
+            // console.log(d.target)
+            d3.select(d.target).style("fill", "blue");
+          })
+          .on("mouseout", function (d) {
+            if(d.target._children){
+              d3.select(d.target).style("fill", "#ff5733");
+            }else{
+              d3.select(d.target).style("fill", "black");
+            }
+          })
         .clone(true).lower()
           .attr("stroke-linejoin", "round")
           .attr("stroke-width", 3)
