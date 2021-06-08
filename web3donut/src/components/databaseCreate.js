@@ -24,9 +24,7 @@ function DatabaseCreate(props) {
           {openCreate?
             <div>
             <hr class="solid"></hr>
-            <h3>Create your Database</h3>
-            <p>You create a DB for your DB's, its on your browser.. to improve security, copy its address wherever else</p>
-            <p>Your user (signer) of the DB also could be deleted from browser.. for that we need to improve wiht <b>identity</b></p>
+            <p>Create your Database</p>
             <button onClick={()=>setCreateDB(!createDB)}>Create new</button>
             {createDB?
               <div>

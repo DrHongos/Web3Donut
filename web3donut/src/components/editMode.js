@@ -9,7 +9,7 @@ function EditModal(props) {
   const [entries, setEntries] = useState([]);
   const canWrite = (db) =>{return db.access._write.includes(props.user) || db.access._write[0] ==='*'};
 
-  useEffect(async ()=>{
+  useEffect(async ()=>{ // eslint-disable-line react-hooks/exhaustive-deps
       setLoading(true);
       async function fetchDB(address){
         const db = await getDB(address)

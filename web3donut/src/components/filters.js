@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
-import Donut from "./donut";
+import Donut from "./D3Graphs/donut";
+import CollapsibleTree from "./D3Graphs/collapsibleTree";
 import {getDagObject, getTreeIpfs} from '../libs/databaseLib';
 import {useStateValue } from '../state';
 const protocolsData = require("../libs/eth-ecosystem");
@@ -11,6 +12,7 @@ function Filters(props) {
   const [search, setSearch] = useState();
   const [results, setResults] = useState([]);
   const [dataGraphed, setDataGraphed] = useState();
+  const [vis,setVis] = useState('sunburst');
 
   const dataCid = async (cid) => {return getDagObject(cid)}
 
@@ -125,7 +127,6 @@ function Filters(props) {
 
       >
       <hr class="solid"></hr>
-
       Database type:
       <button onClick={()=>{
         setData(protocolsData)
@@ -133,22 +134,33 @@ function Filters(props) {
       <button disabled={!appState.entries.length >0} onClick={()=>{getLatestDB('ipfsObject')}}>ipfsObject</button>
       <button disabled={!appState.entriesDAGtest.length >0} onClick={()=>{getLatestDB('ipfsDag')}}>ipfsDAG</button><br />
       <hr class="solid"></hr>
-      <div
-        style={{
-          display:'flex',
-          justifyContent:'top',
-          alignItems:'left',
-          margin:"0vh auto"
-        }}
-        id='environment'>
-        <input placeholder='Search' onChange={(e)=>setSearch(e.target.value)}></input>
+        <div
+          style={{
+            display:'flex',
+            justifyContent:'top',
+            alignItems:'left',
+            margin:"0vh auto"
+          }}
+          id='environment'>
+        <input placeholder='Search' onChange={(e)=>setSearch(e.target.value)}></input><br />
+        <span>Graph type:
+          <button onClick={()=>setVis('sunburst')}>donut</button>
+          <button onClick={()=>setVis('collapsibleTree')}>tree</button>
+        </span>
         </div>
 
-      <Donut
+        {vis === 'sunburst'?
+          <Donut
+          data = {data}
+          dataGraphed = {dataGraphed}
+          />
+        :null}
+        {vis === 'collapsibleTree'?
+        <CollapsibleTree
         data = {data}
         dataGraphed = {dataGraphed}
-      />
-
+        />
+        :null}
       {/*results?
         <ul>
         {results.map(x=>{return <li key={x.name}>{x&&x.children?

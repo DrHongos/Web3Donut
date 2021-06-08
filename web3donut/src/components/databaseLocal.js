@@ -12,7 +12,6 @@ import '../App.css';
 function DatabaseLocal(props) {
   const [appState] = useStateValue();
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [items, setItems] = useState(appState.programs);
   const [editModal, setEditModal] = useState(false);
 
