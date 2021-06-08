@@ -4,8 +4,8 @@ import { useStateValue } from '../state'
 import EditModal from './editMode';
 import DatabaseCreate from './databaseCreate';
 import DatabaseImport from './databaseImport';
-import burn from '../libs/burn.png';
-import edit from '../libs/edit.png';
+import burn from '../libs/icons/burn.png';
+import edit from '../libs/icons/edit.png';
 
 // import DBCard from './databaseCard'; // not usable.. had to adapt!
 import '../App.css';
@@ -41,14 +41,12 @@ function DatabaseLocal(props) {
                   <tr>
                     <th>name</th>
                     <th>Type</th>
-                    <th>Address</th>
                     <th>Functions</th>
                   </tr>
                   {items.map(x => {return(
                   <tr >
                    <td>{x.payload.value.name}</td>
                    <td>{x.payload.value.type}</td>
-                   <td>{x.payload.value.address}</td>
                    <td>
                     <button onClick={()=>setEditModal(x.payload.value.address)}><img src={edit} alt='open&edit' width="20" height="23"></img></button>
                     <button onClick={()=>removeDatabase(x)}><img src={burn} alt='delete' width="20" height="23"></img></button>

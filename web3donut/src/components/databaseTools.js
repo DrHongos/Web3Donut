@@ -3,79 +3,60 @@ import { dagPreparation } from '../libs/databaseLib';
 import {  useStateValue } from '../state'; //actions,
 
 function DBTools(props) {
-  // const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [appState] = useStateValue();//, dispatch
-  const [createKv, setCreateKv] = useState(false);
-  const [createLogModal, setCreateLogModal] = useState(false);
-  // const [requestPermission, setRequestPermission] = useState(false);
   const [uploadJson, setUploadJson] = useState(false);
 
-
   // converge all input functions! manage different databases and inputs
-
-  async function createLog(value){
+  async function createEntry(value){
     // if (event) event.preventDefault()
     // if (value.length === 0) return
-    // Create log has to manage multiple db's! and inputs..
     let db = props.db;
-    // this to manage the add log button.. data is also introduced in args
+    let key
     if(!value){
-      value = document.getElementById('logValue').value;
+      value = document.getElementById('value').value;
     }
-//  Metadata of the log
-    let timestamp = new Date(); // but not timing.. this goes by orbitdb
-// Creates the ipfs block (is it a block?)
-    let ipfsCid = await dagPreparation({value:value,  timestamp:timestamp}) //comment: comment,
-    console.log(ipfsCid.toString())
-// catch error in input for eventlogs (remember CRUD functions are different)
+    try{
+      key = document.getElementById('key').value
+    }catch{
+      key = 'dbEntry'
+    }
     if (db.type === 'eventlog') {
-      await db.add({key:'db',value:ipfsCid.string})
+      //  Metadata of the log
+      let timestamp = new Date();
+      let ipfsCid = await dagPreparation({value:value,  timestamp:timestamp})
+      // console.log(ipfsCid.toString())
+      await db.add({key:key,value:ipfsCid.string})
     }else if(db.type === 'keyvalue'){
-      await db.set('msg',{value:value})
+      await db.set(key,{value:value})
+    }else if(db.type === 'docstore'){
+      await db.put({_id:key, value:value});
+    }else if(db.type === 'counter'){
+      let fl
+      try{
+        fl = parseFloat(value)
+      }catch{
+        console.log('Please insert a number!')
+        return
+      }
+      await db.inc(fl);
     }
     else{
-      throw new Error('This component can only handle eventlog/key-values!.. finish it!')
+      throw new Error('There was an error!')
     }
-    // const entries = await db.iterator({ limit: 5 }).collect().reverse()
-    // and then dispatch specific call (switch?)
-      // dispatch({ type: actions.DB.SET_DB, db, entries })
-      // dispatch({ type: actions.DBTRASH.SET_DBTRASH, db, entries })
+    // const allEntries = await db.iterator({ limit: 5 }).collect().reverse(); // iterator doesnt work for everyone
+    // props.setEntries(allEntries);
     console.log('Saved!')
+    setOpen(false);
   }
 
-  // async function requestWritePermission(){
-  //   let db = appState.dbrequests;
-  //   let name = document.getElementById('requestName').value;
-  //   let msg = document.getElementById('requestMsg').value;
-  //   let ids = appState.db.identity._id; // nope!!
-  //   await db.set(name,{name:name, msg:msg, id:ids})
-  //   const entries = Object.keys(db.all).map(e => ({ payload: { value: {key: e, value: db.get(e)} } }))
-  //   dispatch({ type: actions.DBREQUESTS.SET_DBREQUESTS, db, entries })
-  // }
 
-  const addKv = async () => {
-    const db = props.db
-    let key = document.getElementById('key').value
-    let value = document.getElementById('value').value
-    // let timestamp = new Date();
-    // let eventCid = await dagPreparation({creator: appState.user, timestamp:timestamp})
-    // let ipfsCid = await dagPreparation({key:key,value:value, event:eventCid}) // all as a DAG?
-    if (db.type !== 'keyvalue') {
-      throw new Error('This component can only handle Key-Value databases')
-    }
-    await db.set(key,{value:value}) // if i send a complete CID, i got signature errors
-    console.log('saved!')
-    setCreateKv(false);
-    // const entries = Object.keys(db.all).map(e => ({ payload: { value: {key: e, value: db.get(e)} } }))
-    // dispatch({ type: actions.DB.SET_DB, db, entries }) // handle different actions
-  }
-
-  async function wrapAndLog(obj, db){ // wrap and return..
+  async function wrapAndLog(obj, db){
     if(!db){
       db = appState.db
     }
     let cid = await dagPreparation(obj)
-    createLog(cid.toString())
+    createEntry(cid.toString())
     console.log('cid obj',cid.toString())
     return cid;
   }
@@ -83,7 +64,6 @@ function DBTools(props) {
   async function uploadJsonDB(){
     const selectedFile = document.getElementById('jsonInput').files[0];
     let obj
-    // let cid
     let reader = new FileReader();
     reader.readAsText(selectedFile);
     reader.onloadend = function () {
@@ -95,34 +75,32 @@ function DBTools(props) {
 
   return (
     <div>
-{/* Adding/Edit content */}
-      <button disabled onClick={()=>{props.db.del(props.db.all)}}>Delete kvstore</button>
-      <button disabled={(!props.canWrite || props.db._type !== 'keyvalue')} onClick={()=>setCreateKv(!createKv)}>Add kv</button>
-      <button disabled={!props.canWrite || props.db._type !== 'eventlog'} onClick={()=>setCreateLogModal(!createLogModal)}>Add log</button>
+      <button disabled={!props.canWrite} onClick={()=>setOpen(!open)}>Add to DB</button>
       <button disabled={!props.canWrite || props.db._type !== 'eventlog'} onClick={()=>setUploadJson(!uploadJson)}>Add a new DB object</button>
-      {/*<button disabled={appState.entriesReq.length === 0} onClick={()=>setRequestPermission(!requestPermission)}>request permissions</button>*/}
-      
-      {createKv?
+
+      {open?
         <div>
-          <input id='key' placeholder='key'></input><br />
-          <input id='value' placeholder='value'></input><br />
-          <button onClick={()=>{addKv()}}>create!</button>
-        </div>
-      :null}
-      {createLogModal?
-        <div>
-          <input id='logValue' placeholder='new DB CID'></input><br />
-          <button onClick={()=>{createLog()}}>make a log!</button>
+        {(props.db._type === 'keyvalue' || props.db._type === 'eventlog')?
+          <div>
+            <input id='key' placeholder='key'></input><br />
+            <input id='value' placeholder='value'></input><br />
+          </div>
+        :null}
+        {props.db._type === 'counter'?
+          <input id='value' type='number' placeholder='number'></input>
+        :null}
+
+        {props.db._type === 'docstore'?
+          <div>
+          <input id='key' placeholder='id'></input>
+          <input id='value' placeholder='value'></input>
+          </div>
+        :null}
+
+        <button onClick={()=>{createEntry()}}>Add!</button>
         </div>
       :null}
 
-      {/*requestPermission?
-        <div>
-          <input id='requestName' placeholder='name'></input><br />
-          <input id='requestMsg' placeholder='msg'></input><br />
-          <button onClick={()=>{requestWritePermission()}}>Send!</button><br />
-        </div>
-      :null*/}
 
       {uploadJson?
           <div>
