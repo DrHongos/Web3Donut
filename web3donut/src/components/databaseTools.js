@@ -1,12 +1,15 @@
 import React, {useState} from "react";
 import { dagPreparation } from '../libs/databaseLib';
-import {  useStateValue } from '../state'; //actions,
+import ObjectCreator from './objectCreation';
+// import {  useStateValue } from '../state'; //actions,
 
 function DBTools(props) {
   const [open, setOpen] = useState(false);
-  const [appState] = useStateValue();//, dispatch
+  // const [appState] = useStateValue();//, dispatch
+  const [ objectForm ,setObjectForm] = useState(false);
   const [uploadJson, setUploadJson] = useState(false);
   const [wrap, setWrap] = useState(true);
+
   // converge all input functions! manage different databases and inputs
   async function createEntry(value){
     // if (event) event.preventDefault()
@@ -60,7 +63,7 @@ function DBTools(props) {
 
 
   async function wrapAndLog(obj){
-    const db = props.db
+    // const db = props.db
     let cid = await dagPreparation(obj)
     console.log('cid obj',cid.toString())
     createEntry(cid.toString())
@@ -87,15 +90,19 @@ function DBTools(props) {
   return (
     <div>
       <button disabled={!props.canWrite} onClick={()=>setOpen(!open)}>Add to DB</button>
-      <button disabled={!props.canWrite || props.db._type !== 'eventlog'} onClick={()=>setUploadJson(!uploadJson)}>Add a new DB object</button>
-
+      <button disabled={!props.canWrite || props.db._type !== 'eventlog'} onClick={()=>setUploadJson(!uploadJson)}>Upload an object</button>
+      <button disabled={!props.canWrite} onClick={()=>setObjectForm(!objectForm)}>Create an object</button>
       {open?
         <div>
         {(props.db._type === 'keyvalue' || props.db._type === 'eventlog')?
           <div>
             <input id='key' placeholder='key'></input><br />
             <input id='value' placeholder='value'></input><br />
+            {props.db._type ==='eventlog'?
+            <div>
             <input type='checkbox' value={wrap} checked={wrap} onChange={()=>setWrap(!wrap)}></input>Wrap value in a DAG
+            </div>
+            :null}
           </div>
         :null}
         {props.db._type === 'counter'?
@@ -121,12 +128,22 @@ function DBTools(props) {
             <input type="file"
               id="fileInput">
            </input>
+           <input type='checkbox' value={wrap} checked={wrap} onChange={()=>setWrap(!wrap)}></input>Wrap value in a DAG
            {/*accept=".json"*/}
            <div>
             <button onClick={()=>uploadJsonDB()}>Upload!</button>
           </div>
           </div>
      :null}
+
+     {objectForm?
+       <ObjectCreator
+          createEntry = {createEntry}
+          wrap = {wrap}
+          setWrap = {setWrap}
+       />
+       :null}
+
     </div>
   );
 }

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {getDB, ipldExplorer} from "../libs/databaseLib";
 import DBTools from './databaseTools';
 import copy from '../libs/icons/copy.png';
-import explore from '../libs/icons/explore.jpg';
+import explore from '../libs/icons/explore.png';
 
 import '../App.css'
 

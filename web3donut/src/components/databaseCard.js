@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import DBTools from './databaseTools';
 import IPFSTools from './ipfsTools';
-import explore from '../libs/icons/explore.jpg';
+import explore from '../libs/icons/explore.png';
 
 import {getDagCid, getDagObject, getTreeIpfs, ipldExplorer} from '../libs/databaseLib';
 // import {fetchDB} from './systems';

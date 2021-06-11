@@ -23,7 +23,7 @@ function Systems () {
         entries = [{ payload: { value: "TODO" } }]
     switch (type) {
       case 'access.manager':
-        dispatch({ type: actions.DBREQUESTS.SET_DBREQUESTS, db, entries })
+        dispatch({ type: actions.DBGUIDE.SET_DBGUIDE, db, entries })
         break;
       case 'ipfsDAG':
         dispatch({ type: actions.DBDAGTEST.SET_DBDAGTEST, db, entries })

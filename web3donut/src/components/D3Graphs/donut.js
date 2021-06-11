@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import logo from '../../libs/raidGuildLogo.png';
+import logo from '../../libs/images/raidGuildLogo.png';
 import '../../App.css';
 
 const d3 = require("d3");

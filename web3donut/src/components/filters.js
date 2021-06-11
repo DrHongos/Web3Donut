@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from "react";
 import Donut from "./D3Graphs/donut";
 import CollapsibleTree from "./D3Graphs/collapsibleTree";
-import {getDagObject, getV0} from '../libs/databaseLib'; //, getTreeIpfs
+import {getDagObject} from '../libs/databaseLib'; //, getTreeIpfs
 import {useStateValue } from '../state';
-const protocolsData = require("../libs/eth-ecosystem");
+const protocolsData = require("../libs/modelsObjects/eth-ecosystem");
 
 function Filters(props) {
   const [appState] = useStateValue();
@@ -25,25 +25,34 @@ function Filters(props) {
       case 'ipfsDag':
         let children = []
         entries = appState.entriesDAGtest[0]
-        console.log('entries',entries)
+        // console.log('entries',entries)
+        // first CID : gets the cid of value
         cid = await getDagObject(entries.payload.value.value)
         // console.log('datacid',cid)
-        console.log('cid',cid)
+        // console.log('cid',cid)
+        // Then gets the object of that cid
         dagObj = await getDagObject(cid.value)
+        // supposedly a json object
         const dagObject = JSON.parse(dagObj.value)
-        console.log('dagObj',dagObject)
+        // console.log('dagObj',dagObject)
         // console.log('dagOb', dagObject)
+
+        // with different categories
         // let dagTree = await getTreeIpfs(cid.value)
         // console.log('obj tree', dagTree)
         for(let branch in dagObject){
           if(branch !== 'name'){
-            console.log('branch',branch)
+            // console.log('branch',branch)
+            // we retrieve the object inside each category
             // console.log(dagObject[branch]) // i need to differentiate Qm.. from v1 CID's
             let obj = await getDagObject(dagObject[branch])
-            if(obj.children){
-              children.push(obj.children[0])
+            // console.log('obj',obj)
+
+            if(obj){
+              children.push(obj)
             }else{
-              obj = await getV0(dagObject[branch]);
+              // error in strucure.. show what's missing
+              // obj = await getV0(dagObject[branch]);
               console.log(obj)
             }
           }

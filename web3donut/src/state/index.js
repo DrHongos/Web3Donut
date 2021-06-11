@@ -17,11 +17,8 @@ export const actions = {
   DB: {
     SET_DB: 'SET_DB'
   },
-  DBREQUESTS:{
-    SET_DBREQUESTS:'SET_DBREQUESTS'
-  },
-  DBTRASH:{
-    SET_DBTRASH:'SET_DBTRASH'
+  DBGUIDE:{
+    SET_DBGUIDE:'SET_DBGUIDE'
   },
   DBDAGTEST:{
     SET_DBDAGTEST:'SET_DBDAGTEST'
@@ -36,10 +33,8 @@ export const actions = {
   PROGRAMS: {
     SET_PROGRAMS: 'SET_PROGRAMS',
     SET_PROGRAMS_LOADING: 'SET_PROGRAMS_LOADING',
-    SET_PROGRAM: 'SET_PROGRAM',
-    SET_PROGRAM_LOADING: 'SET_PROGRAM_LOADING'
   }
-  
+
 }
 
 export const loadingState = 'loading'

@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import {useStateValue } from '../state';
 import DBCard from './databaseCard';
 
-// when i f*ck up DB i have to open control center, generate one, then create the same one from the browser, now its replicated (it will say that is already created!)
 function DatabaseForm(props) {
   const [appState] = useStateValue();
   const [loading, setLoading] = useState(false);
@@ -39,20 +38,11 @@ function DatabaseForm(props) {
           setLoading = {setLoading}
           />
           :null}
-        {appState.dbrequests?
+        {appState.dbGuide?
         <DBCard
-          name = 'Requests'
-          db = {appState.dbrequests}
-          entries = {appState.entriesReq}
-          user = {appState.user}
-          setLoading = {setLoading}
-        />
-        :null}
-        {appState.dbTrash?
-        <DBCard
-          name = 'Trash'
-          db = {appState.dbTrash}
-          entries = {appState.entriesTrash}
+          name = 'Guide'
+          db = {appState.dbGuide}
+          entries = {appState.entriesGuide}
           user = {appState.user}
           setLoading = {setLoading}
         />
@@ -68,21 +58,6 @@ function DatabaseForm(props) {
         :null}
         </div>
         :null}
-
-{/*
-  Model 1 : Data as an object, root CID update<br />
-  test the DB to log (add functions)<br />
-  Connect all DB (fetch last one synched)<br />
-  get data from IPFS for the sunburst<br />
-
-  DB retrieval (replicate every xxx seconds)<br />
-  Add access control (give/revoke access functions)<br />
-
-  Model 2 : Data as DAG, update all parents till root (finally root update)<br />
-  Create a leaf/branch form to introduce elements<br />
-  where does DAGs work better?<br />
-  Retest ipfs.dag get (for link nodes) / cat (for objects )<br />
-  */}
       </div>
 
   );

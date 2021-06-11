@@ -1,0 +1,24 @@
+{
+  "name": "EtherJs",
+  "children": [
+    {
+      "name":  "API",
+      "children": [
+        { "name": "Providers","children":[]},
+          {"name":"doc","url": "https://docs.ethers.io/v5/api/providers/", "value": 10},
+        { "name": "Signers",,"children":[]},
+          {"name":"doc","url": "https://docs.ethers.io/v5/api/signer/", "value": 10},
+        { "name": "Contract Interaction","children":[]},
+          {"name":"doc","url": "https://docs.ethers.io/v5/api/contract/", "value": 10},
+        { "name": "Utilities","children":[]},
+          {"name":"doc","url": "https://docs.ethers.io/v5/api/utils/", "value": 10},
+        { "name": "Other libraries","children":[
+          {"name":"doc","url": "https://docs.ethers.io/v5/api/other/", "value": 10},
+          ]},
+        { "name": "Experimental","children":[
+          {"name":"doc","url": "https://docs.ethers.io/v5/api/experimental/", "value": 10},
+          ]}
+        ]
+      },
+    ]
+}

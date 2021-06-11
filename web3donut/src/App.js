@@ -13,10 +13,8 @@ function App() {
     user: null,
     db: null,
     entries: [],
-    dbrequests:null,
-    entriesReq:[],
-    dbTrash:null,
-    entriesTrash:[],
+    dbGuide:null,
+    entriesGuide:[],
     dbDAGtest:null,
     entriesDAGtest:[],
     dbUsers:null,
@@ -53,17 +51,11 @@ function App() {
           db: action.db,
           entries: action.entries,
         }
-      case actions.DBREQUESTS.SET_DBREQUESTS:
+      case actions.DBGUIDE.SET_DBGUIDE:
         return {
           ...state,
-          dbrequests: action.db,
-          entriesReq: action.entries,
-        }
-      case actions.DBTRASH.SET_DBTRASH:
-        return {
-          ...state,
-          dbTrash: action.db,
-          entriesTrash: action.entries,
+          dbGuide: action.db,
+          entriesGuide: action.entries,
         }
       case actions.DBDAGTEST.SET_DBDAGTEST:
         return {
@@ -113,16 +105,18 @@ function App() {
     <StateProvider initialState={initialState} reducer={reducer}>
     <div className="App">
       <header className="App-header">
-      Change the databases to public, restore information for the visualizers<br />
-      Add DB of guide, which is a follow up (with alerts? or toasts?) of different parts of the app<br />
-      with information taken from the database IPNS blogging style<br />
-      add a Search tool to find objects in specific DB (key: orbitdb - value: orbitdb object to add in a classificator)<br />
-      Create your classifications one object at a time and join them into a DAG tree<br />
       <Systems />
       <DatabaseForm />
       <DatabaseLocal />
       <Filters />
       </header>
+      <ul>
+        <li>Add DB of guide, which is a follow up (with alerts? or toasts?) of different parts of the app</li>
+        <li>with information taken from the database IPNS blogging style</li>
+        <li>convert ipfsObject into a Search tool to find objects in specific DB (key: 'orbitdb' - value: orbitdb object CID to add in a classificator)</li>
+        <li>Create your classifications with name/object (as many as needed) into a DAG tree</li>
+        <li><a href="https://github.com/orbitdb/orbit-db-access-controllers" target='blank' rel='noopener noreferrer'>access control</a></li>
+      </ul>
     </div>
     </StateProvider>
   );
