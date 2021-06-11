@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import {getAllDatabases,  removeDatabase} from "../libs/databaseLib";
 import { useStateValue } from '../state'
 import EditModal from './editMode';
+import IPFSTools from './ipfsTools';
 import DatabaseCreate from './databaseCreate';
 import DatabaseImport from './databaseImport';
 import burn from '../libs/icons/burn.png';
@@ -42,6 +43,7 @@ function DatabaseLocal(props) {
                     <th>name</th>
                     <th>Type</th>
                     <th>Functions</th>
+                    {/* Add views for entries */}
                   </tr>
                   {items.map(x => {return(
                   <tr >
@@ -55,10 +57,13 @@ function DatabaseLocal(props) {
                  )})}
                  </table>
                  {editModal?
-                 <EditModal
-                    user = {appState.user}
-                    address = {editModal}
-                 />
+                   <div>
+                     <EditModal
+                        user = {appState.user}
+                        address = {editModal}
+                     />
+                     <IPFSTools />
+                  </div>
                  :null}
               </div>
             :'You dont have any yet. Create your first!'}

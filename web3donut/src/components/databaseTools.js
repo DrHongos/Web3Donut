@@ -6,7 +6,7 @@ function DBTools(props) {
   const [open, setOpen] = useState(false);
   const [appState] = useStateValue();//, dispatch
   const [uploadJson, setUploadJson] = useState(false);
-
+  const [wrap, setWrap] = useState(true);
   // converge all input functions! manage different databases and inputs
   async function createEntry(value){
     // if (event) event.preventDefault()
@@ -22,9 +22,17 @@ function DBTools(props) {
       key = 'dbEntry'
     }
     if (db.type === 'eventlog') {
+      let valueW;
+      if (wrap){
+        let wrappedCid = await dagPreparation({value:value})
+        valueW = wrappedCid.toString();
+        console.log('wrappedCid', valueW)
+      }else{
+        valueW = value;
+      }
       //  Metadata of the log
       let timestamp = new Date();
-      let ipfsCid = await dagPreparation({value:value,  timestamp:timestamp})
+      let ipfsCid = await dagPreparation({value:valueW,  timestamp:timestamp})
       // console.log(ipfsCid.toString())
       await db.add({key:key,value:ipfsCid.string})
     }else if(db.type === 'keyvalue'){
@@ -51,24 +59,27 @@ function DBTools(props) {
   }
 
 
-  async function wrapAndLog(obj, db){
-    if(!db){
-      db = appState.db
-    }
+  async function wrapAndLog(obj){
+    const db = props.db
     let cid = await dagPreparation(obj)
-    createEntry(cid.toString())
     console.log('cid obj',cid.toString())
+    createEntry(cid.toString())
     return cid;
   }
 
   async function uploadJsonDB(){
-    const selectedFile = document.getElementById('jsonInput').files[0];
+    const selectedFile = document.getElementById('fileInput').files[0];
     let obj
+    const extension = selectedFile.name.split('.').pop().toLowerCase();
     let reader = new FileReader();
     reader.readAsText(selectedFile);
     reader.onloadend = function () {
         console.log('Readed!', reader.readyState); // readyState will be 2
-        obj = JSON.parse(reader.result);
+        if(extension === 'json'){
+          obj = JSON.parse(reader.result);
+        }else{
+          obj = reader.result;
+        }
         wrapAndLog(obj);
       };
     }
@@ -84,6 +95,7 @@ function DBTools(props) {
           <div>
             <input id='key' placeholder='key'></input><br />
             <input id='value' placeholder='value'></input><br />
+            <input type='checkbox' value={wrap} checked={wrap} onChange={()=>setWrap(!wrap)}></input>Wrap value in a DAG
           </div>
         :null}
         {props.db._type === 'counter'?
@@ -93,7 +105,9 @@ function DBTools(props) {
         {props.db._type === 'docstore'?
           <div>
           <input id='key' placeholder='id'></input>
-          <input id='value' placeholder='value'></input>
+          <input id='value' placeholder='value'></input><br />
+          <input disabled id='query' placeholder='id(?)'></input>
+          <button disabled onClick={()=>console.log('TODO! (needs input)')}>query</button>
           </div>
         :null}
 
@@ -104,11 +118,10 @@ function DBTools(props) {
 
       {uploadJson?
           <div>
-            <p>Has to be a .json file!</p>
             <input type="file"
-              id="jsonInput"
-              accept=".json">
+              id="fileInput">
            </input>
+           {/*accept=".json"*/}
            <div>
             <button onClick={()=>uploadJsonDB()}>Upload!</button>
           </div>

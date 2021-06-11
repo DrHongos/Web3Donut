@@ -8,7 +8,7 @@ import DatabaseForm from './components/databaseForm';
 import DatabaseLocal from './components/databaseLocal';
 
 function App() {
-  const [formModal, setFormModal]=useState(false);
+  const [guide, setGuide]=useState(true);
   const initialState = {
     user: null,
     db: null,
@@ -113,12 +113,13 @@ function App() {
     <StateProvider initialState={initialState} reducer={reducer}>
     <div className="App">
       <header className="App-header">
+      Change the databases to public, restore information for the visualizers<br />
+      Add DB of guide, which is a follow up (with alerts? or toasts?) of different parts of the app<br />
+      with information taken from the database IPNS blogging style<br />
+      add a Search tool to find objects in specific DB (key: orbitdb - value: orbitdb object to add in a classificator)<br />
+      Create your classifications one object at a time and join them into a DAG tree<br />
       <Systems />
-      <button  onClick={()=>setFormModal(!formModal)}>Databases</button>
-      {formModal?
-        <DatabaseForm />
-
-        :null}
+      <DatabaseForm />
       <DatabaseLocal />
       <Filters />
       </header>

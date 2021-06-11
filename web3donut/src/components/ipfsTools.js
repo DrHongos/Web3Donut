@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { dagPreparation, getFromIpfs, addIpfs, getIpfs } from '../libs/databaseLib';
+import { dagPreparation, getFromIpfs, addIpfs, getIpfs, isCID } from '../libs/databaseLib';
 // import { actions, useStateValue } from '../state'
 
 function IPFSTools(props) {
@@ -9,6 +9,7 @@ function IPFSTools(props) {
   const [getFileIpfsModal, setGetFileIpfsModal] = useState(false);
   const [createDag, setCreateDag] = useState(false);
   const [addIpfsModal, setAddIpfsModal] = useState(false);
+  const [cidModal, setCidModal] = useState(false);
 
 
   async function SearchIPFS(){
@@ -58,7 +59,16 @@ function IPFSTools(props) {
     // }
   }
 
+  async function checkCID(){
+    const cid = document.getElementById('isCID').value.toString();
+    const is = await isCID(cid);
+    console.log(cid,' : ',is)
+  }
 
+  // async function seeBookmarks(){
+  //   const bookmarks = await browser.bookmarks.get()
+  //   console.log(bookmarks)
+  // }
 
   return (
     <div>
@@ -71,7 +81,8 @@ function IPFSTools(props) {
           <button onClick={()=>setGetFromIpfsModal(!getFromIpfsModal)}>Get ipfs</button>
           <button onClick={()=>setGetFileIpfsModal(!getFileIpfsModal)}>Get file</button>
           <button onClick={()=>setAddIpfsModal(!addIpfsModal)}>Add file to ipfs</button>
-
+          <button onClick={()=>setCidModal(!cidModal)}>is CID?</button>
+{/*       <button onClick={()=>seeBookmarks()}>Bookmarks</button>  */}
           {getFromIpfsModal?
             <div>
             <input id='getIpfs' placeholder='Qm..'></input><br />
@@ -98,6 +109,13 @@ function IPFSTools(props) {
             <button onClick={()=>{addFileIpfs()}}>Add to IPFS</button><br />
             </div>
             :null}
+          {cidModal?
+            <div>
+            <input id='isCID' placeholder='cid?'></input>
+            <button onClick={()=>{checkCID()}}>Is CID?</button><br />
+            </div>
+            :null}
+
         </div>
       :null}
 

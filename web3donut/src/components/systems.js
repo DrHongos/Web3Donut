@@ -25,11 +25,8 @@ function Systems () {
       case 'access.manager':
         dispatch({ type: actions.DBREQUESTS.SET_DBREQUESTS, db, entries })
         break;
-      case 'DAGTest.logs':
+      case 'ipfsDAG':
         dispatch({ type: actions.DBDAGTEST.SET_DBDAGTEST, db, entries })
-        break;
-      case 'test.stuff':
-        dispatch({ type: actions.DBTRASH.SET_DBTRASH, db, entries })
         break;
       case 'kvTests':
         dispatch({ type: actions.DBUSERS.SET_DBUSERS, db, entries })
@@ -48,10 +45,9 @@ function Systems () {
 
 
   async function initDatabases(){
-    await fetchDB('/orbitdb/zdpuArkzsrwpHS7ptLh4wq6YV2HfQEKSxPZGEmfNuWw8H8QYC/DBLOGS', 'DBLOGS')
-    await fetchDB('/orbitdb/zdpuApTdrZtdtUQ4xrqydQ1MgfcC41RGScm5wvCYPuWom6fJh/DAGTest.logs', 'DAGTest.logs')
+    await fetchDB('/orbitdb/zdpuB2TjWHFxPnxng4EUYX3B6s67EjcfXGf2J6uFZE7PbazCF/ipfsObject', 'ipfsObject')
+    await fetchDB('/orbitdb/zdpuAsWPoMa1tGvB83f8Kw17DzKnw7jQBE5NmfpFzRMJRE6Tk/ipfsDAG', 'ipfsDAG')
     await fetchDB("/orbitdb/zdpuAwtDbBCfDK7sDpxZn7Jgzj9WxfPgS8STaxWadKtnmTwrk/access.manager",'access.manager')
-    await fetchDB('/orbitdb/zdpuB2HtaiTPDEqPidv5tv66s8SL8UAowGLXLpcKtm7AaHRF6/test.stuff', 'test.stuff')
     await fetchDB('/orbitdb/zdpuB1HfZEqMk4Fu2M72Zef7tx3tpFJzcNdsUVCjfng6MtunB/kvTests', 'kvTests')
     }
 

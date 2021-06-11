@@ -57,8 +57,13 @@ export const getDB = async (address) => {
   return db
 }
 
+export function ipldExplorer(address) {
+  let url = `https://explore.ipld.io/#/explore/${address}`
+  if(url) window.open(url, '_blank').focus();
+}
+
 export const addDatabase = async (address) => {
-  console.log(address)
+  // console.log(address)
   const db = await getDB(address)
   console.log(db)
   return programs.add({
@@ -101,6 +106,8 @@ const recreateCid = (cid) =>{
   return properCid;
 }
 
+export const isCID = (cid) => {return CID.isCID(cid)};
+
 export const getDagCid = async (cid, path) =>{
   if(!CID.isCID(cid)){
     let properCid = recreateCid(cid)
@@ -118,9 +125,15 @@ export const getDagCid = async (cid, path) =>{
 }
 
 export const getDagObject = async (cid) =>{
+  // difference v1 and v0.. retrieve both obv..
   for await (const result of ipfsNode.cat(cid.toString())) {
     return result
   }
+}
+
+export const getV0 = async (cid) =>{ //asyncgenerator
+  let res = await ipfsNode.get(cid);
+  return res;
 }
 
 export const getIpfs = async (cid) =>{

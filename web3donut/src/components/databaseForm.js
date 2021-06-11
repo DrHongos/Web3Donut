@@ -6,22 +6,24 @@ import DBCard from './databaseCard';
 function DatabaseForm(props) {
   const [appState] = useStateValue();
   const [loading, setLoading] = useState(false);
-
+  const [open, setOpen] = useState(false);
 
   return (
       <div>
-
         {loading?
           <div><hr class="solid"></hr>
             <p>Loading.. (data not replicated!)</p>
           <hr class="solid"></hr></div>
           :null}
+          <hr class="solid"></hr>
+          <button  onClick={()=>setOpen(!open)}>Databases</button>
 
         <hr class="solid"></hr>
-
+        {open?
+          <div>
         {appState.db?
         <DBCard
-          name = 'IPFS Object Tests'
+          name = 'IPFS Object'
           db = {appState.db}
           entries = {appState.entries}
           user = {appState.user}
@@ -30,7 +32,7 @@ function DatabaseForm(props) {
         :null}
         {appState.dbDAGtest?
           <DBCard
-          name = 'DAG Tests'
+          name = 'IPFS DAG '
           db = {appState.dbDAGtest}
           entries = {appState.entriesDAGtest}
           user = {appState.user}
@@ -64,7 +66,8 @@ function DatabaseForm(props) {
           setLoading = {setLoading}
         />
         :null}
-
+        </div>
+        :null}
 
 {/*
   Model 1 : Data as an object, root CID update<br />

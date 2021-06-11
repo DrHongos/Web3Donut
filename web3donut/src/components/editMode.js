@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from "react";
-import {getDB} from "../libs/databaseLib";
+import {getDB, ipldExplorer} from "../libs/databaseLib";
 import DBTools from './databaseTools';
 import copy from '../libs/icons/copy.png';
+import explore from '../libs/icons/explore.jpg';
 
 import '../App.css'
 
@@ -61,6 +62,9 @@ function EditModal(props) {
           {entries && entries.length > 0?
             <table>
               <tr>
+                {db._type === 'keyvalue' || db._type === 'eventlog'?
+                <th>functions</th>
+                :null}
                 {db._type !== 'counter'?
                 <th>key</th>
                 :null}
@@ -68,11 +72,17 @@ function EditModal(props) {
               </tr>
             {entries.map((x, item)=>{return (
               <tr key={item}>
-                {db._type === 'keyvalue' || db._type === 'eventlog'?
-                  <td>{x.payload.value.key}</td>
-                :null}
-                {db._type === 'docstore'?
-                  <td>{x.payload.value._id}</td>
+              {db._type === 'keyvalue' || db._type === 'eventlog'?
+              <td><button onClick={()=>ipldExplorer(x.payload.value.value)}><img src={explore} alt='explore' width="20" height="23"></img></button></td>
+              :null}
+              {db._type !== 'counter'?
+                <td>
+                  <p>{x.payload.value.key}</p>
+
+                  {db._type === 'docstore'?
+                  <p>{x.payload.value._id}</p>
+                  :null}
+                  </td>
                 :null}
 
                 {db._type === 'keyvalue'?
@@ -84,12 +94,11 @@ function EditModal(props) {
                 {db._type === 'counter'?
                   <td>{x.payload.value}</td>
                 :null}
-
               </tr>
             )})}
 
           </table>
-          :null}
+          :<p>no entries or DB not synched..  <a href='https://www.youtube.com/watch?v=MkoeqtKUUe4' target='_blank' rel='noreferrer' style={{color:'white'}}>listen meanwhile</a></p>}
         </div>
         }
 

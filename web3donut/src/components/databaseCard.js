@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import DBTools from './databaseTools';
 import IPFSTools from './ipfsTools';
+import explore from '../libs/icons/explore.jpg';
 
-import {getDagCid, getDagObject, getTreeIpfs} from '../libs/databaseLib';
+import {getDagCid, getDagObject, getTreeIpfs, ipldExplorer} from '../libs/databaseLib';
 // import {fetchDB} from './systems';
 
 function DBCard(props) {
@@ -10,10 +11,7 @@ function DBCard(props) {
   const [tip, setTip] = useState('');
   const canWrite = props.db.access._write.includes(props.user) || props.db.access._write[0] ==='*';
 
-  function ipldExplorer(address) {
-    let url = `https://explore.ipld.io/#/explore/${address}`
-    if(url) window.open(url, '_blank').focus();
-  }
+
 
 // continue debugging databaseTools for usage of DBs
   async function retrieve(type, cid, path){
@@ -81,9 +79,9 @@ function DBCard(props) {
                   <span>{' - '}
                   value: {x.payload?.value?.value? x.payload.value.value.slice(0,4) : 'loading'}...
                   <button onClick={()=>retrieve('dagCat',x.payload.value.value)}>CAT</button>
-                  <button onClick={()=>ipldExplorer(x.payload.value.value)}>Explorer</button>
+                  <button onClick={()=>ipldExplorer(x.payload.value.value)}><img src={explore} alt='explore' width="20" height="23"></img></button>
                   <button onClick={()=>retrieve('dag', x.payload.value.value)}>DAG.GET</button>
-                  <button onClick={()=>retrieve('tree',x.payload.value.value)}>DAG.TREE</button> 
+                  <button onClick={()=>retrieve('tree',x.payload.value.value)}>DAG.TREE</button>
                   </span>
                 :null}
                 </li>)})}

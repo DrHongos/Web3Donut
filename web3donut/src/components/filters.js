@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Donut from "./D3Graphs/donut";
 import CollapsibleTree from "./D3Graphs/collapsibleTree";
-import {getDagObject, getTreeIpfs} from '../libs/databaseLib';
+import {getDagObject, getV0} from '../libs/databaseLib'; //, getTreeIpfs
 import {useStateValue } from '../state';
 const protocolsData = require("../libs/eth-ecosystem");
 
@@ -25,17 +25,27 @@ function Filters(props) {
       case 'ipfsDag':
         let children = []
         entries = appState.entriesDAGtest[0]
+        console.log('entries',entries)
         cid = await getDagObject(entries.payload.value.value)
-        console.log('datacid',cid)
+        // console.log('datacid',cid)
+        console.log('cid',cid)
         dagObj = await getDagObject(cid.value)
-        console.log('dagOb', dagObj)
-        let dagTree = await getTreeIpfs(cid.value)
-        console.log('obj tree', dagTree)
-        for(let branch in dagObj){
+        const dagObject = JSON.parse(dagObj.value)
+        console.log('dagObj',dagObject)
+        // console.log('dagOb', dagObject)
+        // let dagTree = await getTreeIpfs(cid.value)
+        // console.log('obj tree', dagTree)
+        for(let branch in dagObject){
           if(branch !== 'name'){
-            console.log(dagObj[branch])
-            let obj = await getDagObject(dagObj[branch])
-            children.push(obj.children[0])
+            console.log('branch',branch)
+            // console.log(dagObject[branch]) // i need to differentiate Qm.. from v1 CID's
+            let obj = await getDagObject(dagObject[branch])
+            if(obj.children){
+              children.push(obj.children[0])
+            }else{
+              obj = await getV0(dagObject[branch]);
+              console.log(obj)
+            }
           }
         }
 
@@ -46,14 +56,14 @@ function Filters(props) {
         entries = appState.entries[0] // [0] is the last log
         cid = await dataCid(entries.payload.value.value)
         dagObj = await dataCid(cid.value)
-        console.log('dagOb', dagObj)
+        // console.log('dagOb', dagObj)
         result = dagObj
 
         break;
       default:
           return
     }
-    console.log(entries)
+    // console.log(entries)
     setData(result)
     return result;
 
