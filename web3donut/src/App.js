@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React from "react"; //,{useState}
 import './App.css';
 import { actions, StateProvider, loadingState  } from './state'
 
@@ -8,7 +8,7 @@ import DatabaseForm from './components/databaseForm';
 import DatabaseLocal from './components/databaseLocal';
 
 function App() {
-  const [guide, setGuide]=useState(true);
+  // const [guide, setGuide]=useState(true);
   const initialState = {
     user: null,
     db: null,
@@ -113,9 +113,9 @@ function App() {
       <ul>
         <li>Add DB of guide, which is a follow up (with alerts? or toasts?) of different parts of the app</li>
         <li>with information taken from the database IPNS blogging style</li>
-        <li>convert ipfsObject into a Search tool to find objects in specific DB (key: 'orbitdb' - value: orbitdb object CID to add in a classificator)</li>
-        <li>Create your classifications with name/object (as many as needed) into a DAG tree</li>
+        <li>convert ipfsObject (key-value or doc?) into a Search tool to find objects in specific DB (key: 'orbitdb' - value: orbitdb object CID to add in a classificator)</li>
         <li><a href="https://github.com/orbitdb/orbit-db-access-controllers" target='blank' rel='noopener noreferrer'>access control</a></li>
+        <li>Encryption and privacy</li>
       </ul>
     </div>
     </StateProvider>

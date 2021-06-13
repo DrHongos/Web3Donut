@@ -11,18 +11,15 @@ function DBTools(props) {
   const [wrap, setWrap] = useState(true);
 
   // converge all input functions! manage different databases and inputs
-  async function createEntry(value){
+  async function createEntry(key, value){
     // if (event) event.preventDefault()
     // if (value.length === 0) return
     let db = props.db;
-    let key
     if(!value){
       value = document.getElementById('value').value;
     }
-    try{
+    if(!key){
       key = document.getElementById('key').value
-    }catch{
-      key = 'dbEntry'
     }
     if (db.type === 'eventlog') {
       let valueW;
@@ -64,9 +61,11 @@ function DBTools(props) {
 
   async function wrapAndLog(obj){
     // const db = props.db
+    let key = document.getElementById('key').value
     let cid = await dagPreparation(obj)
     console.log('cid obj',cid.toString())
-    createEntry(cid.toString())
+    setUploadJson(false);
+    createEntry(key, cid.toString())
     return cid;
   }
 
@@ -111,10 +110,10 @@ function DBTools(props) {
 
         {props.db._type === 'docstore'?
           <div>
-          <input id='key' placeholder='id'></input>
-          <input id='value' placeholder='value'></input><br />
-          <input disabled id='query' placeholder='id(?)'></input>
-          <button disabled onClick={()=>console.log('TODO! (needs input)')}>query</button>
+            <input id='key' placeholder='id'></input>
+            <input id='value' placeholder='value'></input><br />
+            <input disabled id='query' placeholder='id(?)'></input>
+            <button disabled onClick={()=>console.log('TODO! (needs input)')}>query</button>
           </div>
         :null}
 
@@ -125,9 +124,10 @@ function DBTools(props) {
 
       {uploadJson?
           <div>
+            <input id='key' placeholder='key'></input><br />
             <input type="file"
               id="fileInput">
-           </input>
+           </input><br />
            <input type='checkbox' value={wrap} checked={wrap} onChange={()=>setWrap(!wrap)}></input>Wrap value in a DAG
            {/*accept=".json"*/}
            <div>

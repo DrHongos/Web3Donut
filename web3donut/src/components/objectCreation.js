@@ -1,16 +1,21 @@
 import React, {useState} from "react";
-import { dagPreparation } from '../libs/databaseLib';
 
 function ObjectCreator(props) {
   const [fields, setFields] = useState([]);
 
   function deleteItem(e){
-    console.log(e.target)
+    let fieldsCurrent = [...fields]
+    const index = fields.indexOf(fields.find(x=>x.key === e));
+    if (index > -1) {
+      fieldsCurrent.splice(index, 1);
+      setFields(fieldsCurrent)
+      console.log("removing: ",e)
+    }
   }
 
   function nameProject(){
     let name = document.getElementById('name').value;
-    const obj = {key:'name', value:name}
+    const obj = {key:'name', value:name}//[, {key:'key', value:name}] // test the key here
     setFields(prevState => (
       [...prevState, obj]
     ))
@@ -26,10 +31,11 @@ function ObjectCreator(props) {
     document.getElementById('key').value = '';
     document.getElementById('value').value = '';
   }
+
   async function createObject(){
     const result = Object.fromEntries(fields.map(k => [k["key"], k["value"]]))
     console.log(JSON.stringify(result))
-    await props.createEntry(JSON.stringify(result))
+    await props.createEntry(result['name'],JSON.stringify(result))
     }
 
   return (
@@ -40,7 +46,7 @@ function ObjectCreator(props) {
             <div>
               <ul>
                 {fields.map(x=>{return(
-                    <li>key: {x.key} - value: {x.value} - <button onClick={(e)=>deleteItem(e)}>delete</button></li>
+                    <li>key: {x.key} - value: {x.value} - <button onClick={()=>deleteItem(x.key)}>delete</button></li>
                 )})}
               </ul>
               <div>
