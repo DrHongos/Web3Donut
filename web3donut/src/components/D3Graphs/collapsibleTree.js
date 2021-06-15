@@ -31,7 +31,8 @@ function CollapsibleTree(props) {
       if (d.depth && d.data.name.length !== 7 && !props.dataGraphed) d.children = null;
     });
 
-    const svg = d3.select("svg")
+    const svg = d3.select("#graph")
+        .append('svg')
         .attr("viewBox", [-margin.left, -margin.top, width, dx])
         .style("font", "10px sans-serif")
         .style("user-select", "none");
@@ -167,15 +168,24 @@ function CollapsibleTree(props) {
   }
 
   useEffect(() => {
-    d3.selectAll("svg > *").remove();
+    d3.selectAll("#graph").select('svg').remove();
     chart(); //useRef()?
   },[props.dataGraphed, props.data]);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
       <br />
-      <br />
-      <svg></svg>
+
+      <div
+        id="graph"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "5vh auto",
+        }}
+      >
+      </div>
     </div>
   );
 }

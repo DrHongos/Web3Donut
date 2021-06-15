@@ -1,15 +1,12 @@
 import React, {useState} from "react";
 import { dagPreparation } from '../libs/databaseLib';
 import ObjectCreator from './objectCreation';
-// import {  useStateValue } from '../state'; //actions,
+import {Button, ButtonGroup, Input, VStack, Checkbox, IconButton} from '@chakra-ui/react';
+import {AttachmentIcon} from '@chakra-ui/icons';
 
 function DBTools(props) {
-  const [open, setOpen] = useState(false);
-  // const [appState] = useStateValue();//, dispatch
-  const [ objectForm ,setObjectForm] = useState(false);
-  const [uploadJson, setUploadJson] = useState(false);
   const [wrap, setWrap] = useState(true);
-
+  const[caseSelected, setCaseSelected] = useState();
   // converge all input functions! manage different databases and inputs
   async function createEntry(key, value){
     // if (event) event.preventDefault()
@@ -55,7 +52,7 @@ function DBTools(props) {
     // const allEntries = await db.iterator({ limit: 5 }).collect().reverse(); // iterator doesnt work for everyone
     // props.setEntries(allEntries);
     console.log('Saved!')
-    setOpen(false);
+    setCaseSelected()
   }
 
 
@@ -64,12 +61,11 @@ function DBTools(props) {
     let key = document.getElementById('key').value
     let cid = await dagPreparation(obj)
     console.log('cid obj',cid.toString())
-    setUploadJson(false);
     createEntry(key, cid.toString())
     return cid;
   }
 
-  async function uploadJsonDB(){
+  async function uploadFileDB(){
     const selectedFile = document.getElementById('fileInput').files[0];
     let obj
     const extension = selectedFile.name.split('.').pop().toLowerCase();
@@ -86,64 +82,102 @@ function DBTools(props) {
       };
     }
 
-  return (
-    <div>
-      <button disabled={!props.canWrite} onClick={()=>setOpen(!open)}>Add to DB</button>
-      <button disabled={!props.canWrite || props.db._type !== 'eventlog'} onClick={()=>setUploadJson(!uploadJson)}>Upload an object</button>
-      <button disabled={!props.canWrite} onClick={()=>setObjectForm(!objectForm)}>Create an object</button>
-      {open?
-        <div>
-        {(props.db._type === 'keyvalue' || props.db._type === 'eventlog')?
-          <div>
-            <input id='key' placeholder='key'></input><br />
-            <input id='value' placeholder='value'></input><br />
-            {props.db._type ==='eventlog'?
+    function handleSelection(selection){
+      if(selection === caseSelected){
+        setCaseSelected()
+      }else{
+        setCaseSelected(selection)
+      }
+    }
+
+
+    const Case = () => {
+
+      switch (caseSelected) {
+        case 'AddToDB':
+        return (
+          <VStack>
+          {(props.db._type === 'keyvalue' || props.db._type === 'eventlog')?
             <div>
-            <input type='checkbox' value={wrap} checked={wrap} onChange={()=>setWrap(!wrap)}></input>Wrap value in a DAG
+              <Input  id='key' placeholder='key'></Input><br />
+              <Input  id='value' placeholder='value'></Input><br />
             </div>
-            :null}
-          </div>
-        :null}
-        {props.db._type === 'counter'?
-          <input id='value' type='number' placeholder='number'></input>
-        :null}
+          :null}
+          {props.db._type === 'counter'?
+            <Input id='value' type='number' placeholder='number' w='20%'></Input>
+          :null}
 
-        {props.db._type === 'docstore'?
-          <div>
-            <input id='key' placeholder='id'></input>
-            <input id='value' placeholder='value'></input><br />
-            <input disabled id='query' placeholder='id(?)'></input>
-            <button disabled onClick={()=>console.log('TODO! (needs input)')}>query</button>
-          </div>
-        :null}
+          {props.db._type === 'docstore'?
+            <div>
+              <Input id='key' placeholder='id'></Input>
+              <Input id='value' placeholder='value'></Input><br />
+{/*
+              <Input disabled id='query' placeholder='id(?)'></Input>
+              <button disabled onClick={()=>console.log('TODO! (needs input)')}>query</button>
+              */}
+            </div>
+          :null}
 
-        <button onClick={()=>{createEntry()}}>Add!</button>
-        </div>
-      :null}
+          <Button
+            colorScheme="white" variant="outline"
+            w='25%'
+            onClick={()=>{createEntry()}}>Add!
+          </Button>
 
-
-      {uploadJson?
-          <div>
-            <input id='key' placeholder='key'></input><br />
-            <input type="file"
+          </VStack>
+        );
+        case 'UploadFile':
+        return (
+          <VStack>
+            <Input id='key' placeholder='key'></Input>
+            <IconButton
+              onClick={()=>{document.getElementById('fileInput').click()}}
+              icon={<AttachmentIcon />}
+              variant='outline'
+              aria-label = 'Add a file'
+              colorScheme='white'>
+            </IconButton>
+            <Input
+              hidden
+              type="file"
               id="fileInput">
-           </input><br />
-           <input type='checkbox' value={wrap} checked={wrap} onChange={()=>setWrap(!wrap)}></input>Wrap value in a DAG
+           </Input>
+
            {/*accept=".json"*/}
            <div>
-            <button onClick={()=>uploadJsonDB()}>Upload!</button>
+            <Button variant='outline' colorScheme='white' onClick={()=>uploadFileDB()}>Upload!</Button>
           </div>
-          </div>
-     :null}
+          </VStack>
 
-     {objectForm?
-       <ObjectCreator
-          createEntry = {createEntry}
-          wrap = {wrap}
-          setWrap = {setWrap}
-       />
-       :null}
+        );
+        case 'ObjectForm':
+        return (
+          <ObjectCreator
+             createEntry = {createEntry}
+             wrap = {wrap}
+             setWrap = {setWrap}
+          />
 
+        );
+        default:
+        return null;
+      }
+    };
+
+
+  return (
+    <div>
+      <ButtonGroup variant="outline" >
+        <Button colorScheme="white" disabled={!props.canWrite} onClick={()=>handleSelection('AddToDB')}>Add to DB</Button>
+        <Button colorScheme="white" disabled={!props.canWrite || props.db._type !== 'eventlog'} onClick={()=>handleSelection('UploadFile')}>Upload an object</Button>
+        <Button colorScheme="white" disabled={!props.canWrite} onClick={()=>handleSelection('ObjectForm')}>Create an object</Button>
+      </ButtonGroup>
+      <VStack>
+        <Case />
+        {caseSelected?
+          <Checkbox variant='outline' colorScheme='white' type='checkbox' value={wrap} isChecked={wrap} onChange={()=>setWrap(!wrap)}>Wrap value in a DAG</Checkbox>
+          :null}
+      </VStack>
     </div>
   );
 }

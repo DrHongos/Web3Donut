@@ -2,75 +2,101 @@ import React, {useState, useEffect} from "react";
 import {getAllDatabases,  removeDatabase} from "../libs/databaseLib";
 import { useStateValue } from '../state'
 import EditModal from './editMode';
-import IPFSTools from './ipfsTools';
 import DatabaseCreate from './databaseCreate';
 import DatabaseImport from './databaseImport';
-import burn from '../libs/icons/burn.png';
-import edit from '../libs/icons/edit.png';
-
+import { Table, TableCaption, Thead, Tbody, Tr,Th,Td, IconButton, HStack, VStack, Text} from "@chakra-ui/react";
 // import DBCard from './databaseCard'; // not usable.. had to adapt!
+import {DeleteIcon, EditIcon, TimeIcon, ArrowBackIcon } from '@chakra-ui/icons';
 import '../App.css';
+
+
 function DatabaseLocal(props) {
   const [appState] = useStateValue();
-  const [open, setOpen] = useState(false);
   const [items, setItems] = useState(appState.programs);
   const [editModal, setEditModal] = useState(false);
 
   async function refresh(){
+    console.log('refreshed!')
     let allPrograms = await getAllDatabases()
     setItems(allPrograms)
   }
-
   useEffect(()=>{
     refresh()
-  },[open,appState.programs,props.db])
+  },[appState.programs,props.db])
 
   return (
-      <div>
-          <button onClick={()=>setOpen(!open)}>My DB</button>
-          {open?
-            <div>
-            <hr class="solid"></hr>
-            My databases {'   '}
-            <button onClick={()=>refresh()}>Refresh</button><br />
-            <DatabaseCreate />
-            <DatabaseImport />
-            <hr class="solid"></hr> {/*Have to difference counter DB's.*/}
+        <VStack>
+          <HStack align='top'>
             {appState?.programs?.length !== 0 ?
               <div>
-                <table>
-                  <tr>
-                    <th>name</th>
-                    <th>Type</th>
-                    <th>Functions</th>
-                    {/* Add views for entries */}
-                  </tr>
-                  {items.map(x => {return(
-                  <tr >
-                   <td>{x.payload.value.name}</td>
-                   <td>{x.payload.value.type}</td>
-                   <td>
-                    <button onClick={()=>setEditModal(x.payload.value.address)}><img src={edit} alt='open&edit' width="20" height="23"></img></button>
-                    <button onClick={()=>removeDatabase(x)}><img src={burn} alt='delete' width="20" height="23"></img></button>
-                    </td>
-                  </tr>
-                 )})}
-                 </table>
-                 {editModal?
-                   <div>
-                     <EditModal
-                        user = {appState.user}
-                        address = {editModal}
-                     />
-                     <IPFSTools />
-                  </div>
-                 :null}
-              </div>
-            :'You dont have any yet. Create your first!'}
-            </div>
-          :null}
-      </div>
+                {editModal?
+                  <VStack>
+                    <IconButton
+                      colorScheme='white'
+                      aria-label='Edit DB'
+                      onClick={()=>setEditModal()}
+                      icon={<ArrowBackIcon />}
+                    >
+                    </IconButton>
+                    <EditModal
+                    user = {appState.user}
+                    address = {editModal}
+                    />
+                  </VStack>
+                :
+                <VStack>
+                <HStack>
+                  <Text color='white'>My databases</Text>
+                  <IconButton
+                  colorScheme='white'
+                  icon={<TimeIcon />}
+                  aria-label='Update DBs'
+                  onClick={()=>refresh()}></IconButton>
+                  <DatabaseCreate />
+                  <DatabaseImport />
+                </HStack>
 
+                <Table size='sm'> {/* Make it open/close so edit will close it and show each DB and add return button */}
+                  <TableCaption>Local Databases</TableCaption>
+                  <Thead>
+                    <Tr>
+                      <Th>name</Th>
+                      <Th>Type</Th>
+                      <Th>Functions</Th>
+                    </Tr>
+                  </Thead>
+                <Tbody>
+                  {items.map(x => {return(
+                  <Tr>
+                   <Td>{x.payload.value.name}</Td>
+                   <Td>{x.payload.value.type}</Td>
+                   <Td>
+                    <IconButton
+                      colorScheme="white"
+                      aria-label="Edit"
+                      onClick={()=>setEditModal(x.payload.value.address)}
+                      icon={<EditIcon />}
+                      >
+                    </IconButton>
+                    <IconButton
+                      colorScheme="white"
+                      aria-label="Delete"
+                      onClick={()=>removeDatabase(x)}
+                      icon={<DeleteIcon />}
+                      > {/* use an alert or modal!*/}
+                    </IconButton>
+                    </Td>
+                  </Tr>
+                 )})}
+               </Tbody>
+             </Table>
+             </VStack>
+            }
+            </div>
+            :'You dont have any yet. Create your first!'}
+
+            </HStack>
+      </VStack>
   );
 }
 

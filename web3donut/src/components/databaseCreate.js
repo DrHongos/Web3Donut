@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import {createDatabase, getAllDatabases} from "../libs/databaseLib";
+import {Button, Input,VStack, Select} from '@chakra-ui/react';
+// import {Search2Icon} from '@chakra-ui/icons';
+
 
 function DatabaseCreate(props) {
-  const [openCreate, setOpenCreate] = useState(false);
   const [createDB, setCreateDB] = useState(false);
 
   async function createNewDB(){
@@ -13,40 +15,31 @@ function DatabaseCreate(props) {
       console.log("Created", hash)
       getAllDatabases().then((data) => {
         console.log("Loaded programs", data)
-        setOpenCreate(false);
       })
     })
   }
 
   return (
-      <div>
-          <button onClick={()=>setOpenCreate(!openCreate)}>Create DB</button>
-          {openCreate?
-            <div>
-            <hr class="solid"></hr>
-            <p>Create your Database</p>
-            <button onClick={()=>setCreateDB(!createDB)}>Create new</button>
+      <VStack>
+          <Button variant='outline' colorScheme='white' onClick={()=>setCreateDB(!createDB)}>Create DB</Button>
             {createDB?
-              <div>
-                <input id='nameDB' placeholder='name'></input><br />
-                <select id="type">
+              <VStack>
+                <Input id='nameDB' placeholder='name'></Input>
+                <Select id="type">
                   <option value="eventlog">EventLog</option>
                   <option value="keyvalue" selected>Key:Value</option>
                   <option value="docstore">Docstore</option>
                   <option value="counter">Counter</option>
-                </select>
-                <select id="permissions">
+                  </Select>
+                <Select id="permissions">
                   <option value="public">Public</option>
                   <option value="" selected>Only me</option>
-                </select>
-                <button onClick={()=>{createNewDB()}}>create!</button>
-              </div>
+                </Select>
+                <Button variant='outline' colorScheme='white' w='40%' onClick={()=>{createNewDB()}}>create!</Button>
+              </VStack>
               :null}
-              </div>
-          :
-          null
-          }
-      </div>
+
+      </VStack>
 
   );
 }

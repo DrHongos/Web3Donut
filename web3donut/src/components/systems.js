@@ -1,13 +1,14 @@
 import React, {useState} from 'react'
 import { initIPFS, initOrbitDB,  getDB, getAllDatabases } from '../libs/databaseLib'
 import { actions, useStateValue } from '../state'
+import { Spinner, HStack, VStack, Box, Text, IconButton } from "@chakra-ui/react"
+import { CheckCircleIcon, CopyIcon, LinkIcon } from '@chakra-ui/icons'
 
 function Systems () {
   const [appState, dispatch] = useStateValue();
-  const [loading, setLoading] = useState(false);
+  const [completeUser, setCompleteUser] = useState(false);
 
   const fetchDB = async (address, type) => {
-    setLoading(true)
     const db = await getDB(address)
     if (db) {
       let entries
@@ -35,13 +36,19 @@ function Systems () {
         dispatch({ type: actions.DB.SET_DB, db, entries })
         break;
     }
-    // console.log('DB ',type,'retrieved!  ')
-    setLoading(false)
     }else{
       console.log(address, ' couldnt be found')
     }
   }
 
+  function copyToClipboard() {
+    var copyText = document.querySelector("#user");
+    var range = document.createRange();
+    range.selectNode(copyText);
+    window.getSelection().addRange(range);
+    console.log('Copied ',copyText.textContent,' to the clipboard')
+    document.execCommand("copy");
+  }
 
 
   async function initDatabases(){
@@ -76,39 +83,70 @@ function Systems () {
     })
   }, [dispatch])// eslint-disable-line react-hooks/exhaustive-deps
 
+  const SystemElement = (props)=> (
+      <HStack fontSize='sm' spacing={1} fontWeight='semibold'>
+        <Text>{props.name}</Text>{''}
+        {props.isLoading?
+          <Spinner />
+          :
+          <CheckCircleIcon />
+        }
+        {props.data?
+          <Box>
+          {props.func?
+            <IconButton
+              colorScheme="white"
+              icon={<LinkIcon />}
+              isDisabled = {props.isLoading}
+              onClick={()=>initDatabases()}>
+            </IconButton>
+            :
+            <Box>
+            {completeUser?
+              <HStack>
+                <Text onClick={()=>setCompleteUser(!completeUser)} id='user'>{props.data}</Text>
+                <IconButton
+                  colorScheme="white"
+                  aria-label="Cpy user address"
+                  onClick={()=>copyToClipboard()}
+                  icon={<CopyIcon />} />
+              </HStack>
+              :
+              <Text onClick={()=>setCompleteUser(!completeUser)}>{props.data.slice(0,7)}...</Text>
+
+            }
+            </Box>
+          }
+          </Box>
+        :null}
+      </HStack>
+  )
+
   return (
-    <div>
-          {loading?<h3>Loading..</h3>:null}
-          <div>
-            <span>IPFS - </span>
-            {appState.ipfsStatus === 'Started'
-              ? <span>Connected</span>
-              : <span>Not</span>
-            }
-          </div>
-          <div>
-            <span>OrbitDB - </span>
-            {appState.orbitdbStatus === 'Started'
-              ? <span>Connected</span>
-              : <span>Not</span>
-            }
-          </div>
-          <div>
-            <span>User:  </span>
-            {appState.user?
-            <span>{appState.user.slice(0,7)}..</span>
-              : <span>Not connected</span>
-            }
-          </div>
-          <div>
-            <span>Databases - </span>
-            {appState.db?
-              <span>Connected</span>
-              : <span>Not</span>
-            }
-              <button onClick={()=>initDatabases()}>Update</button>
-          </div>
-    </div>
+    <Box  w='30%' border='1px solid lightgray'>
+      <VStack  alignItems='left'>
+          <SystemElement
+            name = 'IPFS'
+            isLoading = {appState.ipfsStatus !== 'Started'}
+            />
+          <SystemElement
+            name = 'OrbitDB'
+            isLoading = {appState.orbitdbStatus !== 'Started'}
+            />
+          <SystemElement
+            name = 'User'
+            isLoading = {!appState.user}
+            data = {appState.user}
+            />
+          <SystemElement
+            name = 'Shared DBs'
+            isLoading = {!appState.db}
+            data = 'Refresh'
+            func = {true}
+            />
+
+      </VStack>
+    </Box>
   )
 }
 

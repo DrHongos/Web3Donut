@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from "react";
+  import React, {useState, useEffect} from "react";
 import Donut from "./D3Graphs/donut";
 import CollapsibleTree from "./D3Graphs/collapsibleTree";
 import {getDagObject} from '../libs/databaseLib'; //, getTreeIpfs
 import {useStateValue } from '../state';
-const protocolsData = require("../libs/modelsObjects/eth-ecosystem");
+import { Select, HStack, Input, InputGroup,InputLeftElement } from "@chakra-ui/react";
+import {Search2Icon} from '@chakra-ui/icons';
 
+const protocolsData = require("../libs/modelsObjects/eth-ecosystem");
 function Filters(props) {
   const [appState] = useStateValue();
   // const [selection, setSelection] = useState();
@@ -136,6 +138,14 @@ function Filters(props) {
     // }
   const treeSearch = (res) => {return {name:"ethereum", children:res}};
 
+  const handleDatabase = (type) =>{
+    if(type === 'local'){
+      setData(protocolsData)
+    }else{
+      getLatestDB(type)
+    }
+  }
+
   return (
       <div
         id="filters"
@@ -145,54 +155,43 @@ function Filters(props) {
         }}
 
       >
-      <hr class="solid"></hr>
-      Database type:
-      <button onClick={()=>{
-        setData(protocolsData)
-      }}>local</button>
-      <button disabled={!appState.entries.length >0} onClick={()=>{getLatestDB('ipfsObject')}}>ipfsObject</button>
-      <button disabled={!appState.entriesDAGtest.length >0} onClick={()=>{getLatestDB('ipfsDag')}}>ipfsDAG</button><br />
-      <hr class="solid"></hr>
-        <div
-          style={{
-            display:'flex',
-            justifyContent:'top',
-            alignItems:'left',
-            margin:"0vh auto"
-          }}
-          id='environment'>
-        <input placeholder='Search' onChange={(e)=>setSearch(e.target.value)}></input><br />
-        <span>Graph type:
-          <button onClick={()=>setVis('sunburst')}>donut</button>
-          <button onClick={()=>setVis('collapsibleTree')}>tree</button>
-        </span>
-        </div>
 
-        {vis === 'sunburst'?
-          <Donut
-          data = {data}
-          dataGraphed = {dataGraphed}
+      <HStack>
+        <Select w='25%' placeholder="Database selector" onChange={(e)=>handleDatabase(e.target.value)} >
+          <option value="local">Local (hardcoded)</option>
+          <option disabled={!appState.entries.length >0} value="ipfsObject">IPFS Object</option>
+          <option disabled={!appState.entriesDAGtest.length >0} value="ipfsDag">IPFS DAG</option>
+        </Select>
+
+        <Select w='25%' placeholder="Graph type" onChange={(e)=>setVis(e.target.value)} >
+          <option value="sunburst" default>Donut</option>
+          <option value="collapsibleTree">Tree</option>
+        </Select>
+
+      <InputGroup >
+          <InputLeftElement
+            pointerEvents="none"
+            children={<Search2Icon color="gray.300" />}
           />
-        :null}
-        {vis === 'collapsibleTree'?
+          <Input type="tel" placeholder="Search"
+            onChange={(e)=>setSearch(e.target.value)}
+          />
+      </InputGroup>
+      </HStack>
+
+      {vis === 'sunburst'?
+        <Donut
+        data = {data}
+        dataGraphed = {dataGraphed}
+        />
+      :null}
+      {vis === 'collapsibleTree'?
         <CollapsibleTree
         data = {data}
         dataGraphed = {dataGraphed}
         />
-        :null}
-      {/*results?
-        <ul>
-        {results.map(x=>{return <li key={x.name}>{x&&x.children?
-          <button onClick={()=>console.log(x)}>{x.name}/{x.children[0].name}</button>
-          :x.name}</li>})}
-          </ul>
-          :null*/}
-      {/*selection?
-        <div>
-        <h3>{selection.name}</h3>
-        <a>{selection.url}</a>
-        </div>
-        :null*/}
+      :null}
+
       </div>
 
   );

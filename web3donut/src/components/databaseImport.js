@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import {addDatabase} from "../libs/databaseLib";
+import {Button, Input, IconButton, HStack,VStack} from '@chakra-ui/react';
+import {Search2Icon} from '@chakra-ui/icons';
 
 function DatabaseImport(props) {
   const [open, setOpen] = useState(false);
@@ -13,17 +15,20 @@ function DatabaseImport(props) {
   }
 
   return (
-      <div>
-        <hr class="solid"></hr>
-        <button onClick={()=>setOpen(!open)}>Import DB</button>
+      <VStack>
+        <Button variant= 'outline' colorScheme='white' onClick={()=>setOpen(!open)}>Import DB</Button>
         {open?
-          <div>
-            <input id='addressInput' placeholder='Address'></input>
-            <button onClick={()=>add()}>Add DB</button>
+          <HStack>
+            <Input id='addressInput' placeholder='Address' w='80%'></Input>
+            <IconButton
+              icon={<Search2Icon />}
+              colorScheme='white'
+              onClick={()=>add()}>
+            Add DB</IconButton>
 
-          </div>
+          </HStack>
           :null}
-      </div>
+      </VStack>
 
   );
 }
