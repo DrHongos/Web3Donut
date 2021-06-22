@@ -10,7 +10,13 @@ import {getDagCid, getDagObject, getTreeIpfs, ipldExplorer} from '../libs/databa
 function DBCard(props) {
   const [tip, setTip] = useState('');
   const [methodSelector, setMethodSelector] = useState();
-  const canWrite = props.db.access._write.includes(props.user) || props.db.access._write[0] ==='*';
+  const canWrite = (db) => {
+    try{
+      return db.access._write.includes(props.user) || db.access._write[0] ==='*'
+    }catch{
+      return true
+    }
+  };
   const type = props.db._type
 
 // continue debugging databaseTools for usage of DBs
@@ -59,13 +65,15 @@ function DBCard(props) {
         <Stat>
           <StatLabel><CopyableText text={props.db.id}/></StatLabel>
           <StatHelpText>type: {type}</StatHelpText>
-          <StatHelpText>access: {props.db.access._write[0] ==='*' ? 'public' : props.db.access._write[0].slice(0,5)}..</StatHelpText>
-          <StatHelpText>Can i write: {canWrite ? 'Yes!':'No!'}</StatHelpText>
+          {props.db.access._write?
+            <StatHelpText>access: {props.db.access._write[0] ==='*' ? 'public' : props.db.access._write[0].slice(0,5)}..</StatHelpText>
+            :null}
+          <StatHelpText>Can i write: {canWrite(props.db) ? 'Yes!':'No!'}</StatHelpText>
         </Stat>
 
         <DBTools
           db = {props.db}
-          canWrite = {canWrite}
+          canWrite = {canWrite(props.db)}
         />
 
           {(props?.entries?.length > 0)?

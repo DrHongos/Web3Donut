@@ -26,6 +26,9 @@ function DatabaseLocal(props) {
 
   return (
         <VStack>
+          <DatabaseCreate />
+          <DatabaseImport />
+
           <HStack align='top'>
             {appState?.programs?.length !== 0 ?
               <div>
@@ -52,8 +55,6 @@ function DatabaseLocal(props) {
                   icon={<TimeIcon />}
                   aria-label='Update DBs'
                   onClick={()=>refresh()}></IconButton>
-                  <DatabaseCreate />
-                  <DatabaseImport />
                 </HStack>
 
                 <Table size='sm'> {/* Make it open/close so edit will close it and show each DB and add return button */}
