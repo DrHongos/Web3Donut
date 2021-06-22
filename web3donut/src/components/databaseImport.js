@@ -8,7 +8,7 @@ function DatabaseImport(props) {
 
   async function add(){
     let address = document.getElementById('addressInput').value;
-    // console.log(address)
+    console.log(address)
     await addDatabase(address);
     console.log('added!')
     setOpen(false);

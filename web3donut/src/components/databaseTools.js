@@ -65,6 +65,17 @@ function DBTools(props) {
     return cid;
   }
 
+  async function giveAccess(){
+    const address = document.getElementById('accessAddress').value
+    console.log('give access to ',address)
+    try{
+      await props.db.access.grant('_write', address) // grant access to database2
+    }catch{
+      return 'Error in giving the access'
+    }
+    console.log('Access granted!')
+  }
+
   async function uploadFileDB(){
     const selectedFile = document.getElementById('fileInput').files[0];
     let obj
@@ -159,6 +170,19 @@ function DBTools(props) {
           />
 
         );
+        case 'GrantAccess':
+        return (
+          <VStack>
+            <Input id='accessAddress' placeholder='orbit-db identity (User)'></Input>
+            <Button
+              onClick={()=>giveAccess()}
+              variant='outline'
+              aria-label = 'give access'
+              colorScheme='white'>grant access!
+            </Button>
+         </VStack>
+        );
+
         default:
         return null;
       }
@@ -171,10 +195,11 @@ function DBTools(props) {
         <Button colorScheme="white" disabled={!props.canWrite} onClick={()=>handleSelection('AddToDB')}>Add to DB</Button>
         <Button colorScheme="white" disabled={!props.canWrite || props.db._type !== 'eventlog'} onClick={()=>handleSelection('UploadFile')}>Upload an object</Button>
         <Button colorScheme="white" disabled={!props.canWrite} onClick={()=>handleSelection('ObjectForm')}>Create an object</Button>
+        <Button colorScheme="white" disabled={!props.canWrite} onClick={()=>handleSelection('GrantAccess')}>Give access</Button>
       </ButtonGroup>
       <VStack>
         <Case />
-        {caseSelected?
+        {caseSelected && caseSelected !=='GrantAccess'?
           <Checkbox variant='outline' colorScheme='white' type='checkbox' value={wrap} isChecked={wrap} onChange={()=>setWrap(!wrap)}>Wrap value in a DAG</Checkbox>
           :null}
       </VStack>

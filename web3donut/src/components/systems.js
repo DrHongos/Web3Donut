@@ -2,7 +2,8 @@ import React, {useState} from 'react'
 import { initIPFS, initOrbitDB,  getDB, getAllDatabases } from '../libs/databaseLib'
 import { actions, useStateValue } from '../state'
 import { Spinner, HStack, VStack, Box, Text, IconButton } from "@chakra-ui/react"
-import { CheckCircleIcon, CopyIcon, LinkIcon } from '@chakra-ui/icons'
+import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
+import CopyableText from './commons/copyableText';
 
 function Systems () {
   const [appState, dispatch] = useStateValue();
@@ -41,14 +42,14 @@ function Systems () {
     }
   }
 
-  function copyToClipboard() {
-    var copyText = document.querySelector("#user");
-    var range = document.createRange();
-    range.selectNode(copyText);
-    window.getSelection().addRange(range);
-    console.log('Copied ',copyText.textContent,' to the clipboard')
-    document.execCommand("copy");
-  }
+  // function copyToClipboard() {
+  //   var copyText = document.querySelector("#user");
+  //   var range = document.createRange();
+  //   range.selectNode(copyText);
+  //   window.getSelection().addRange(range);
+  //   console.log('Copied ',copyText.textContent,' to the clipboard')
+  //   document.execCommand("copy");
+  // }
 
 
   async function initDatabases(){
@@ -103,14 +104,7 @@ function Systems () {
             :
             <Box>
             {completeUser?
-              <HStack>
-                <Text onClick={()=>setCompleteUser(!completeUser)} id='user'>{props.data}</Text>
-                <IconButton
-                  colorScheme="white"
-                  aria-label="Cpy user address"
-                  onClick={()=>copyToClipboard()}
-                  icon={<CopyIcon />} />
-              </HStack>
+              <CopyableText text={props.data}/> // handle close
               :
               <Text onClick={()=>setCompleteUser(!completeUser)}>{props.data.slice(0,7)}...</Text>
 

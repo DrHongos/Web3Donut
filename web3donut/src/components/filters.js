@@ -30,20 +30,18 @@ function Filters(props) {
         // console.log('entries',entries)
         // first CID : gets the cid of value
         cid = await getDagObject(entries.payload.value.value)
-        // console.log('datacid',cid)
-        // console.log('cid',cid)
+        console.log('cid',cid)
         // Then gets the object of that cid
         dagObj = await getDagObject(cid.value)
         // supposedly a json object
-        const dagObject = JSON.parse(dagObj.value)
-        // console.log('dagObj',dagObject)
-        // console.log('dagOb', dagObject)
+        const dagObject = JSON.parse(dagObj.value) // objects has been stringified because of error on loading (?)
+        console.log('dagObj',dagObject)
 
         // with different categories
         // let dagTree = await getTreeIpfs(cid.value)
         // console.log('obj tree', dagTree)
         for(let branch in dagObject){
-          if(branch !== 'name'){
+          if(branch !== 'name'){ // ignore the name (and other metadata) to retrieve the sub objects
             // console.log('branch',branch)
             // we retrieve the object inside each category
             // console.log(dagObject[branch]) // i need to differentiate Qm.. from v1 CID's

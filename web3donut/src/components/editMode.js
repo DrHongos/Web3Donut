@@ -10,7 +10,14 @@ function EditModal(props) {
   const [loading, setLoading] = useState(false);
   const [db, setDb] = useState(null);
   const [entries, setEntries] = useState([]);
-  const canWrite = (db) =>{return db.access._write.includes(props.user) || db.access._write[0] ==='*'};
+  const canWrite = (db) => {
+    try{
+      return db.access._write.includes(props.user) || db.access._write[0] ==='*'
+    }catch{
+      return true
+    }
+  };
+  // (db) =>{};
 
   useEffect(async ()=>{ // eslint-disable-line react-hooks/exhaustive-deps
       setLoading(true);
@@ -45,15 +52,18 @@ function EditModal(props) {
         <div>
         {loading? <Spinner />:
         <div>
+        <DBTools
+        db = {db}
+        canWrite = {canWrite(db)}
+        setEntries = {setEntries}
+        />
+        <CopyableText text={props.address} />
           {entries && entries.length > 0?
             <VStack>
-            <DBTools
-              db = {db}
-              canWrite = {canWrite(db)}
-              setEntries = {setEntries}
-              />
             <Table size='sm'>
-              <TableCaption placement='top' style={{color:'white', fontWeight:'bold'}}><CopyableText text={props.address} /></TableCaption>
+              <TableCaption placement='top' style={{color:'white', fontWeight:'bold'}}>
+                <Text>Can i write: {canWrite(db)?'yes':'no'}</Text>
+              </TableCaption>
               <Thead>
                 <Tr>
                   {db._type === 'eventlog'?
@@ -89,7 +99,7 @@ function EditModal(props) {
                 :null}
 
                 {db._type === 'keyvalue'?
-                  <Td>{x.payload.value.value.value}</Td>
+                  <Td>{x.payload.value.value.value?x.payload.value.value.value:x.payload.value.value}</Td>
                 :null}
                 {(db._type === 'eventlog' || db._type === 'docstore')?
                   <Td>{x.payload.value.value}</Td>

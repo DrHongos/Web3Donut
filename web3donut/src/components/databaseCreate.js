@@ -34,6 +34,8 @@ function DatabaseCreate(props) {
                 <Select id="permissions">
                   <option value="public">Public</option>
                   <option value="" selected>Only me</option>
+                  <option value="access" >Access control</option>
+                  <option value="orbitdb" >Orbit DB identity</option>
                 </Select>
                 <Button variant='outline' colorScheme='white' w='40%' onClick={()=>{createNewDB()}}>create!</Button>
               </VStack>

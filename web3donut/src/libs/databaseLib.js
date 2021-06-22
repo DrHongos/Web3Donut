@@ -1,7 +1,35 @@
 import IPFS from 'ipfs'
 import Config from './config'
 import OrbitDB from 'orbit-db'
+import OtherAccessController from './access_test';
 const CID = require('cids')
+let AccessControllers = require('orbit-db-access-controllers')
+AccessControllers.addAccessController({ AccessController: OtherAccessController })
+
+// access control:
+//P2P
+//---
+// Owner user grants to user
+
+// Add web3 context, get user address and send it in each entry
+// Later that should be a signature that will be handled (and verifyied by the access control)
+// access control should look at the contract members and only allow those to make entries!
+
+// Contract based
+// ---
+// User can write if address in contract? => DAO!
+// Raid Guild cohort season 1 DAO : 0x10E31C10FB4912BC408Ce6C585074bd8693F2158
+// method: members(addres) >
+// delegateKey(address) shares(uint256) loot(uint256) exists(bool) highestIndexYesVote(uint256) jailed(uint256)
+// [
+// (address) : 0x08b3931b2ae83113c711c92e1bb87989f1fab004
+// (uint256) : 10
+// (uint256) : 0
+// (bool) : true
+// (uint256) : 0
+// (uint256) : 0
+// ]
+
 
 // const IpfsClient = require('ipfs-http-client') // for ipfs daemon cases??
 
@@ -25,7 +53,8 @@ export const initIPFS = async () => {
 // Start OrbitDB
 export const initOrbitDB = async (ipfs) => {
 // add different repo from ipfs or its conflict
-  orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB'})
+  orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB', AccessControllers: AccessControllers})
+  console.log('orbit instance: ', orbitdb)
   return orbitdb
 }
 
@@ -65,7 +94,7 @@ export function ipldExplorer(address) {
 export const addDatabase = async (address) => {
   // console.log(address)
   const db = await getDB(address)
-  console.log(db)
+  // console.log(db)
   return programs.add({
     name: db.dbname,
     type: db.type,
@@ -76,9 +105,16 @@ export const addDatabase = async (address) => {
 
 export const createDatabase = async (name, type, permissions) => {
   let accessController
+
   switch (permissions) {
     case 'public':
       accessController = { write: ['*'] }
+      break
+    case 'access':
+      accessController = {type:'othertype', write: [orbitdb.identity.id]}
+      break
+    case 'orbitdb':
+      accessController = {type:'orbitdb', write: [orbitdb.identity.id]}
       break
     default:
       accessController = { write: [orbitdb.identity.id] }
