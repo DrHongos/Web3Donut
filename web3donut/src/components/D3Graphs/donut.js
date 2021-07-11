@@ -20,9 +20,9 @@ function Donut(props) {
   let data;
 
   const dataOriginal = !props.dataGraphed || props.dataGraphed.children.length === 0;
-  if(dataOriginal ){
-    data  = props.data;
-  }else{
+  if(dataOriginal) {
+    data = props.data;
+  } else {
     data = props.dataGraphed;
   }
 
@@ -45,6 +45,10 @@ function Donut(props) {
     const svg = d3.select("svg")
         .attr("viewBox", [0, 0, width, width])
         .style("font", "10px sans-serif");
+
+    Object.entries(props.style ?? {}).forEach(([attr, val]) => {
+      svg.style(attr, val)
+    });
 
     const g = svg.append("g")
         .attr("transform", `translate(${width / 2},${width / 2})`);

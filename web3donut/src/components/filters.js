@@ -168,12 +168,16 @@ function Filters(props) {
         </span>
         </div>
 
-        {vis === 'sunburst'?
+        {vis === 'sunburst' && (
           <Donut
-          data = {data}
-          dataGraphed = {dataGraphed}
+            data={data}
+            dataGraphed={dataGraphed}
+            style={{
+              'min-height': '90vmin',
+              'min-width': '90vmin',
+            }}
           />
-        :null}
+        )}
         {vis === 'collapsibleTree'?
         <CollapsibleTree
         data = {data}
