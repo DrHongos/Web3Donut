@@ -3,22 +3,28 @@ import {
   initIPFS, initOrbitDB,  getDB, getAllDatabases,
 } from '../libs/databaseLib'
 import { actions, useStateValue } from '../state'
-import { Spinner, HStack, VStack, Box, Text, IconButton } from "@chakra-ui/react"
+import {
+  Spinner, HStack, VStack, Box, Text, IconButton,
+} from '@chakra-ui/react'
 import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
-import CopyableText from './commons/copyableText';
-import {useWeb3Context} from '../libs/Web3Context';
+import CopyableText from './commons/copyableText'
+import { useWeb3Context } from '../libs/Web3Context'
 
-function Systems () {
-  const [appState, dispatch] = useStateValue();
-  const [completeUser, setCompleteUser] = useState(false);
-  const { providerChainId, account } = useWeb3Context();
+const Systems = () => {
+  const [appState, dispatch] = useStateValue()
+  const [completeUser, setCompleteUser] = useState(false)
+  const { providerChainId, account } = useWeb3Context()
 
   const fetchDB = async (address, type) => {
     const db = await getDB(address)
     if (db) {
       let entries
       if (db.type === 'eventlog' || db.type === 'feed') {
-        entries = await db.iterator({ limit: 5 }).collect().reverse()
+        entries = await (
+          db.iterator({ limit: 5 })
+          .collect()
+          .reverse()
+        )
       } else if (db.type === 'counter') {
         entries = [{ payload: { value: db.value } }]
       } else if (db.type === 'keyvalue') {
@@ -30,34 +36,37 @@ function Systems () {
           e !== null, { fullOp: true }).reverse()
         )
       } else {
-        entries = [{ payload: { value: "TODO" } }]
+        entries = [{ payload: { value: 'TODO' } }]
       }
       switch (type) {
-      case 'access.manager':
-        dispatch({ type: actions.DBGUIDE.SET_DBGUIDE, db, entries })
-        break;
-      case 'ipfsDAG':
-        dispatch({ type: actions.DBDAGTEST.SET_DBDAGTEST, db, entries })
-        break;
-      case 'kvTests':
-        dispatch({ type: actions.DBUSERS.SET_DBUSERS, db, entries })
-        break;
-      case 'ipfsObject':
-        dispatch({ type: actions.DB.SET_DB, db, entries })
-        break;
-    }
+        case 'access.manager':
+          dispatch({ type: actions.DBGUIDE.SET_DBGUIDE, db, entries })
+        break
+        case 'ipfsDAG':
+          dispatch({ type: actions.DBDAGTEST.SET_DBDAGTEST, db, entries })
+        break
+        case 'kvTests':
+          dispatch({ type: actions.DBUSERS.SET_DBUSERS, db, entries })
+        break
+        case 'ipfsObject':
+          dispatch({ type: actions.DB.SET_DB, db, entries })
+        break
+        default:
+          console.warn(`Unknown DB Type: '${type}'`)
+        break
+      }
     }else{
       console.log(address, ' couldnt be found')
     }
   }
 
   // function copyToClipboard() {
-  //   var copyText = document.querySelector("#user");
-  //   var range = document.createRange();
-  //   range.selectNode(copyText);
-  //   window.getSelection().addRange(range);
+  //   var copyText = document.querySelector("#user")
+  //   var range = document.createRange()
+  //   range.selectNode(copyText)
+  //   window.getSelection().addRange(range)
   //   console.log('Copied ',copyText.textContent,' to the clipboard')
-  //   document.execCommand("copy");
+  //   document.execCommand("copy")
   // }
 
 
@@ -77,13 +86,12 @@ function Systems () {
       await (
         initIPFS().then(async (ipfs) => {
           dispatch({ type: actions.SYSTEMS.SET_IPFS, ipfsStatus: 'Started'})
-          // console.log(ipfs.id())
-          // console.log(await ipfs.stats.repo())
+
           await (
             initOrbitDB(ipfs).then(async (databases) => {
               dispatch({ type: actions.SYSTEMS.SET_ORBITDB, orbitdbStatus: 'Started' })
 
-              let publicKey = databases.identity.id;
+              let publicKey = databases.identity.id
               dispatch({type: actions.USER.SET_USER, publicKey})
               await initDatabases()
               const programs = await getAllDatabases()
@@ -96,36 +104,35 @@ function Systems () {
       })()
   }, [dispatch])// eslint-disable-line react-hooks/exhaustive-deps
 
-  const SystemElement = (props)=> (
-      <HStack fontSize='sm' spacing={1} fontWeight='semibold'>
-        <Text>{props.name}</Text>{''}
-        {props.isLoading?
-          <Spinner />
-          :
-          <CheckCircleIcon />
-        }
-        {props.data?
-          <Box>
-          {props.func?
+  const SystemElement = (props) => (
+    <HStack fontSize='sm' spacing={1} fontWeight='semibold'>
+      <Text>{props.name}</Text>{''}
+      {props.isLoading ? (
+        <Spinner />
+      ) : (
+        <CheckCircleIcon />
+      )}
+      {props.data && (
+        <Box>
+          {props.func ? (
             <IconButton
               colorScheme="white"
               icon={<LinkIcon />}
               isDisabled = {props.isLoading}
               onClick={()=>initDatabases()}>
             </IconButton>
-            :
+          ) : (
             <Box>
-            {completeUser?
-              <CopyableText text={props.data}/> // handle close
-              :
-              <Text onClick={()=>setCompleteUser(!completeUser)}>{props.data.slice(0,7)}...</Text>
-
-            }
+              {completeUser ? (
+                <CopyableText text={props.data}/> // handle close
+              ) : (
+                <Text onClick={()=>setCompleteUser(!completeUser)}>{props.data.slice(0,7)}...</Text>
+              )}
             </Box>
-          }
-          </Box>
-        :null}
-      </HStack>
+          )}
+        </Box>
+      )}
+    </HStack>
   )
 
   return (
@@ -134,28 +141,31 @@ function Systems () {
           <SystemElement
             name = 'IPFS'
             isLoading = {appState.ipfsStatus !== 'Started'}
-            />
+          />
           <SystemElement
             name = 'OrbitDB'
             isLoading = {appState.orbitdbStatus !== 'Started'}
-            />
+          />
           <SystemElement
             name = 'User'
             isLoading = {!appState.user}
             data = {appState.user}
-            />
+          />
           <SystemElement
             name = 'Shared DBs'
             isLoading = {!appState.db}
             data = 'Refresh'
             func = {true}
-            />
+          />
           <SystemElement
             name = 'Web3'
             isLoading = {!account}
-            data = {providerChainId !== 100? 'Connect to xdai' : account}
-            />
-
+            data = {providerChainId !== 100 ? (
+              'Connect to xdai'
+            ) : (
+              account
+            )}
+          />
       </VStack>
     </Box>
   )

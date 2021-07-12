@@ -1,29 +1,38 @@
 import IPFS from 'ipfs'
 import OrbitDB from 'orbit-db'
-import DaoHausController from './access_test';
-const CID = require('cids')
-let AccessControllers = require('orbit-db-access-controllers')
-AccessControllers.addAccessController({ AccessController: DaoHausController })
+import DaoHausController from './access_test'
+import CID from 'cids'
+import AccessControllers from 'orbit-db-access-controllers'
+import CONFIG from './config'
 
-// const IpfsClient = require('ipfs-http-client') // for ipfs daemon cases??
+AccessControllers.addAccessController({
+  AccessController: DaoHausController
+})
 
-// OrbitDB instance
 let orbitdb
 let ipfsNode
 
-// for personal DB's
-let programs;
+let programs
 
 export const initIPFS = async () => {
   if(!ipfsNode) {
-    ipfsNode = await IPFS.create(Config.ipfs)
+    ipfsNode = await IPFS.create(CONFIG.ipfs)
   }
   return ipfsNode
 }
 
 export const initOrbitDB = async (ipfs) => {
-// add different repo from ipfs or its conflict
-  orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB', AccessControllers: AccessControllers})
+  if(!orbitdb) {
+    orbitdb = await (
+      OrbitDB.createInstance(
+        ipfs,
+        {
+          repo: './orbitDB',
+          AccessControllers,
+        }
+      )
+    )
+  }
   console.log('orbit instance: ', orbitdb)
   return orbitdb
 }
@@ -45,7 +54,7 @@ export const getAllDatabases = async () => {
 
 export const getDB = async (address) => {
   let db
-  if (orbitdb) {
+  if(orbitdb) {
     db = await orbitdb.open(address)
     await db.load()
     db.events.on('replicated', () => {
@@ -66,40 +75,44 @@ export function ipldExplorer(address) {
 }
 
 export const addDatabase = async (address) => {
-  // console.log(address)
-  const db = await getDB(address)
-  // console.log(db)
+  const { dbname, type } = await getDB(address)
   return programs.add({
-    name: db.dbname,
-    type: db.type,
-    address: address,
+    name: dbname,
+    type,
+    address,
     added: Date.now()
   })
 }
 
-
-export const createDatabase = async (name, type, permissions, provider,extra) => {
+export const createDatabase = async (name, type, permissions, provider, extra) => {
   let accessController
   let options
   switch (permissions) {
     case 'public':
       accessController = { write: ['*'] }
-      break
+    break
     case 'daoHaus':
-      options={ipfs: ipfsNode, web3: provider, contractAddress:extra , accessController:{type:'daohausmember'}} //,defaultAccount: [orbitdb.identity.id]
-      break
+      options = {
+        ipfs: ipfsNode, web3: provider,
+        contractAddress: extra,
+        accessController: { type: 'daohausmember' }
+        //,defaultAccount: [orbitdb.identity.id]
+      }
+    break
     case 'orbitdb':
-      accessController = {type:'orbitdb', write: [orbitdb.identity.id]}
-      break
+      accessController = {
+        type:'orbitdb', write: [orbitdb.identity.id]
+      }
+    break
     default:
       accessController = { write: [orbitdb.identity.id] }
-      break
+    break
   }
 
-  let db;
-  if(options){
-    db = await orbitdb.create(name, type, {options})
-  }else{
+  let db
+  if(options) {
+    db = await orbitdb.create(name, type, { options })
+  } else {
     db = await orbitdb.create(name, type, { accessController })
   }
 
@@ -132,9 +145,7 @@ export const getDagCid = async (cid, path) => {
   }
   let dataR = await ipfsNode.dag.get(cid, { path })
   if(dataR) {
-    let res = dataR
-    console.log(res)
-    return res;
+    return dataR
   } else {
     console.log('Error! Data is undefined')
   }
@@ -171,7 +182,6 @@ export const getTreeIpfs = async (cid, path) => {
   const results = []
   const tree = await ipfsNode.dag.tree(cid, { path })
   for await (const item of tree) {
-    // console.log(item)
     results.push(item)
   }
   return results

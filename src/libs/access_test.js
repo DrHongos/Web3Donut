@@ -25,8 +25,6 @@ export default class DaoHausController extends AccessController {
       this.defaultAccount = defaultAccount
     }
 
-
-
     static get type () { return 'othertype' } // Return the type for this controller
 
     get address () {
@@ -56,12 +54,12 @@ export default class DaoHausController extends AccessController {
       const memberRequest = await this.contract.methods.members(entry.payload.value.account).call()
       if(memberRequest){
         console.log(memberRequest)
-        let isMember = memberRequest.exists
+        // let isMember = memberRequest.exists
         return true
       }else{
         return false
       }
-      }
+    }
 
     async grant (access, identity) {} // Logic for granting access to identity
 
