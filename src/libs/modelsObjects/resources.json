@@ -1,0 +1,434 @@
+{
+  "name": "web3skills",
+  "children": [
+  {
+  "name": "Master Web3 Project", "icon": "",
+  "children": [
+  { "name" : "Web3 Starter Website ", "img": "", "value": 10, "children" : [
+  { "name" : "Web3 Starter Website ",
+  "children": [
+  { "name" : "Website", "img": "", "url": "https://season1.raidguild.freeweb3.com", "value": 1 },
+  { "name" : "Application", "img": "", "url": "https://web3vm.com", "value": 1 }
+  ]},
+  { "name" : "Comm. Channels",
+  "children": [
+  { "name" : "Documentation", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Analytics", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Twitter", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Discord", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Github", "img": "", "url": "https://freeweb3.com", "value": 1 }
+  ]},
+  { "name" : "Project Contacts",
+  "children": [
+  { "name" : "Contact-01", "img": "", "url": "https://twitter.com/tenfinney", "value": 1 },
+  { "name" : "Contact-02", "img": "", "url": "https://twitter.com/tenfinney", "value": 1 },
+  { "name" : "Contact-03", "img": "", "url": "https://twitter.com/tenfinney", "value": 1 }
+  ]}
+  ]}
+  ]},
+  {
+  "name": "Raid-Guild Project", "icon": "",
+  "children": [
+  { "name" : "Dungeon Master ", "img": "https://bafybeie53yep2g6ihxfsjadef2h3v6dbaa435swsbssca5z5m4ohz4axmm.ipfs.infura-ipfs.io/", "value": 10, "children" : [
+  { "name" : "Dungeon Master ",
+  "children": [
+  { "name" : "Website", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Application", "img": "", "url": "https://freeweb3.com", "value": 1 }
+  ]},
+  { "name" : "Comm. Channels",
+  "children": [
+  { "name" : "Documentation", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Analytics", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Twitter", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Discord", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Github", "img": "", "url": "https://freeweb3.com", "value": 1 }
+  ]},
+  { "name" : "Project Contacts",
+  "children": [
+  { "name" : "Contact-01", "img": "", "url": "https://twitter.com/tenfinney", "value": 1 },
+  { "name" : "Contact-02", "img": "", "url": "https://twitter.com/tenfinney", "value": 1 },
+  { "name" : "Contact-03", "img": "", "url": "https://twitter.com/tenfinney", "value": 1 }
+  ]}
+  ]}
+  ]},
+  {
+  "name": "Season 1 Project", "icon": "",
+  "children": [
+  { "name" : "Eth. Kanban Proj. Mgmt. ", "img": "", "value": 10, "children" : [
+  { "name" : "Eth. Kanban Proj. Mgmt. ",
+  "children": [
+  { "name" : "Website", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Application", "img": "", "url": "https://freeweb3.com", "value": 1 }
+  ]},
+  { "name" : "Comm. Channels",
+  "children": [
+  { "name" : "Documentation", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Analytics", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Twitter", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Discord", "img": "", "url": "https://freeweb3.com", "value": 1 },
+  { "name" : "Github", "img": "", "url": "https://freeweb3.com", "value": 1 }
+  ]},
+  { "name" : "Project Contacts",
+  "children": [
+  { "name" : "Contact-01", "img": "", "url": "https://twitter.com/tenfinney", "value": 1 },
+  { "name" : "Contact-02", "img": "", "url": "https://twitter.com/tenfinney", "value": 1 },
+  { "name" : "Contact-03", "img": "", "url": "https://twitter.com/tenfinney", "value": 1 }
+  ]}
+  ]}
+  ]},
+  {
+  "name": "Raid-Guild Projects", "icon": "",
+  "children": [
+  { "name" : "Current Projects ",
+  "children": [
+  {"name" : "RG RIPs", "img": "", "url": "https://hackmd.io/_0BcjD2sS5WMQErhJk0sPQ?edit", "value": 2 }
+  ]},
+  { "name" : "Pooling ",
+  "children": [
+  {"name" : "PoolTogether", "img": "", "url": "https://builder.pooltogether.com/", "value": 1 },
+  {"name" : "PoolTogether Community Pools", "img": "", "url": "https://community.pooltogether.com/pools/xdai/0x78000A8149190E238f93765Dcb3cf264f25A652c", "value": 1 },
+  {"name" : "PoolTogether Prize Pool Builder", "img": "", "url": "https://docs.pooltogether.com/protocol/prize-pool/prize-pool-builder", "value": 1 }
+  ]},
+  { "name" : "Smart Invoice and Escrow ",
+  "children": [
+  {"name" : "Smart Invoice Design Review", "img": "", "url": "https://hackmd.io/y0wjYRdqRHKv9AleIwZuQQ", "value": 1 },
+  {"name" : "Smart Invoice smart-contract", "img": "", "url": "https://github.com/raid-guild/smart-invoice/blob/main/packages/contracts/contracts/SmartInvoice.sol", "value": 1 },
+  {"name" : "Smart Invoice UX arentweall audit", "img": "", "url": "https://hackmd.io/@arentweall/H1foWq5YO", "value": 1 }
+  ]},
+  { "name" : "Dungeon Master ",
+  "children": [
+  {"name" : "Dungeon Master", "img": "", "url": "https://dungeon-master.on.fleek.co/#/", "value": 1 },
+  {"name" : "Dungeon Master API RIP Proposal v1", "img": "", "url": "https://hackmd.io/wNeADa-_T62CAy4k2TEckg", "value": 1 },
+  {"name" : "Dungeon Master DB and API Spec", "img": "", "url": "https://hackmd.io/7PFRU7-fSVS1TfQnhYqSHw", "value": 1 },
+  {"name" : "Dungeon Master Lucidchart", "img": "", "url": "https://lucid.app/lucidchart/aedb9b70-ea55-47a5-93a9-72ef35463fe4/edit?shared=true&page=q1GHSA~rAyVI#", "value": 1 },
+  {"name" : "Raid Guild Dungeon Master", "img": "", "url": "https://dungeon-master.on.fleek.co/#/", "value": 1 },
+  {"name" : "RIP Dungeon Master UX", "img": "", "url": "https://docs.google.com/document/d/1CDkqFX7qK6WBrwmRcNmUEOo-fJOFgu312bWeG1uwjQ4/edit", "value": 1 }
+  ]}
+  ]},
+  {
+  "name": "Season 1 Projects", "icon": "",
+  "children": [
+  { "name" : "Current Projects ",
+  "children": [
+  {"name" : "RG S1 Projects", "img": "", "url": "https://airtable.com/shrlYKj9sDHuVPyMw", "value": 2 }
+  ]},
+  { "name" : "Season 1 Website ",
+  "children": [
+  {"name" : "RG-S1 Cohort V1", "img": "", "url": "https://bafybeiddoqrphelyfo4c2st2ifxpoqqr7kte3qmv6l7oozgjsy3kkrqh3m.ipfs.infura-ipfs.io/", "value": 1 },
+  {"name" : "RG-S1 Cohort V2", "img": "", "url": "https://bafybeigfqm5jta3lqskmpb5d6n3ubyvz3fyayjngvfjzgnfiacat6ubvca.ipfs.infura-ipfs.io/", "value": 1 },
+  {"name" : "RG-S1 Documentation", "img": "", "url": "https://bafybeihaks3vi5kmeqkpiu5jcpj2hh445auta4l2yx6qgm5opioljonlyq.ipfs.infura-ipfs.io/docs/intro/", "value": 1 },
+  {"name" : "RG-S1 Slaying Demons", "img": "", "url": "https://bafybeiddoqrphelyfo4c2st2ifxpoqqr7kte3qmv6l7oozgjsy3kkrqh3m.ipfs.infura-ipfs.io/blog/slaying-demons/", "value": 1 },
+  {"name" : "RG-S1 web3 site template earth2travis", "img": "", "url": "https://github.com/raid-guild/cohort-docusaurus-v0", "value": 1 },
+  {"name" : "RG-S1 web3 site template jonathanprozzi", "img": "", "url": "https://github.com/jonathanprozzi/raid-guild-cohort-docusaurus-v0", "value": 1 }
+  ]},
+  { "name" : "Kanban Proj. Mgmt. ",
+  "children": [
+  {"name" : "dot-org mkdir01 ", "img": "", "url": "https://github.com/mkdir01/dot-org", "value": 1 },
+  {"name" : "GraphQL", "img": "", "url": "http://localhost:8000/___graphql?query=query%20MyQuery%20%7B%0A%20%20allFile%0A%20%20file%0A%7D%0A&operationName=MyQuery", "value": 1 },
+  {"name" : "Kanban API Web Components", "img": "", "url": "https://htmlelements.com/docs/kanban-api/", "value": 1 },
+  {"name" : "kanban board pluggable components", "img": "", "url": "https://github.com/rcdexta/react-trello", "value": 1 },
+  {"name" : "kanban board react-trello", "img": "", "url": "https://github.com/rcdexta/react-trello/blob/master/package.json", "value": 1 },
+  {"name" : "Kanban Boards Smartsheet", "img": "", "url": "https://smartsheet.com/s/kanban-dimensions?s=1&c=95&m=4400&a=397963890667&k=%2Bkanban&mtp=b&adp=&net=g&dev=c&devm=&plc=&ds_rl=1286294&gclid=Cj0KCQjwwLKFBhDPARIsAPzPi-LFvUi1cxyF_yn5nJYic2aplFV1Q3j56ird67es9Vc8OHSy9YT5U3YaAg43EALw_wcB&gclsrc=aw.ds", "value": 1 },
+  {"name" : "Kanban Complex Layouts", "img": "", "url": "https://htmlelements.com/docs/kanban-complex-layouts/", "value": 1 },
+  {"name" : "Kanban Test 0x047bb446", "img": "", "url": "https://rinkeby.etherscan.io/address/0x047bb446fbca43e84f4c1a5f849c8cd74d40a325#writeContract", "value": 1 },
+  {"name" : "RG-S1 Eth-KanBan Project", "img": "", "url": "https://hackmd.io/yuIbPOJcQ1GQW0GYdXieNw?view", "value": 1 },
+  {"name" : "RIP: ToKanBan A Tokenized Kanban Project", "img": "", "url": "https://github.com/raid-guild/RIPs/issues/33", "value": 1 },
+  {"name" : "ToKanBan", "img": "", "url": "https://github.com/rpal3058/ToKanBan", "value": 1 },
+  {"name" : "ToKanBan Kanban neokry", "img": "", "url": "https://github.com/neokry/ToKanBan/blob/master/packages/hardhat/contracts/Kanban.sol", "value": 1 },
+  {"name" : "ToKanBan neokry", "img": "", "url": "https://github.com/neokry/ToKanBan", "value": 1 },
+  {"name" : "ToKanBan packagejson", "img": "", "url": "https://github.com/rpal3058/ToKanBan/blob/main/package.json", "value": 1 },
+  {"name" : "ToKanBan Pull 11", "img": "", "url": "https://github.com/neokry/ToKanBan/pull/11", "value": 1 },
+  {"name" : "ToKanBan solidity neokry", "img": "", "url": "https://github.com/neokry/ToKanBan/blob/master/packages/hardhat/contracts/ToKanBan.sol", "value": 1 }
+  ]},
+  { "name" : "Web3 Starter Website ",
+  "children": [
+  {"name" : "dApp Backend with Nodejs Webpack", "img": "", "url": "https://medium.com/oli-systems/building-dapps-backend-with-node-js-and-webpack-311cda224da5", "value": 1 },
+  {"name" : "DarrenRM/sbv-site-", "img": "", "url": "https://github.com/DarrenRM/sbv-site", "value": 1 },
+  {"name" : "Gatsby Node_js TypeScript API", "img": "", "url": "https://gatsby-now-examples.vercel.app/", "value": 1 },
+  {"name" : "RG dot-org-v2 React Chakra Starter Site", "img": "", "url": "https://github.com/raid-guild/dot-org-v2/tree/develop", "value": 1 },
+  {"name" : "RG RIP Create-Raid-App ", "img": "", "url": "https://github.com/raid-guild/RIPs/issues/26", "value": 1 },
+  {"name" : "RG Web3 Starter Site", "img": "", "url": "https://infallible-wiles-fd5269.netlify.app/#/", "value": 1 },
+  {"name" : "RG-S1 RIP Create-Raid-App bitbeckers", "img": "", "url": "https://github.com/bitbeckers/create-raid-app-poc", "value": 1 }
+  ]},
+  { "name" : "Project Job Board ",
+  "children": [
+  {"name" : "Jobs for Ethereum Devs challenge", "img": "", "url": "https://ethhole.com/challenge", "value": 1 },
+  {"name" : "Jobs for Ethereum Devs learning", "img": "", "url": "https://ethhole.com/learning", "value": 1 },
+  {"name" : "Raid Guild Job Board", "img": "", "url": "https://distracted-wing-cc3131.netlify.app/", "value": 1 }
+  ]},
+  { "name" : "Web3 DB Donut Tree ",
+  "children": [
+  {"name" : "DrHongos ethtarium", "img": "", "url": "https://github.com/DrHongos/ethtarium/tree/master", "value": 1 },
+  {"name" : "DrHongos Web3Donut", "img": "", "url": "https://github.com/DrHongos/Web3Donut", "value": 1 },
+  {"name" : "DrHongos Web3Donut main", "img": "", "url": "https://github.com/DrHongos/Web3Donut/tree/main/web3donut", "value": 1 },
+  {"name" : "DrHongos Web3Donut package_json", "img": "", "url": "https://github.com/DrHongos/Web3Donut/blob/main/web3donut/package.json", "value": 1 },
+  {"name" : "DrHongos Web3Donut src_libs", "img": "", "url": "https://github.com/DrHongos/Web3Donut/tree/main/web3donut/src/libs", "value": 1 },
+  {"name" : "Pentacle", "img": "", "url": "https://pentacle.ai/ethereum", "value": 1 },
+  {"name" : "RG-S1 DrHongos Web3Donut Web3 skillS", "img": "", "url": "https://github.com/DrHongos/Web3Donut", "value": 1 },
+  {"name" : "RG-S1 Habit Roles and Rabbit Holes", "img": "", "url": "https://web3-library.raidguild.freeweb3.com/", "value": 1 },
+  {"name" : "RG-S1 Task", "img": "", "url": "https://docs.google.com/spreadsheets/d/1m33JYPiXOM_SWo8nsMczGWh3Y5H08knjAms0nzlrMLY/edit#gid=0", "value": 1 },
+  {"name" : "RG-S1 Web3 Tools Library", "img": "", "url": "https://web3starburst.raidguild.freeweb3.com/", "value": 1 },
+  {"name" : "Sunburst Donut Component", "img": "", "url": "https://observablehq.com/@d3/zoomable-sunburst", "value": 1 },
+  {"name" : "Web3 Rabbit Hole", "img": "", "url": "https://docs.google.com/document/d/1kLJM_D_WyRtPImKwClnFAhLY0ww3X330WtUgtpjx62c/edit", "value": 1 }
+  ]}
+  ]},
+  {
+  "name": "Decentralized Organizations", "icon": "",
+  "children": [
+  { "name" : "DAOhaus Organizations ",
+  "children": [
+  {"name" : "DAOhaus App", "img": "", "url": "https://app.daohaus.club/", "value": 1 },
+  {"name" : "DAOhaus Club", "img": "", "url": "https://daohaus.club/", "value": 1 },
+  {"name" : "DAOhaus Club", "img": "", "url": "https://daohaus.club/", "value": 1 },
+  {"name" : "DAOhaus Deus ExMachina", "img": "", "url": "https://app.daohaus.club/dao/0x64/0x039286cf4193cba97cf71087e4440961854b6ed0/members", "value": 1 },
+  {"name" : "DAOhaus Party Notes June 3 2021", "img": "", "url": "https://hackmd.io/@jonathanprozzi/daohaus-haus-party-live-notes-6-3", "value": 1 },
+  {"name" : "DAOhaus RaidGuild-S1", "img": "", "url": "https://app.daohaus.club/dao/0x64/0x10e31c10fb4912bc408ce6c585074bd8693f2158/members", "value": 1 },
+  {"name" : "DAOhaus RaidGuild-S1 M1", "img": "", "url": "https://app.daohaus.club/dao/0x64/0x10e31c10fb4912bc408ce6c585074bd8693f2158/members#1", "value": 1 },
+  {"name" : "DAOhaus RG-P86", "img": "", "url": "https://app.daohaus.club/dao/0x64/0xfe1084bc16427e5eb7f13fc19bcd4e641f7d571f/proposals/86", "value": 1 },
+  {"name" : "DAOhaus RG-P92", "img": "", "url": "https://app.daohaus.club/dao/0x64/0xfe1084bc16427e5eb7f13fc19bcd4e641f7d571f/proposals/92", "value": 1 },
+  {"name" : "DAOhaus RG-PS", "img": "", "url": "https://app.daohaus.club/dao/0x64/0xfe1084bc16427e5eb7f13fc19bcd4e641f7d571f/proposals", "value": 1 },
+  {"name" : "DAOhaus RG-S1-P39", "img": "", "url": "https://app.daohaus.club/dao/0x64/0x10e31c10fb4912bc408ce6c585074bd8693f2158/proposals/39", "value": 1 },
+  {"name" : "DAOhaus RG-S1-P40", "img": "", "url": "https://app.daohaus.club/dao/0x64/0x10e31c10fb4912bc408ce6c585074bd8693f2158/proposals/40", "value": 1 },
+  {"name" : "DAOhaus RG-S1-PS", "img": "", "url": "https://app.daohaus.club/dao/0x64/0x10e31c10fb4912bc408ce6c585074bd8693f2158/proposals", "value": 1 },
+  {"name" : "DAOhaus RG-Settings", "img": "", "url": "https://app.daohaus.club/dao/0x64/0xfe1084bc16427e5eb7f13fc19bcd4e641f7d571f/settings", "value": 1 },
+  {"name" : "DAOhaus Tenfinney profile", "img": "", "url": "https://app.daohaus.club/dao/0x64/0x10e31c10fb4912bc408ce6c585074bd8693f2158/profile/0x7b035331967075a168471dfbd23ed977f048f61e", "value": 1 }
+  ]},
+  { "name" : "Raid-Guild Operations ",
+  "children": [
+  {"name" : "Raid Guild Operations HQ", "img": "", "url": "https://github.com/raid-guild/HQ", "value": 1 },
+  {"name" : "RaidGuild Improvment Projects", "img": "", "url": "https://github.com/raid-guild/RIPs", "value": 1 },
+  {"name" : "RaidGuild Intro", "img": "", "url": "https://google.com/search?channel=fs&client=ubuntu&q=what+is+raidguild", "value": 1 },
+  {"name" : "RaidGuild RIPs", "img": "", "url": "https://hackmd.io/_0BcjD2sS5WMQErhJk0sPQ?edit", "value": 1 },
+  {"name" : "RG Job Board Check-In", "img": "", "url": "https://lettucemeet.com/l/nowWV", "value": 1 },
+  {"name" : "RG-CS-aragon", "img": "", "url": "https://raidguild.org/case-studies/aragon", "value": 1 },
+  {"name" : "RG-CS-minion", "img": "", "url": "https://raidguild.org/case-studies/minion", "value": 1 },
+  {"name" : "RG-CS-oneup", "img": "", "url": "https://raidguild.org/case-studies/oneup", "value": 1 },
+  {"name" : "RG-CS-sbv", "img": "", "url": "https://raidguild.org/case-studies/sbv", "value": 1 },
+  {"name" : "RG-CS-stakeonme", "img": "", "url": "https://raidguild.org/case-studies/stakeonme", "value": 1 },
+  {"name" : "RG-CS-tellor", "img": "", "url": "https://raidguild.org/case-studies/tellor", "value": 1 },
+  {"name" : "RG-HireUs", "img": "", "url": "https://hireus.raidguild.org/", "value": 1 },
+  {"name" : "RG-portfolio", "img": "", "url": "https://raidguild.org/portfolio/", "value": 1 },
+  {"name" : "RG-Raid-SimpleFi", "img": "", "url": "https://docs.google.com/spreadsheets/d/1kZ65D7XRaQ4AaxdsufygTVolAYnwzFe_XUrcOVwg4sQ/edit#gid=0", "value": 1 },
+  {"name" : "RG-Raid-SimpleFi-Specs", "img": "", "url": "https://docs.google.com/document/d/1XYFmwOJi57KttR7P_C9CD7_Vf0VmvJ3iVoUEZqcg9bU/edit", "value": 1 },
+  {"name" : "RG-RIP-request", "img": "", "url": "https://github.com/raid-guild/RIPs/blob/master/.github/ISSUE_TEMPLATE/rip-request.md", "value": 1 },
+  {"name" : "RG-S1 Tasks", "img": "", "url": "https://docs.google.com/spreadsheets/d/1TyXmBesk_V_JImMv081zcEFi_A7f5nV1Q3kJEYveRRY/edit#gid=0", "value": 1 },
+  {"name" : "RG-Smart Invoice FAQ", "img": "", "url": "https://docs.smartinvoice.xyz/", "value": 1 },
+  {"name" : "State of the Raid", "img": "", "url": "https://raidguild.substack.com/p/-state-of-the-raid-february", "value": 1 }
+  ]},
+  { "name" : "Miscellanoeous DAO Info ",
+  "children": [
+  {"name" : "CrunchyPie neanderthals", "img": "", "url": "https://github.com/CrunchyPie/neanderthals", "value": 1 },
+  {"name" : "Dungeon Master Rage Shipper", "img": "", "url": "https://hackmd.io/DEeLY5mfQASvi0mNV588qQ", "value": 1 },
+  {"name" : "Gitcoin Grants lexDAO", "img": "", "url": "https://etherscan.io/address/0x97103fda00a2b47eac669568063c00e65866a633", "value": 1 },
+  {"name" : "HausDAO/daohaus Website", "img": "", "url": "https://github.com/HausDAO/daohaus-website", "value": 1 },
+  {"name" : "Internal Raid Tasks", "img": "", "url": "https://docs.google.com/spreadsheets/d/1TyXmBesk_V_JImMv081zcEFi_A7f5nV1Q3kJEYveRRY/edit#gid=0", "value": 1 },
+  {"name" : "LexDAO People", "img": "", "url": "https://github.com/orgs/lexDAO/people", "value": 1 },
+  {"name" : "RG RIP Rage-Shipper", "img": "", "url": "https://github.com/raid-guild/RIPs/issues/47", "value": 1 }
+  ]},
+  { "name" : "DAO Governance ",
+  "children": [
+  {"name" : "Aave Aavenomics Governance", "img": "", "url": "https://docs.aave.com/aavenomics/governance", "value": 1 },
+  {"name" : "Aave Governance", "img": "", "url": "https://app.aave.com/governance", "value": 1 },
+  {"name" : "Aave Governance Activated", "img": "", "url": "https://medium.com/aave/aave-protocol-governance-v2-has-been-activated-af4a4b228885", "value": 1 },
+  {"name" : "Aave Governance Developers", "img": "", "url": "https://docs.aave.com/developers/protocol-governance/governance", "value": 1 },
+  {"name" : "Aave Governance FAQ", "img": "", "url": "https://docs.aave.com/faq/governance", "value": 1 }
+  ]}
+  ]},
+  {
+  "name": "Blockchains", "icon": "",
+  "children": [
+  { "name" : "Layer One Blockchains ",
+  "children": [
+  {"name" : "Ethereum API IPFS API ETH Nodes Service", "img": "", "url": "https://infura.io/dashboard", "value": 1 },
+  {"name" : "Managed Blockchain Services Chainstack", "img": "", "url": "https://chainstack.com/", "value": 1 },
+  {"name" : "Polkadot Decoded", "img": "", "url": "https://youtube.com/playlist?list=PLOyWqupZ-WGuAB8z_PkZD6f-IA6CUONFb", "value": 1 },
+  {"name" : "Rinkeby Authenticated Faucet", "img": "", "url": "https://faucet.rinkeby.io/", "value": 1 }
+  ]},
+  { "name" : "Solidity and Oracles ",
+  "children": [
+  {"name" : "Chainlink Keepers by The Crypto Oracle", "img": "", "url": "https://twitter.com/Crypto___Oracle/status/1401978216353468417", "value": 1 },
+  {"name" : "Remix Ethereum Project", "img": "", "url": "https://remix-project.org/", "value": 1 },
+  {"name" : "Remix Ethereum IDE", "img": "", "url": "https://remix.ethereum.org", "value": 1 },
+  {"name" : "Rinkeby Authenticated Faucet", "img": "", "url": "https://faucet.rinkeby.io/", "value": 1 },
+  {"name" : "Solidity Programming Workshop", "img": "", "url": "https://youtube.com/watch?v=UGiA709mQSg", "value": 1 },
+  {"name" : "Solidity Tutorial", "img": "", "url": "https://cryptozombies.io/", "value": 1 }
+  ]},
+  { "name" : "Blockchain Bridges ",
+  "children": [
+  {"name" : "Arbitrum Offchain Labs Offchain Labs", "img": "", "url": "https://medium.com/offchainlabs/wen-arbitrum-634969c14713", "value": 1 },
+  {"name" : "Get Started Polygon Ethereum", "img": "", "url": "https://polygon.technology/get-started/", "value": 1 },
+  {"name" : "Getting Started with Matic SDK", "img": "", "url": "https://docs.matic.network/docs/develop/ethereum-matic/pos/using-sdk/getting-started", "value": 1 },
+  {"name" : "Introducing Arbitrum One Offchain Labs", "img": "", "url": "https://offchain.medium.com/introducing-arbitrum-one-our-mainet-beta-ed0e9b63b435", "value": 1 },
+  {"name" : "Matic Network Documentation", "img": "", "url": "https://docs.matic.network/docs/develop/getting-started/", "value": 1 }
+  ]},
+  { "name" : "Transaction Costs ",
+  "children": [
+  {"name" : "ETH Gas Station", "img": "", "url": "https://ethgasstation.info/index.php", "value": 2 }
+  ]}
+  ]},
+  {
+  "name": "Databases", "icon": "",
+  "children": [
+  { "name" : "Content Storage IPFS ",
+  "children": [
+  {"name" : "A Name Resolver for the Distributed Web", "img": "", "url": "https://blog.cloudflare.com/cloudflare-distributed-web-resolver/", "value": 1 },
+  {"name" : "Cloudflare Gateway ENS IPFS Integration", "img": "", "url": "https://coindesk.com/cloudflare-unveils-gateway-to-distributed-web-with-ens-ipfs-integration", "value": 1 },
+  {"name" : "Distributed Web Gateway", "img": "", "url": "https://cloudflare.com/de-de/distributed-web-gateway/", "value": 1 },
+  {"name" : "Estuary", "img": "", "url": "https://estuary.tech/", "value": 1 },
+  {"name" : "OrbitDB", "img": "", "url": "https://github.com/orbitdb/orbit-db", "value": 1 },
+  {"name" : "OrbitDB nodejs package", "img": "", "url": "https://www.npmjs.com/package/orbit-db", "value": 1 }
+  ]},
+  { "name" : "Centralized Databases ",
+  "children": [
+  {"name" : "Airtable", "img": "", "url": "https://airtable.com/", "value": 1 },
+  {"name" : "Airtable - Grid view", "img": "", "url": "https://airtable.com/shrsePq0kWudly5Ye/tbli7QqsCqQf8yfJz", "value": 1 },
+  {"name" : "Databases Vercel", "img": "", "url": "https://vercel.com/docs/solutions/databases", "value": 1 }
+  ]},
+  { "name" : "BigChain DB ",
+  "children": [
+  {"name" : "BigchainDB Client-Server API", "img": "", "url": "http://docs.bigchaindb.com/en/latest/installation/api/http-client-server-api.html", "value": 1 },
+  {"name" : "BigchainDB Guide", "img": "", "url": "https://bigchaindb.com/developers/guide/", "value": 1 },
+  {"name" : "BigchainDB JS driver", "img": "", "url": "https://github.com/bigchaindb/js-bigchaindb-driver", "value": 1 },
+  {"name" : "BigchainDB Use Cases", "img": "", "url": "https://bigchaindb.com/features/", "value": 1 },
+  {"name" : "IPDB Research", "img": "", "url": "https://ipdb.io/research/", "value": 1 },
+  {"name" : "IPDB Resources", "img": "", "url": "https://ipdb.io/resources/", "value": 1 },
+  {"name" : "IPDB Test", "img": "", "url": "https://test.ipdb.io/", "value": 1 }
+  ]}
+  ]},
+  {
+  "name": "Web3 dApp Development", "icon": "",
+  "children": [
+  { "name" : "General Developer Tools ",
+  "children": [
+  {"name" : "Computed Diff Checker", "img": "", "url": "https://diffchecker.com/diff", "value": 1 },
+  {"name" : "HackMD", "img": "", "url": "https://hackmd.io", "value": 1 },
+  {"name" : "Introduction to Git", "img": "", "url": "https://docs.google.com/presentation/d/1P3SzBeCLlei-xxNYuMzEZMUM8SFrgMdFwHpPi7OJhBA/htmlpresent", "value": 1 },
+  {"name" : "Mastering Markdown GitHub", "img": "", "url": "https://guides.github.com/features/mastering-markdown/", "value": 1 },
+  {"name" : "Puppeteer", "img": "", "url": "https://pptr.dev/#?product=Puppeteer&version=v9.1.1&show=outline", "value": 1 }
+  ]},
+  { "name" : "Website Design Tools ",
+  "children": [
+  {"name" : "Case Studies Deep Work", "img": "", "url": "https://deepwork.studio/case-studies/", "value": 1 },
+  {"name" : "dot-to-ascii", "img": "", "url": "https://dot-to-ascii.ggerganov.com/", "value": 1 },
+  {"name" : "Generative Design System Components ", "img": "", "url": "https://components.ai/theme/tachyons-v5?tab=editor", "value": 1 },
+  {"name" : "Miro Visual Collaboration", "img": "", "url": "https://miro.com/app/dashboard/", "value": 1 },
+  {"name" : "Nodesign Design", "img": "", "url": "https://nodesign.dev/", "value": 1 },
+  {"name" : "RG Style Guide Figma", "img": "", "url": "https://figma.com/file/lV5tzyt5oBrEsfitWcLUBf/RG-Style-Guide?node-id=86%3A4", "value": 1 },
+  {"name" : "Tailwind CSS", "img": "", "url": "https://tailwindcss.com/", "value": 1 },
+  {"name" : "Theme UI Figma", "img": "", "url": "https://figma.com/community/plugin/797015796747379907/Theme-UI", "value": 1 },
+  {"name" : "Uncial Antiqua Font", "img": "", "url": "https://fonts.google.com/specimen/Uncial+Antiqua#standard-styles", "value": 1 },
+  {"name" : "unDraw Illustrations", "img": "", "url": "https://undraw.co/illustrations", "value": 1 },
+  {"name" : "Wordsmiths Meetup", "img": "", "url": "https://hackmd.io/Vv3NnAhlQZm4gkwnqtjsLw?both", "value": 1 }
+  ]},
+  { "name" : "Frontend Website Tools ",
+  "children": [
+  {"name" : "Chakra UI", "img": "", "url": "https://chakra-ui.com/docs/getting-started", "value": 1 },
+  {"name" : "Cypress JavaScript Testing Framework", "img": "", "url": "https://cypress.io/", "value": 1 },
+  {"name" : "Quick Optimized Website", "img": "", "url": "https://docusaurus.io/", "value": 1 },
+  {"name" : "RG-S1 Habit Roles and Rabbit Holes", "img": "", "url": "https://season1.raidguild.freeweb3.com/", "value": 1 },
+  {"name" : "State Machine Model-Based React Testing", "img": "", "url": "https://css-tricks.com/model-based-testing-in-react-with-state-machines/", "value": 1 },
+  {"name" : "XState Catalogue Multi-Step Timer", "img": "", "url": "https://xstate-catalogue.com/machines/multi-step-timer", "value": 1 },
+  {"name" : "XState Docs", "img": "", "url": "https://xstate.js.org/docs/", "value": 1 },
+  {"name" : "Xstate Getting Started", "img": "", "url": "https://vietnguyen.site/getting-started-with-xstate/", "value": 1 },
+  {"name" : "Xstate State Machines", "img": "", "url": "https://github.com/ulukfuni/state-machine-example", "value": 1 }
+  ]},
+  { "name" : "Full-stack Applications ",
+  "children": [
+  {"name" : "ChainShot", "img": "", "url": "https://chainshot.com/courses", "value": 1 },
+  {"name" : "Docusaurus Client Entry", "img": "", "url": "https://github.com/facebook/docusaurus/blob/073fdeae8eea3cf13e27fcc7f0a9fe5265fad84c/packages/docusaurus/src/client/clientEntry.tsx", "value": 1 },
+  {"name" : "Ethereum Dapps Development", "img": "", "url": "https://reddit.com/r/ethdev/", "value": 1 },
+  {"name" : "Full Stack Ethereum Guide", "img": "", "url": "https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13", "value": 1 },
+  {"name" : "Josephs How-to Ethereum Dev", "img": "", "url": "https://hackmd.io/NS-XCiEbS2GUpI8Wu1Xdew", "value": 1 },
+  {"name" : "One Click Dapp", "img": "", "url": "https://oneclickdapp.com/", "value": 1 },
+  {"name" : "RedwoodJS Ethereum App", "img": "", "url": "https://medium.com/coinmonks/using-redwoodjs-to-create-an-ethereum-app-8c385815b717", "value": 1 },
+  {"name" : "Scaffold-Eth AG", "img": "", "url": "https://github.com/austintgriffith/scaffold-eth", "value": 1 },
+  {"name" : "Zapper DeFi", "img": "", "url": "https://zapper.fi/invest", "value": 1 },
+  {"name" : "Zapper Docs", "img": "", "url": "https://github.com/Zapper-fi/Docs", "value": 1 },
+  {"name" : "Zola ENS Static Site", "img": "", "url": "https://matthewcantelon.ca/blog/zola-ens-ipfs/", "value": 1 }
+  ]},
+  { "name" : "Security and Testing ",
+  "children": [
+  {"name" : "Cypress vs Puppeteer for E2E Testing", "img": "", "url": "https://activeviam.com/blog/technology-en/puppeteer-vs-cypress-best-end-end-testing/#:~:text=Cypress%20was%20designed%20for%20E2E,just%20a%20browser%20automation%20tool", "value": 1 },
+  {"name" : "E2E dApp Testing with Dappeteer Puppeteer", "img": "", "url": "https://github.com/NodeFactoryIo/dappeteer", "value": 1 },
+  {"name" : "Puppeteer Headless Chrome Node API", "img": "", "url": "https://github.com/puppeteer/puppeteer", "value": 1 },
+  {"name" : "SSH Key Creation", "img": "", "url": "https://confluence.atlassian.com/bitbucketserver/creating-ssh-keys-776639788.html", "value": 1 }
+  ]},
+  { "name" : "Application Deployment ",
+  "children": [
+  {"name" : "Fullstack App Nextjs Prisma PostgreSQL", "img": "", "url": "https://vercel.com/guides/nextjs-prisma-postgres", "value": 1 },
+  {"name" : "Serverless Functions Vercel", "img": "", "url": "https://vercel.com/docs/serverless-functions/introduction", "value": 1 },
+  {"name" : "State Machine Example", "img": "", "url": "https://github.com/ulukfuni/state-machine-example/blob/master/pages/rickandmorty.js", "value": 1 }
+  ]}
+  ]},
+  {
+  "name": "Web3 Skills", "icon": "",
+  "children": [
+  { "name" : "Onboarding into Web3 ",
+  "children": [
+  {"name" : "Ethplorer history 0x5219c80", "img": "", "url": "https://ethplorer.io/address/0x5219c80f8179f3361a605fbb5ddb7528308a1dc0#", "value": 1 },
+  {"name" : "Ethplorer history 0x9FcCea1", "img": "", "url": "https://ethplorer.io/address/0x9fccea1dca74b110f265ac5f86f7acf0b3709ac0#", "value": 1 },
+  {"name" : "Get an Ethereum Account", "img": "", "url": "https://docs.decentraland.org/examples/get-a-wallet/", "value": 1 }
+  ]},
+  { "name" : "General Web3 Information ",
+  "children": [
+  {"name" : "Git Tutorial Atlassian", "img": "", "url": "https://atlassian.com/git", "value": 1 },
+  {"name" : "Learn About Web3", "img": "", "url": "https://hackmd.io/RcZjYYsTQNW-RSYNCIByQw?view", "value": 1 },
+  {"name" : "Skill Discovery", "img": "", "url": "https://forum.metagame.wtf/t/rfc-skill-discovery-discord-mini-game/607/2", "value": 1 },
+  {"name" : "Skill Forest FP", "img": "", "url": "https://forum.daohaus.club/t/9-funding-proposal-skill-forest-phase-1/402/2", "value": 1 }
+  ]},
+  { "name" : "FreeWeb3 Info Sites ",
+  "children": [
+  {"name" : "freeWeb3 resource library", "img": "", "url": "https://freeweb3.com/", "value": 1 },
+  {"name" : "Web3vm The Web3 Vending Machine", "img": "", "url": "https://web3vm.com/#ipfseth", "value": 1 }
+  ]},
+  { "name" : "Non-Fungible Assets NFTS ",
+  "children": [
+  {"name" : "ArtBlocks docs scriptjs", "img": "", "url": "https://github.com/ArtBlocks/docs/blob/main/script.js", "value": 1 },
+  {"name" : "Create an NFT", "img": "", "url": "https://docs.alchemy.com/alchemy/tutorials/how-to-create-an-nft", "value": 1 },
+  {"name" : "Regency NFT Opensea Escape to Infinity", "img": "", "url": "https://opensea.io/assets/0x56cb47517bac9f8ae749b528400355423d24f037/62", "value": 1 },
+  {"name" : "RegencyNFT", "img": "", "url": "https://etherscan.io/address/0x56cb47517bac9f8ae749b528400355423d24f037#code", "value": 1 }
+  ]}
+  ]},
+  {
+  "name": "Decentralized Finance DeFi", "icon": "",
+  "children": [
+  { "name" : "Custodial Exchanges ",
+  "children": [
+  {"name" : "Coinbase Pro", "img": "", "url": "https://pro.coinbase.com/portfolios/USD", "value": 1 },
+  {"name" : "ETH BTC TradingView", "img": "", "url": "https://tradingview.com/symbols/ETHBTC/", "value": 1 },
+  {"name" : "Ethereum DeFi Ecosystem", "img": "", "url": "https://defiprime.com/ethereum", "value": 1 },
+  {"name" : "Plaid FinTech", "img": "", "url": "https://plaid.com/", "value": 1 },
+  {"name" : "Wyre API Reference", "img": "", "url": "https://docs.sendwyre.com/", "value": 1 }
+  ]},
+  { "name" : "Automated Market Making ",
+  "children": [
+  {"name" : "0x tokens on Ethereum", "img": "", "url": "https://0x.org/", "value": 1 },
+  {"name" : "1inch DeFi DEX Aggregator", "img": "", "url": "https://app.1inch.io/", "value": 1 },
+  {"name" : "MakerDAO", "img": "", "url": "https://makerdao.com/en/", "value": 1 },
+  {"name" : "Rari Capital", "img": "", "url": "https://rari.capital/", "value": 1 }
+  ]},
+  { "name" : "Liquidity Pools ",
+  "children": [
+  {"name" : "Balancer Pools", "img": "", "url": "https://pools.balancer.exchange/#/", "value": 1 },
+  {"name" : "Balancer Wallet", "img": "", "url": "https://pools.balancer.exchange/#/wallet", "value": 1 },
+  {"name" : "DeFiPulse Index Price", "img": "", "url": "https://coingecko.com/en/coins/defipulse-index", "value": 1 },
+  {"name" : "Balancer Pools", "img": "", "url": "https://bafybeicpzhzgbkb64zcvsr3fcskfyptgj5b3nmotrwac3pyfuypmm65nii.ipfs.infura-ipfs.io/", "value": 1 }
+  ]}
+  ]},
+  {
+  "name": "Metaverse Art and Space", "icon": "",
+  "children": [
+  { "name" : "Cryptovoxels ",
+  "children": [
+  {"name" : "Cryptovoxels - Ethereum Virtual World", "img": "", "url": "https://cryptovoxels.com/", "value": 1 },
+  {"name" : "CV Airflow Guestbook", "img": "", "url": "https://airtable.com/tblfAMzBpjZJLM8WV/viwP86an6uRDzk7fj/recfOSthbsOa64WLY/fldS0HuQsnp1cCjeF/attvql9savMcjUaU9?blocks=hide", "value": 1 }
+  ]},
+  { "name" : "Fractal NFTs ",
+  "children": [
+  {"name" : "Alive Fractals", "img": "", "url": "https://bafybeib7vhr75abuqrtwsptlk2mdntkgziumtkjt73snmrzj22iwbrovhm.ipfs.infura-ipfs.io/", "value": 1 },
+  {"name" : "Fractal 21-Seconds Fly-Out Fly-In", "img": "", "url": "https://bafybeif3k3inhhntc3ssrprhi72np4pmnh7su2ve5n4gbejxeq6c7uwg3e.ipfs.infura-ipfs.io/", "value": 1 }
+  ]}
+  ]}
+  ]
+  }
+  
