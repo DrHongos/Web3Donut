@@ -1,17 +1,23 @@
 import React, {useState} from "react";
 import DBTools from './databaseTools';
-import IPFSTools from './ipfsTools';
-import explore from '../libs/icons/explore.png';
+import CopyableText from './commons/copyableText';
+import { HStack, Stat, StatLabel, StatHelpText, Center, IconButton, Select, Table, TableCaption, Thead,Tbody, Th,Tr,Td } from "@chakra-ui/react"
+import {Search2Icon, ExternalLinkIcon } from '@chakra-ui/icons'
 
 import {getDagCid, getDagObject, getTreeIpfs, ipldExplorer} from '../libs/databaseLib';
 // import {fetchDB} from './systems';
 
 function DBCard(props) {
-  const [open, setOpen] = useState(false);
   const [tip, setTip] = useState('');
-  const canWrite = props.db.access._write.includes(props.user) || props.db.access._write[0] ==='*';
-
-
+  const [methodSelector, setMethodSelector] = useState();
+  const canWrite = (db) => {
+    try{
+      return db.access._write.includes(props.user) || db.access._write[0] ==='*'
+    }catch{
+      return true
+    }
+  };
+  const type = props.db._type
 
 // continue debugging databaseTools for usage of DBs
   async function retrieve(type, cid, path){
@@ -36,8 +42,8 @@ function DBCard(props) {
             text = 'ipfs.dag.tree(cid, {path}) gives you: (check console) '
             break
         default:
-          data = 'te'
-          text = 'Otro caso'
+          data = 'Error'
+          text = 'Error'
           break
 
       }
@@ -53,54 +59,85 @@ function DBCard(props) {
   }
 
   return (
-    <div>
-      <div onClick={()=>setOpen(!open)}>
-      <span>{props.name} </span>
-      {/*<button onClick={()=>console.log('fetchDB(props.db.id, props.db.dbname)')}>Refresh</button>*/}
-      </div>
-      {(open && props.db)?
+    <Center>
+      {props.db?
         <div>
-          <div style={{fontSize:'16px'}} onClick={()=>setOpen(!open)}>
-            <p>{props.db.id}</p>
-            <p>type: {props.db._type}</p>
-            <p>access: <button onClick={()=>console.log('user database?')}>{props.db.access._write[0] ==='*' ? 'public' : props.db.access._write[0].slice(0,5)}..</button></p>
-            <p>Can i write: {canWrite ? 'Yes!':'No!'}</p>
-          </div>
-          <ul>
-          {(props?.entries?.length > 0)?
-            <div>
-            <hr className="solid"/>
-            <p style={{fontSize:'14px'}} >latests {props.entries.length > 5 ? 5 : props.entries.length} events..</p> <br />
-            {props.entries.map((x, item)=>
-              {return (<li key={x.payload.value.timestamp}>
-                key: {x.payload.value.key}{' - '}
-                <button onClick={()=>{retrieve('get', x.payload.value.key)}}>GET</button>
-                {props.db._type === 'eventlog'?
-                  <span>{' - '}
-                  value: {x.payload?.value?.value? x.payload.value.value.slice(0,4) : 'loading'}...
-                  <button onClick={()=>retrieve('dagCat',x.payload.value.value)}>CAT</button>
-                  <button onClick={()=>ipldExplorer(x.payload.value.value)}><img src={explore} alt='explore' width="20" height="23"></img></button>
-                  <button onClick={()=>retrieve('dag', x.payload.value.value)}>DAG.GET</button>
-                  <button onClick={()=>retrieve('tree',x.payload.value.value)}>DAG.TREE</button>
-                  </span>
-                :null}
-                </li>)})}
-                {tip !== ''? tip : null}
-                </div>
-                :<p>DB is not replicated or has 0 entries, please wait and/or update databases</p>}
-          </ul>
-          <DBTools
-            db = {props.db}
-            canWrite = {canWrite}
-          />
-          <IPFSTools />
+        <Stat>
+          <StatLabel><CopyableText text={props.db.id}/></StatLabel>
+          <StatHelpText>type: {type}</StatHelpText>
+          {props.db.access._write?
+            <StatHelpText>access: {props.db.access._write[0] ==='*' ? 'public' : props.db.access._write[0].slice(0,5)}..</StatHelpText>
+            :null}
+          <StatHelpText>Can i write: {canWrite(props.db) ? 'Yes!':'No!'}</StatHelpText>
+        </Stat>
 
+        <DBTools
+          db = {props.db}
+          canWrite = {canWrite(props.db)}
+        />
+
+          {(props?.entries?.length > 0)?
+            <Table variant="simple">
+              <TableCaption>Latest {props.entries.length > 5 ? 5 : props.entries.length} events</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Key</Th>
+                  <Th>Value</Th>
+                  {type === 'eventlog'?
+                  <Th>Functions</Th>
+                  :null}
+                </Tr>
+              </Thead>
+              <Tbody>
+              {props.entries.map((x, item)=>
+                {return (
+                <Tr>
+                  <Td>{x.payload.value.key}</Td>
+                  {type === 'keyvalue'?
+                  <Td>{x.payload.value.value.value}</Td>
+                  :
+
+                  <Td>{x.payload?.value?.value? x.payload.value.value.slice(0,4) : 'loading'}</Td>
+                }
+                {type==='eventlog'?
+                <Td>
+                <HStack>
+                <IconButton
+                colorScheme="white"
+                aria-label="Search entry"
+                icon={<ExternalLinkIcon />}
+                onClick={()=>ipldExplorer(x.payload.value.value)}
+                />
+                {/*Select and button should be same component*/}
+                <Select placeholder="Method" onChange={(e)=>setMethodSelector(e.target.value)} value={methodSelector}>
+                <option value="dagCat">CAT</option>
+                <option value="dag">DAG.GET</option>
+                <option value="tree">Tree</option>
+                </Select>
+
+                <IconButton
+                isDisabled={methodSelector===null}
+                colorScheme="white"
+                aria-label="Search entry"
+                icon={<Search2Icon />}
+                onClick={(e)=>retrieve(methodSelector, x.payload.value.value)}
+                />
+                </HStack>
+                </Td>
+                :null}
+                </Tr>
+              )})}
+              </Tbody>
+            </Table>
+
+          :'Database empty, or not synched.. wait till replicates'}
+          {tip !== ''? tip : null}
         </div>
         : null
       }
         <hr className="solid"/>
 
-    </div>
+    </Center>
 
   );
 }

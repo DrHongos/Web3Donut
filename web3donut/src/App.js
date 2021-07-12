@@ -2,13 +2,16 @@ import React from "react"; //,{useState}
 import './App.css';
 import { actions, StateProvider, loadingState  } from './state'
 
-import Systems from './components/systems';
+import Header from './components/header';
 import Filters from './components/filters';
 import DatabaseForm from './components/databaseForm';
 import DatabaseLocal from './components/databaseLocal';
+import { ChakraProvider, Box } from '@chakra-ui/react/';
+import { Redirect, Route, Switch, BrowserRouter as Router } from 'react-router-dom';
+import Web3ContextProvider from "./libs/Web3Context";
+
 
 function App() {
-  // const [guide, setGuide]=useState(true);
   const initialState = {
     user: null,
     db: null,
@@ -100,8 +103,8 @@ function App() {
 // Errors and bugs:
 // db.iterator({ limit: -1 }).collect() says its not a function when empty
 
-
   return (
+<<<<<<< HEAD
     <StateProvider {...{ initialState, reducer }}>
       <div className="App">
         <header className="App-header">
@@ -118,6 +121,38 @@ function App() {
           <li>Encryption and privacy</li>
         </ul>
       </div>
+=======
+    <StateProvider initialState={initialState} reducer={reducer}>
+    <ChakraProvider>
+      <Web3ContextProvider>
+        <Box
+          backgroundColor='#303030'
+          color='white'
+        >
+          <Router>
+            <Header w='100%'/>
+            <Switch>
+              <Route exact path="/sharedDatabases" component={DatabaseForm} />
+              <Route exact path="/localDatabases" component={DatabaseLocal} />
+              <Route path="/" component={Filters} />
+              <Redirect to="/" />
+            </Switch>
+          </Router>
+        </Box>
+      </Web3ContextProvider>
+{/*
+      <ul>
+        <li>Add DB of guide, which is a follow up (with alerts? or toasts?) of different parts of the app</li>
+        <li>with information taken from the database IPNS blogging style</li>
+        <li>convert ipfsObject (key-value or doc?) into a Search tool to find objects in specific DB (key: 'orbitdb' - value: orbitdb object CID to add in a classificator)</li>
+        <li><a href="https://github.com/orbitdb/orbit-db-access-controllers" target='blank' rel='noopener noreferrer'>access control</a></li>
+        <li>Encryption and privacy - https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md</li>
+        <li>https://github.com/QuestNetwork/qd-messages-ts</li>
+        <li>https://github.com/Peergos/Peergos</li>
+      </ul>
+*/}
+    </ChakraProvider>
+>>>>>>> chakra
     </StateProvider>
   );
 }

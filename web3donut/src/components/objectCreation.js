@@ -1,4 +1,7 @@
 import React, {useState} from "react";
+import {Button, Input, VStack, Table, TableCaption, Thead, Tbody, Th, Tr, Td, IconButton,  Divider} from '@chakra-ui/react';
+import {DeleteIcon } from '@chakra-ui/icons';
+
 
 function ObjectCreator(props) {
   const [fields, setFields] = useState([]);
@@ -42,17 +45,36 @@ function ObjectCreator(props) {
     <div>
       <hr className="solid"/>
       <div>
-        {fields.length > 0 ? (
-          <div>
-            <ul>
-              {fields.map((x, idx) => (
-                <li key={idx}>key: {x.key} - value: {x.value} - <button onClick={()=>deleteItem(x.key)}>delete</button></li>
-              ))}
-            </ul>
+        <div>
+          {fields.length > 0?
             <div>
-              <input id='key' placeholder='Classificator'></input>
-              <input id='value' placeholder='value'></input>
-              <button onClick={addItem}>Add Property</button>
+              <Table>
+                <TableCaption placement='top'>data</TableCaption>
+                <Thead>
+                  <Tr>
+                    <Th>key</Th>
+                    <Th>value</Th>
+                    <Th>functions</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                {fields.map(x=>{return(
+                  <Tr>
+                    <Td>{x.key}</Td>
+                    <Td>{x.value}</Td>
+                    <Td><IconButton colorScheme='white' icon={<DeleteIcon />} onClick={()=>deleteItem(x.key)}></IconButton></Td>
+                  </Tr>
+                )})}
+                </Tbody>
+              </Table>
+              <VStack>
+                <Input w='90%' colorScheme='white' variant='outline' id='key' placeholder='Classificator'></Input>
+                <Input w='90%' colorScheme='white' variant='outline' id='value' placeholder='value'></Input>
+                <Button colorScheme='white' variant='outline' onClick={()=>addItem()}>Add property</Button>
+                <Divider />
+                <Button colorScheme='white' variant='outline' onClick={()=>createObject()}>Finish object</Button>
+              </VStack>
+
             </div>
             <input type='checkbox' value={props.wrap} checked={props.wrap} onChange={()=>{props.setWrap(wrap => !wrap)}}/>Wrap value in a DAG
             <br/>
@@ -60,8 +82,10 @@ function ObjectCreator(props) {
           </div>
         ) : (
           <div>
-            <input id='name' placeholder='name'></input>
-            <button onClick={nameProject}>Name the Project</button>
+            <VStack >
+              <Input w='80%' variant='outline' colorScheme='white' id='name' placeholder='name'></Input>
+              <Button variant='outline' colorScheme='white' onClick={()=>nameProject()}>Name the project</Button>
+            </VStack>
           </div>
         )}
       </div>

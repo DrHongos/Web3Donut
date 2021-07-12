@@ -41,7 +41,9 @@ function Donut(props) {
 
     root.each(d => d.current = d);
 
-    const svg = d3.select("svg")
+    const svg = d3
+        .select('#graph')
+        .append('svg')
         .attr("viewBox", [0, 0, width, width])
         .style("font", "10px sans-serif");
 
@@ -174,11 +176,11 @@ function Donut(props) {
       const y = (d.y0 + d.y1) / 2 * radius;
       return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
     }
-    return svg.node();
+      return svg.node();
   }
 
   useEffect(() => {
-    d3.selectAll("svg > *").remove();
+    d3.select("#graph").select('svg').remove();
     chart(); //useRef()?
   },[props.dataGraphed, props.data]);// eslint-disable-line react-hooks/exhaustive-deps
 
@@ -186,7 +188,7 @@ function Donut(props) {
     <div>
 
         <div
-          id="3d-graph"
+          id="graph"
           style={{
             display: "flex",
             justifyContent: "center",
@@ -194,8 +196,6 @@ function Donut(props) {
             margin: "5vh auto",
           }}
         >
-        <svg></svg>
-
       </div>
     </div>
   );

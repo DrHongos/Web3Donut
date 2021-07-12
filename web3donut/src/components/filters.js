@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from "react";
+  import React, {useState, useEffect} from "react";
 import Donut from "./D3Graphs/donut";
 import CollapsibleTree from "./D3Graphs/collapsibleTree";
 import {getDagObject} from '../libs/databaseLib'; //, getTreeIpfs
 import {useStateValue } from '../state';
-const protocolsData = require("../libs/modelsObjects/eth-ecosystem");
+import { Select, HStack, Input, InputGroup,InputLeftElement } from "@chakra-ui/react";
+import {Search2Icon} from '@chakra-ui/icons';
 
+const protocolsData = require("../libs/modelsObjects/eth-ecosystem");
 function Filters(props) {
   const [appState] = useStateValue();
   // const [selection, setSelection] = useState();
@@ -28,20 +30,18 @@ function Filters(props) {
         // console.log('entries',entries)
         // first CID : gets the cid of value
         cid = await getDagObject(entries.payload.value.value)
-        // console.log('datacid',cid)
-        // console.log('cid',cid)
+        console.log('cid',cid)
         // Then gets the object of that cid
         dagObj = await getDagObject(cid.value)
         // supposedly a json object
-        const dagObject = JSON.parse(dagObj.value)
-        // console.log('dagObj',dagObject)
-        // console.log('dagOb', dagObject)
+        const dagObject = JSON.parse(dagObj.value) // objects has been stringified because of error on loading (?)
+        console.log('dagObj',dagObject)
 
         // with different categories
         // let dagTree = await getTreeIpfs(cid.value)
         // console.log('obj tree', dagTree)
         for(let branch in dagObject){
-          if(branch !== 'name'){
+          if(branch !== 'name'){ // ignore the name (and other metadata) to retrieve the sub objects
             // console.log('branch',branch)
             // we retrieve the object inside each category
             // console.log(dagObject[branch]) // i need to differentiate Qm.. from v1 CID's
@@ -136,6 +136,14 @@ function Filters(props) {
     // }
   const treeSearch = (res) => {return {name:"ethereum", children:res}};
 
+  const handleDatabase = (type) =>{
+    if(type === 'local'){
+      setData(protocolsData)
+    }else{
+      getLatestDB(type)
+    }
+  }
+
   return (
       <div
         id="filters"
@@ -145,6 +153,7 @@ function Filters(props) {
         }}
 
       >
+<<<<<<< HEAD
       <hr className="solid"/>
       Database type:
       <button onClick={() => {
@@ -200,6 +209,45 @@ function Filters(props) {
         <a>{selection.url}</a>
         </div>
         :null*/}
+=======
+
+      <HStack>
+        <Select w='25%' placeholder="Database selector" onChange={(e)=>handleDatabase(e.target.value)} >
+          <option value="local">Local (hardcoded)</option>
+          <option disabled={!appState.entries.length >0} value="ipfsObject">IPFS Object</option>
+          <option disabled={!appState.entriesDAGtest.length >0} value="ipfsDag">IPFS DAG</option>
+        </Select>
+
+        <Select w='25%' placeholder="Graph type" onChange={(e)=>setVis(e.target.value)} >
+          <option value="sunburst" default>Donut</option>
+          <option value="collapsibleTree">Tree</option>
+        </Select>
+
+      <InputGroup >
+          <InputLeftElement
+            pointerEvents="none"
+            children={<Search2Icon color="gray.300" />}
+          />
+          <Input type="tel" placeholder="Search"
+            onChange={(e)=>setSearch(e.target.value)}
+          />
+      </InputGroup>
+      </HStack>
+
+      {vis === 'sunburst'?
+        <Donut
+        data = {data}
+        dataGraphed = {dataGraphed}
+        />
+      :null}
+      {vis === 'collapsibleTree'?
+        <CollapsibleTree
+        data = {data}
+        dataGraphed = {dataGraphed}
+        />
+      :null}
+
+>>>>>>> chakra
       </div>
 
   );

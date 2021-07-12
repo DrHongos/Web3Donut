@@ -3,13 +3,17 @@ import {
   initIPFS, initOrbitDB,  getDB, getAllDatabases,
 } from '../libs/databaseLib'
 import { actions, useStateValue } from '../state'
+import { Spinner, HStack, VStack, Box, Text, IconButton } from "@chakra-ui/react"
+import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
+import CopyableText from './commons/copyableText';
+import {useWeb3Context} from '../libs/Web3Context';
 
 function Systems () {
   const [appState, dispatch] = useStateValue();
-  const [loading, setLoading] = useState(false);
+  const [completeUser, setCompleteUser] = useState(false);
+  const { providerChainId, account } = useWeb3Context();
 
   const fetchDB = async (address, type) => {
-    setLoading(true)
     const db = await getDB(address)
     if (db) {
       let entries
@@ -41,15 +45,21 @@ function Systems () {
       case 'ipfsObject':
         dispatch({ type: actions.DB.SET_DB, db, entries })
         break;
-      default:
-        console.warn('Unknown Type', type)
-      }
-      // console.log('DB ',type,'retrieved!  ')
-      setLoading(false)
-    } else {
-      console.log(`${address} couldn't be found`)
+    }
+    }else{
+      console.log(address, ' couldnt be found')
     }
   }
+
+  // function copyToClipboard() {
+  //   var copyText = document.querySelector("#user");
+  //   var range = document.createRange();
+  //   range.selectNode(copyText);
+  //   window.getSelection().addRange(range);
+  //   console.log('Copied ',copyText.textContent,' to the clipboard')
+  //   document.execCommand("copy");
+  // }
+
 
   async function initDatabases(){
     await fetchDB('/orbitdb/zdpuB2TjWHFxPnxng4EUYX3B6s67EjcfXGf2J6uFZE7PbazCF/ipfsObject', 'ipfsObject')
@@ -86,42 +96,68 @@ function Systems () {
       })()
   }, [dispatch])// eslint-disable-line react-hooks/exhaustive-deps
 
+  const SystemElement = (props)=> (
+      <HStack fontSize='sm' spacing={1} fontWeight='semibold'>
+        <Text>{props.name}</Text>{''}
+        {props.isLoading?
+          <Spinner />
+          :
+          <CheckCircleIcon />
+        }
+        {props.data?
+          <Box>
+          {props.func?
+            <IconButton
+              colorScheme="white"
+              icon={<LinkIcon />}
+              isDisabled = {props.isLoading}
+              onClick={()=>initDatabases()}>
+            </IconButton>
+            :
+            <Box>
+            {completeUser?
+              <CopyableText text={props.data}/> // handle close
+              :
+              <Text onClick={()=>setCompleteUser(!completeUser)}>{props.data.slice(0,7)}...</Text>
+
+            }
+            </Box>
+          }
+          </Box>
+        :null}
+      </HStack>
+  )
+
   return (
-    <div>
-      {loading && <h3>Loading…</h3>}
-      <div>
-        <span>IPFS - </span>
-        {appState.ipfsStatus !== 'Started' && (
-          <span>Not </span>
-        )}
-        <span>Connected</span>
-      </div>
-      <div>
-        <span>OrbitDB - </span>
-        {appState.orbitdbStatus !== 'Started' && (
-          <span>Not </span>
-        )}
-        <span>Connected</span>
-      </div>
-      <div>
-        <span>User: </span>
-        {appState.user ? (
-          <span title={appState.user}>
-            {appState.user.slice(0, 7)}…
-          </span>
-        ) : (
-          <span>Not Connected</span>
-        )}
-      </div>
-      <div>
-        <span>Databases - </span>
-        {!appState.db && <span>Not </span>}
-        <span>Connected</span>
-      </div>
-      <div>
-        <button onClick={initDatabases}>Update</button>
-      </div>
-    </div>
+    <Box  w='30%' border='1px solid lightgray'>
+      <VStack  alignItems='left'>
+          <SystemElement
+            name = 'IPFS'
+            isLoading = {appState.ipfsStatus !== 'Started'}
+            />
+          <SystemElement
+            name = 'OrbitDB'
+            isLoading = {appState.orbitdbStatus !== 'Started'}
+            />
+          <SystemElement
+            name = 'User'
+            isLoading = {!appState.user}
+            data = {appState.user}
+            />
+          <SystemElement
+            name = 'Shared DBs'
+            isLoading = {!appState.db}
+            data = 'Refresh'
+            func = {true}
+            />
+          <SystemElement
+            name = 'Web3'
+            isLoading = {!account}
+            data = {providerChainId !== 100? 'Connect to xdai' : account}
+            />
+
+      </VStack>
+    </Box>
   )
 }
 

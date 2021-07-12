@@ -1,16 +1,22 @@
 import React, {useState, useEffect} from "react";
 import {getDB, ipldExplorer} from "../libs/databaseLib";
 import DBTools from './databaseTools';
-import copy from '../libs/icons/copy.png';
-import explore from '../libs/icons/explore.png';
-
+import CopyableText from './commons/copyableText';
+import {Spinner, Center, Table, TableCaption, Thead, Tbody, Tr,Th,Td, IconButton, Text, Link, VStack } from '@chakra-ui/react'
+import {Search2Icon} from '@chakra-ui/icons';
 import '../App.css'
 
 function EditModal(props) {
   const [loading, setLoading] = useState(false);
   const [db, setDb] = useState(null);
   const [entries, setEntries] = useState([]);
-  const canWrite = (db) =>{return db.access._write.includes(props.user) || db.access._write[0] ==='*'};
+  const canWrite = (db) => {
+    try{
+      return db.access._write.includes(props.user) || db.access._write[0] ==='*'
+    }catch{
+      return true
+    }
+  };
 
   useEffect(async ()=>{ // eslint-disable-line react-hooks/exhaustive-deps
       setLoading(true);
@@ -38,80 +44,83 @@ function EditModal(props) {
     fetchDB(props.address)
   },[props.address, setDb, setEntries])
 
-  function copyToClipboard() {
-    var copyText = document.querySelector("#address");
-    var range = document.createRange();
-    range.selectNode(copyText);
-    window.getSelection().addRange(range);
-    // console.log('Copied ',copyText,' to the clipboard')
-    document.execCommand("copy");
-  }
 
   return (
-      <div>
+      <Center>
       {db?
         <div>
-        <span>
-          <p>Address: </p>
-          <p id='address'>{props.address}
-          <button onClick={()=>copyToClipboard()}><img src={copy} alt='copy to clipboard' width="20" height="23"></img></button>
-          </p>
-        </span>
-        {loading? 'loading..':
-        <div>
-          {entries && entries.length > 0?
-            <table>
-              <tr>
-                {db._type === 'keyvalue' || db._type === 'eventlog'?
-                <th>functions</th>
-                :null}
-                {db._type !== 'counter'?
-                <th>key</th>
-                :null}
-                <th>value</th>
-              </tr>
-            {entries.map((x, item)=>{return (
-              <tr key={item}>
-              {db._type === 'keyvalue' || db._type === 'eventlog'?
-              <td><button onClick={()=>ipldExplorer(x.payload.value.value)}><img src={explore} alt='explore' width="20" height="23"></img></button></td>
-              :null}
-              {db._type !== 'counter'?
-                <td>
-                  <p>{x.payload.value.key}</p>
-
-                  {db._type === 'docstore'?
-                  <p>{x.payload.value._id}</p>
-                  :null}
-                  </td>
-                :null}
-
-                {db._type === 'keyvalue'?
-                  <td>{x.payload.value.value.value}</td>
-                :null}
-                {(db._type === 'eventlog' || db._type === 'docstore')?
-                  <td>{x.payload.value.value}</td>
-                :null}
-                {db._type === 'counter'?
-                  <td>{x.payload.value}</td>
-                :null}
-              </tr>
-            )})}
-
-          </table>
-          :<p>no entries or DB not synched..  <a href='https://www.youtube.com/watch?v=MkoeqtKUUe4' target='_blank' rel='noreferrer' style={{color:'white'}}>listen meanwhile</a></p>}
-        </div>
-        }
-
+        {loading? <Spinner />:
         <div>
         <DBTools
           db = {db}
           canWrite = {canWrite(db)}
           setEntries = {setEntries}
         />
+        <CopyableText text={props.address} />
+          {entries && entries.length > 0?
+            <VStack>
+            <Table size='sm'>
+              <TableCaption placement='top' style={{color:'white', fontWeight:'bold'}}>
+                <Text>Can i write: {canWrite(db)?'yes':'no'}</Text>
+              </TableCaption>
+              <Thead>
+                <Tr>
+                  {db._type === 'eventlog'?
+                  <Th>functions</Th>
+                  :null}
+                  {db._type !== 'counter'?
+                  <Th>key</Th>
+                  :null}
+                  <Th>value</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+            {entries.map((x, item)=>{return (
+              <Tr key={item}>
+              {db._type === 'eventlog'?
+              <Td>
+                <IconButton
+                  colorScheme="white"
+                  aria-label="Search entry"
+                  onClick={()=>ipldExplorer(x.payload.value.value)}
+                  icon={<Search2Icon />}
+                />
+              </Td>
+              :null}
+              {db._type !== 'counter'?
+                <Td>
+                  <p>{x.payload.value.key}</p>
+
+                  {db._type === 'docstore'?
+                  <p>{x.payload.value._id}</p>
+                  :null}
+                </Td>
+                :null}
+
+                {db._type === 'keyvalue'?
+                  <Td>{x.payload.value.value.value?x.payload.value.value.value:x.payload.value.value}</Td>
+                :null}
+                {(db._type === 'eventlog' || db._type === 'docstore')?
+                  <Td>{x.payload.value.value}</Td>
+                :null}
+                {db._type === 'counter'?
+                  <Td>{x.payload.value}</Td>
+                :null}
+              </Tr>
+            )})}
+          </Tbody>
+          </Table>
+          </VStack>
+          :
+          <Center>
+          <Text>no entries or DB not synched..  <Link href='https://www.youtube.com/watch?v=MkoeqtKUUe4' target='_blank' rel='noreferrer' style={{color:'white'}}>listen meanwhile</Link><
+          /Text>
+          </Center>}
         </div>
+        }
       </div>
       :'There are no entries in this database, make the first!'}
-    </div>
+    </Center>
 
 
   );

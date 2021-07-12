@@ -1,7 +1,14 @@
 import IPFS from 'ipfs'
 import OrbitDB from 'orbit-db'
+<<<<<<< HEAD
 import CID from 'cids'
 import Config from './config'
+=======
+import DaoHausController from './access_test';
+const CID = require('cids')
+let AccessControllers = require('orbit-db-access-controllers')
+AccessControllers.addAccessController({ AccessController: DaoHausController })
+>>>>>>> chakra
 
 // const IpfsClient = require('ipfs-http-client') // for ipfs daemon cases??
 
@@ -20,9 +27,15 @@ export const initIPFS = async () => {
 }
 
 export const initOrbitDB = async (ipfs) => {
+<<<<<<< HEAD
   if(!orbitdb) {
     orbitdb = await OrbitDB.createInstance(ipfs, { repo: './orbitDB' })
   }
+=======
+// add different repo from ipfs or its conflict
+  orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB', AccessControllers: AccessControllers})
+  console.log('orbit instance: ', orbitdb)
+>>>>>>> chakra
   return orbitdb
 }
 
@@ -66,7 +79,11 @@ export function ipldExplorer(address) {
 export const addDatabase = async (address) => {
   // console.log(address)
   const db = await getDB(address)
+<<<<<<< HEAD
   console.log('Adding', db)
+=======
+  // console.log(db)
+>>>>>>> chakra
   return programs.add({
     name: db.dbname,
     type: db.type,
@@ -75,18 +92,40 @@ export const addDatabase = async (address) => {
   })
 }
 
-export const createDatabase = async (name, type, permissions) => {
+
+export const createDatabase = async (name, type, permissions, provider,extra) => {
   let accessController
+  let options
   switch (permissions) {
+<<<<<<< HEAD
   case 'public':
     accessController = { write: ['*'] }
     break
   default:
     accessController = { write: [orbitdb.identity.id] }
     break
+=======
+    case 'public':
+      accessController = { write: ['*'] }
+      break
+    case 'daoHaus':
+      options={ipfs: ipfsNode, web3: provider, contractAddress:extra , accessController:{type:'daohausmember'}} //,defaultAccount: [orbitdb.identity.id]
+      break
+    case 'orbitdb':
+      accessController = {type:'orbitdb', write: [orbitdb.identity.id]}
+      break
+    default:
+      accessController = { write: [orbitdb.identity.id] }
+      break
+>>>>>>> chakra
   }
 
-  const db = await orbitdb.create(name, type, { accessController })
+  let db;
+  if(options){
+    db = await orbitdb.create(name, type, {options})
+  }else{
+    db = await orbitdb.create(name, type, { accessController })
+  }
 
   return programs.add({
     name,
