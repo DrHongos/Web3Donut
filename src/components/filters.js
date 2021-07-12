@@ -153,63 +153,6 @@ function Filters(props) {
         }}
 
       >
-<<<<<<< HEAD
-      <hr className="solid"/>
-      Database type:
-      <button onClick={() => {
-        setData(protocolsData)
-      }}>Local</button>
-      <button disabled={appState.entries.length === 0} onClick={()=>{getLatestDB('ipfsObject')}}>ipfsObject</button>
-      <button disabled={appState.entriesDAGtest.length === 0} onClick={()=>{getLatestDB('ipfsDag')}}>ipfsDAG</button><br />
-      <hr className="solid"/>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'top',
-            alignItems: 'left',
-            margin: '0vh auto',
-          }}
-          id='environment'
-        >
-        <input placeholder='Search' onChange={(e)=>setSearch(e.target.value)}></input><br />
-        <span>Graph Type:
-          <button onClick={()=>setVis('sunburst')}>Donut</button>
-          <button onClick={()=>setVis('collapsibleTree')}>Tree</button>
-        </span>
-        </div>
-
-        {vis === 'sunburst' && (
-          <Donut
-            {...{ data, dataGraphed }}
-            style={{
-              'min-height': '90vmin',
-              'min-width': '90vmin',
-            }}
-          />
-        )}
-        {vis === 'collapsibleTree' && (
-          <CollapsibleTree
-            {...{ data, dataGraphed }}
-            style={{
-              'min-height': '90vmin',
-              'min-width': '90vmin',
-            }}
-          />
-        )}
-      {/*results?
-        <ul>
-        {results.map(x=>{return <li key={x.name}>{x&&x.children?
-          <button onClick={()=>console.log(x)}>{x.name}/{x.children[0].name}</button>
-          :x.name}</li>})}
-          </ul>
-          :null*/}
-      {/*selection?
-        <div>
-        <h3>{selection.name}</h3>
-        <a>{selection.url}</a>
-        </div>
-        :null*/}
-=======
 
       <HStack>
         <Select w='25%' placeholder="Database selector" onChange={(e)=>handleDatabase(e.target.value)} >
@@ -247,7 +190,6 @@ function Filters(props) {
         />
       :null}
 
->>>>>>> chakra
       </div>
 
   );

@@ -1,36 +1,13 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import {
-  createDatabase, getAllDatabases,
-} from "../libs/databaseLib";
-=======
 import React, {useState} from "react";
 import {createDatabase, getAllDatabases} from "../libs/databaseLib";
 import {Button, Input,VStack, Select} from '@chakra-ui/react';
 // import {Search2Icon} from '@chakra-ui/icons';
 import {useWeb3Context} from '../libs/Web3Context';
->>>>>>> chakra
 
 function DatabaseCreate(props) {
   const [createDB, setCreateDB] = useState(false);
   const {provider} = useWeb3Context();
 
-<<<<<<< HEAD
-  async function createNewDB() {
-    const { value: nameDB } = document.getElementById('nameDB')
-    const { value: type } = document.getElementById('type')
-    const { value: permissions } = (
-      document.getElementById('permissions')
-    )
-    await (
-      createDatabase(nameDB, type, permissions)
-      .then((hash) => {
-        console.log('Created', hash)
-        getAllDatabases().then((data) => {
-          console.log('Loaded Programs', data)
-          setOpenCreate(false);
-        })
-=======
   async function createNewDB(){
     let nameDB = document.getElementById('nameDB').value
     let type = document.getElementById('type').value
@@ -40,7 +17,6 @@ function DatabaseCreate(props) {
       console.log("Created", hash)
       getAllDatabases().then((data) => {
         console.log("Loaded programs", data)
->>>>>>> chakra
       })
     )
   }

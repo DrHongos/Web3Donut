@@ -1,14 +1,9 @@
 import IPFS from 'ipfs'
 import OrbitDB from 'orbit-db'
-<<<<<<< HEAD
-import CID from 'cids'
-import Config from './config'
-=======
 import DaoHausController from './access_test';
 const CID = require('cids')
 let AccessControllers = require('orbit-db-access-controllers')
 AccessControllers.addAccessController({ AccessController: DaoHausController })
->>>>>>> chakra
 
 // const IpfsClient = require('ipfs-http-client') // for ipfs daemon cases??
 
@@ -27,15 +22,9 @@ export const initIPFS = async () => {
 }
 
 export const initOrbitDB = async (ipfs) => {
-<<<<<<< HEAD
-  if(!orbitdb) {
-    orbitdb = await OrbitDB.createInstance(ipfs, { repo: './orbitDB' })
-  }
-=======
 // add different repo from ipfs or its conflict
   orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB', AccessControllers: AccessControllers})
   console.log('orbit instance: ', orbitdb)
->>>>>>> chakra
   return orbitdb
 }
 
@@ -79,11 +68,7 @@ export function ipldExplorer(address) {
 export const addDatabase = async (address) => {
   // console.log(address)
   const db = await getDB(address)
-<<<<<<< HEAD
-  console.log('Adding', db)
-=======
   // console.log(db)
->>>>>>> chakra
   return programs.add({
     name: db.dbname,
     type: db.type,
@@ -97,14 +82,6 @@ export const createDatabase = async (name, type, permissions, provider,extra) =>
   let accessController
   let options
   switch (permissions) {
-<<<<<<< HEAD
-  case 'public':
-    accessController = { write: ['*'] }
-    break
-  default:
-    accessController = { write: [orbitdb.identity.id] }
-    break
-=======
     case 'public':
       accessController = { write: ['*'] }
       break
@@ -117,7 +94,6 @@ export const createDatabase = async (name, type, permissions, provider,extra) =>
     default:
       accessController = { write: [orbitdb.identity.id] }
       break
->>>>>>> chakra
   }
 
   let db;
