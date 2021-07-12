@@ -26,7 +26,6 @@ function Donut(props) {
     data = props.dataGraphed;
   }
 
-
   const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1)) // this kills the color palette in ipfs_API
   const partition = data => {
     const root = d3.hierarchy(data)
@@ -57,39 +56,40 @@ function Donut(props) {
         .attr("class", "tooltip")
         .style("color", 'white');
 
-    const path = g.append("g")
-    .selectAll("path")
-    .data(root.descendants().slice(1))
-    .join("path")
-    .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-    .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
-    .attr("d", d => arc(d.current))
-    .on("mouseover", function(d) {
-      div.transition()
-      .duration(200)
-      .style("opacity", .9);
-      div.html(`<span>name: ${d.target.__data__.data.name}</span><br/><span>url: ${d.target.__data__.data.url}</span><br/><span>description: ${d.target.__data__.data.description}</span>`)
-      .style("right", "1px")
-      .style("top",  "1px");
-    })
-    .on("mouseout", function(d) {
-      div.transition()
-      .duration(500)
-      .style("opacity", 0)
-    });
+    const path = (
+      g.append("g")
+      .selectAll("path")
+      .data(root.descendants().slice(1))
+      .join("path")
+      .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+      .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
+      .attr("d", d => arc(d.current))
+      .on('mouseover', (evt, d) => {
+        console.info('EVT', evt.target)
+        div.transition()
+        .duration(200)
+        .style("opacity", .9);
+        // div.html(`<span>name: ${evt.target.__data__.data.name}</span><br/><span>url: ${d.target.__data__.data.url}</span><br/><span>description: ${d.target.__data__.data.description}</span>`)
+        // .style("right", "1px")
+        // .style("top",  "1px");
+      })
+      .on("mouseout", function(d) {
+        div.transition()
+        .duration(500)
+        .style("opacity", 0)
+      })
+    );
 
-    path.filter(d => d.children)
-        .style("cursor", "pointer")
-        .on("click", clicked)
-
-    path.filter(d => !d.children)
-        .style("cursor","crosshair")
-        .on("click", goto)
+    path.style('cursor', d => (
+      Boolean(d.children) ? 'crosshair' : 'pointer'
+    ))
+    .on('click', clicked)
 
     path.append("title")
         .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
 
-    const label = g.append("g")
+    const label = (
+      g.append("g")
         .attr("pointer-events", "all")
         .attr("text-anchor", "middle")
         .style("user-select", "none")
@@ -101,18 +101,23 @@ function Donut(props) {
         .attr("transform", d => labelTransform(d.current))
         .style('fill', 'white')
         .text(d => d.data.name)
-        // test for improve letters and visibility (currently affects all label objects!)
-        // .on("mouseover", d => {
-        //   label.transition()
-        //   .duration(100)
-        //   .style("font-size", "20px");
-        //
-        // })
-        // .on("mouseout", function(d) {
-        //   label.transition()
-        //   .duration(100)
-        //   .style("font-size", "10px");
-        // })
+        .style('cursor', d => (
+          Boolean(d.children) ? 'crosshair' : 'pointer'
+        ))
+        .on('click', clicked)
+        .on('mouseover', (evt) => {
+          d3.select(evt.target)
+          .transition()
+          .duration(100)
+          .style('font-size', '20px');
+        })
+        .on('mouseout', (evt) => {
+          d3.select(evt.target)
+          .transition()
+          .duration(100)
+          .style('font-size', '10px');
+        })
+    );
 
     const parent = g.append("image")
         .attr("pointer-events", "all")
@@ -123,12 +128,12 @@ function Donut(props) {
           .attr('x',-80)
           .attr('y',-80)
 
-    function goto(event, p){
-      const url = p.data.url;
-      if(url) window.open(url, '_blank').focus();
-    }
-
     function clicked(event, p) {
+      const { data: { url } } = p;
+      if(url) {
+        return window.open(url, '_blank').focus();
+      }
+      console.info('P', p)
       if(!p) return;
       parent.datum(p.parent || root);
       root.each(d => d.target = {

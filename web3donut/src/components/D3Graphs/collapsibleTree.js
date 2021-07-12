@@ -8,9 +8,9 @@ function CollapsibleTree(props) {
   const width = 700;
   let data;
   const dataOriginal = !props.dataGraphed || props.dataGraphed.children.length === 0;
-  if(dataOriginal ){
-    data  = props.data;
-  }else{
+  if(dataOriginal) {
+    data = props.data;
+  } else {
     data = props.dataGraphed;
   }
 
@@ -35,6 +35,10 @@ function CollapsibleTree(props) {
         .attr("viewBox", [-margin.left, -margin.top, width, dx])
         .style("font", "10px sans-serif")
         .style("user-select", "none");
+
+    Object.entries(props.style ?? {}).forEach(([attr, val]) => {
+      svg.style(attr, val)
+    });
 
     const gLink = svg.append("g")
         .attr("fill", "none")

@@ -1,7 +1,7 @@
 import IPFS from 'ipfs'
-import Config from './config'
 import OrbitDB from 'orbit-db'
-const CID = require('cids')
+import CID from 'cids'
+import Config from './config'
 
 // const IpfsClient = require('ipfs-http-client') // for ipfs daemon cases??
 
@@ -11,36 +11,34 @@ let ipfsNode
 
 // for personal DB's
 let programs;
-// Start IPFS
-export const initIPFS = async () => {
-//test with ipfs-http-client
-  // const ipfsNode = await IpfsClient.create(Config.ipfs)
-  // return ipfsNode
 
- ipfsNode = await IPFS.create(Config.ipfs)
- return ipfsNode;
+export const initIPFS = async () => {
+  if(!ipfsNode) {
+    ipfsNode = await IPFS.create(Config.ipfs)
+  }
+  return ipfsNode
 }
 
-
-// Start OrbitDB
 export const initOrbitDB = async (ipfs) => {
-// add different repo from ipfs or its conflict
-  orbitdb = await OrbitDB.createInstance(ipfs, {repo:'./orbitDB'})
+  if(!orbitdb) {
+    orbitdb = await OrbitDB.createInstance(ipfs, { repo: './orbitDB' })
+  }
   return orbitdb
 }
 
 export const getAllDatabases = async () => {
-  if (!programs && orbitdb) {
-    // Load programs database
+  if(!programs && orbitdb) {
     programs = await orbitdb.feed('browser.programs', {
       accessController: { write: [orbitdb.identity.id] },
-      create: true
+      create: true,
     })
     await programs.load()
   }
-  return programs
-    ? programs.iterator({ limit: -1 }).collect()
-    : []
+  return (
+    programs ? (
+      programs.iterator({ limit: -1 }).collect()
+    ) : []
+  )
 }
 
 export const getDB = async (address) => {
@@ -49,9 +47,12 @@ export const getDB = async (address) => {
     db = await orbitdb.open(address)
     await db.load()
     db.events.on('replicated', () => {
-      console.log('replicated',db)
-      const result = db.iterator({ limit: -1 }).collect().map(e => e.payload.value) // gives an error
-      console.log(result.join('\n'))
+      console.log('replicated', db)
+      const result = (
+        db.iterator({ limit: -1 }).collect()
+        .map(e => e.payload.value) // gives an error
+      )
+      console.table(result)
     })
   }
   return db
@@ -59,13 +60,13 @@ export const getDB = async (address) => {
 
 export function ipldExplorer(address) {
   let url = `https://explore.ipld.io/#/explore/${address}`
-  if(url) window.open(url, '_blank').focus();
+  if(url) window.open(url, '_blank').focus()
 }
 
 export const addDatabase = async (address) => {
   // console.log(address)
   const db = await getDB(address)
-  console.log(db)
+  console.log('Adding', db)
   return programs.add({
     name: db.dbname,
     type: db.type,
@@ -77,12 +78,12 @@ export const addDatabase = async (address) => {
 export const createDatabase = async (name, type, permissions) => {
   let accessController
   switch (permissions) {
-    case 'public':
-      accessController = { write: ['*'] }
-      break
-    default:
-      accessController = { write: [orbitdb.identity.id] }
-      break
+  case 'public':
+    accessController = { write: ['*'] }
+    break
+  default:
+    accessController = { write: [orbitdb.identity.id] }
+    break
   }
 
   const db = await orbitdb.create(name, type, { accessController })
@@ -95,33 +96,33 @@ export const createDatabase = async (name, type, permissions) => {
   })
 }
 
-
-export const getPublicKey = async () =>{
-  let ipfsId = await ipfsNode.id();
-  return ipfsId.publicKey;
+export const removeDatabase = async (hash) => {
+  console.log('Removing', hash)
+  return programs.remove(hash)
 }
 
-const recreateCid = (cid) =>{
-  const properCid = new CID(cid);
-  return properCid;
-}
+export const getPublicKey = async () => (
+  (await ipfsNode.id()).publicKey
+)
 
-export const isCID = (cid) => {return CID.isCID(cid)};
+const recreateCid = (cid) => (
+  new CID(cid)
+)
 
-export const getDagCid = async (cid, path) =>{
-  if(!CID.isCID(cid)){
-    let properCid = recreateCid(cid)
-    cid = properCid
+export const { isCID } = CID
+
+export const getDagCid = async (cid, path) => {
+  if(!isCID(cid)) {
+    cid = recreateCid(cid)
   }
-  let dataR = (await ipfsNode.dag.get(cid, {path}))
-  if(dataR){
-      let res = dataR
-      console.log(res)
-      return res;
-    }
-    else{
-        console.log('error! data is undefined')
-      }
+  let dataR = await ipfsNode.dag.get(cid, { path })
+  if(dataR) {
+    let res = dataR
+    console.log(res)
+    return res;
+  } else {
+    console.log('Error! Data is undefined')
+  }
 }
 
 export const getDagObject = async (cid) =>{
@@ -131,40 +132,34 @@ export const getDagObject = async (cid) =>{
   }
 }
 
-export const getV0 = async (cid) =>{ //asyncgenerator
-  let res = await ipfsNode.get(cid);
-  return res;
-}
+export const getV0 = async (cid) => ( //asyncgenerator
+  await ipfsNode.get(cid)
+)
 
-export const getIpfs = async (cid) =>{
-  let res = await ipfsNode.get(cid);
-  return res;
-}
+export const getIpfs = getV0
 
-export const dagPreparation = async (data) =>{
+export const dagPreparation = async (data) => (
   // in put {pin:true}
-  let cid = await ipfsNode.dag.put(data);
-  return cid;
+  await ipfsNode.dag.put(data)
+)
+
+export const addIpfs = async (data) => {
+  const { cid } = await ipfsNode.add(data)
+  console.log('Added', cid)
+  return cid
 }
 
-export const addIpfs = async (data) =>{
-  let cid = await ipfsNode.add(data);
-  console.log(cid)
-  return cid.cid;
-}
-
-export const getTreeIpfs = async (cid, path) =>{
-  if(!CID.isCID(cid)){
-    let properCid = recreateCid(cid)
-    cid = properCid
+export const getTreeIpfs = async (cid, path) => {
+  if(!isCID(cid)){
+    cid = recreateCid(cid)
   }
-  let results = []
-  let tree = await ipfsNode.dag.tree(cid, {path});
+  const results = []
+  const tree = await ipfsNode.dag.tree(cid, { path })
   for await (const item of tree) {
     // console.log(item)
     results.push(item)
   }
-  return results;
+  return results
 }
 
 export const getFromIpfs = async (cid) =>{
@@ -174,14 +169,8 @@ export const getFromIpfs = async (cid) =>{
     // chunks of data are returned as a Buffer, convert it back to a string // it doesn't work!
     data += chunk.toString()
   }
-  if(data !== ''){
-    return data;
-  }else{
-    return 'nothing was found in '+cid.toString()
+  if(data !== '') {
+    return data
   }
-
-}
-export const removeDatabase = async (hash) => {
-  console.log(hash.hash)
-  return programs.remove(hash.hash)
+  return `Nothing was found in '${cid.toString()}'`
 }

@@ -145,45 +145,48 @@ function Filters(props) {
         }}
 
       >
-      <hr class="solid"></hr>
+      <hr className="solid"/>
       Database type:
-      <button onClick={()=>{
+      <button onClick={() => {
         setData(protocolsData)
-      }}>local</button>
-      <button disabled={!appState.entries.length >0} onClick={()=>{getLatestDB('ipfsObject')}}>ipfsObject</button>
-      <button disabled={!appState.entriesDAGtest.length >0} onClick={()=>{getLatestDB('ipfsDag')}}>ipfsDAG</button><br />
-      <hr class="solid"></hr>
+      }}>Local</button>
+      <button disabled={appState.entries.length === 0} onClick={()=>{getLatestDB('ipfsObject')}}>ipfsObject</button>
+      <button disabled={appState.entriesDAGtest.length === 0} onClick={()=>{getLatestDB('ipfsDag')}}>ipfsDAG</button><br />
+      <hr className="solid"/>
         <div
           style={{
-            display:'flex',
-            justifyContent:'top',
-            alignItems:'left',
-            margin:"0vh auto"
+            display: 'flex',
+            justifyContent: 'top',
+            alignItems: 'left',
+            margin: '0vh auto',
           }}
-          id='environment'>
+          id='environment'
+        >
         <input placeholder='Search' onChange={(e)=>setSearch(e.target.value)}></input><br />
-        <span>Graph type:
-          <button onClick={()=>setVis('sunburst')}>donut</button>
-          <button onClick={()=>setVis('collapsibleTree')}>tree</button>
+        <span>Graph Type:
+          <button onClick={()=>setVis('sunburst')}>Donut</button>
+          <button onClick={()=>setVis('collapsibleTree')}>Tree</button>
         </span>
         </div>
 
         {vis === 'sunburst' && (
           <Donut
-            data={data}
-            dataGraphed={dataGraphed}
+            {...{ data, dataGraphed }}
             style={{
               'min-height': '90vmin',
               'min-width': '90vmin',
             }}
           />
         )}
-        {vis === 'collapsibleTree'?
-        <CollapsibleTree
-        data = {data}
-        dataGraphed = {dataGraphed}
-        />
-        :null}
+        {vis === 'collapsibleTree' && (
+          <CollapsibleTree
+            {...{ data, dataGraphed }}
+            style={{
+              'min-height': '90vmin',
+              'min-width': '90vmin',
+            }}
+          />
+        )}
       {/*results?
         <ul>
         {results.map(x=>{return <li key={x.name}>{x&&x.children?

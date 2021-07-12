@@ -13,12 +13,12 @@ function App() {
     user: null,
     db: null,
     entries: [],
-    dbGuide:null,
-    entriesGuide:[],
-    dbDAGtest:null,
-    entriesDAGtest:[],
-    dbUsers:null,
-    entriesUsers:[],
+    dbGuide: null,
+    entriesGuide: [],
+    dbDAGtest: null,
+    entriesDAGtest: [],
+    dbUsers: null,
+    entriesUsers: [],
     programs: [],
     orbitdbStatus: 'Starting',
     ipfsStatus: 'Starting',
@@ -41,17 +41,20 @@ function App() {
           orbitdbStatus: action.orbitdbStatus
         }
       case actions.SYSTEMS.SET_IPFS:
+        console.info('IPFS', action)
         return {
           ...state,
           ipfsStatus: action.ipfsStatus
         }
       case actions.DB.SET_DB:
+        console.info('DB', action)
         return {
           ...state,
           db: action.db,
           entries: action.entries,
         }
       case actions.DBGUIDE.SET_DBGUIDE:
+        console.info('DBGUIDE', action)
         return {
           ...state,
           dbGuide: action.db,
@@ -102,24 +105,24 @@ function App() {
 
 
   return (
-    <StateProvider initialState={initialState} reducer={reducer}>
-    <div className="App">
-      <header className="App-header">
-      <Systems />
-      <DatabaseForm />
-      <DatabaseLocal />
-      <Filters />
-      </header>
-      <ul>
-        <li>Add DB of guide, which is a follow up (with alerts? or toasts?) of different parts of the app</li>
-        <li>with information taken from the database IPNS blogging style</li>
-        <li>convert ipfsObject (key-value or doc?) into a Search tool to find objects in specific DB (key: 'orbitdb' - value: orbitdb object CID to add in a classificator)</li>
-        <li><a href="https://github.com/orbitdb/orbit-db-access-controllers" target='blank' rel='noopener noreferrer'>access control</a></li>
-        <li>Encryption and privacy</li>
-      </ul>
-    </div>
+    <StateProvider {...{ initialState, reducer }}>
+      <div className="App">
+        <header className="App-header">
+          <Systems />
+          <DatabaseForm />
+          <DatabaseLocal />
+          <Filters />
+        </header>
+        <ul>
+          <li>Add DB of guide, which is a follow up (with alerts? or toasts?) of different parts of the app</li>
+          <li>with information taken from the database IPNS blogging style</li>
+          <li>convert ipfsObject (key-value or doc?) into a Search tool to find objects in specific DB (key: 'orbitdb' - value: orbitdb object CID to add in a classificator)</li>
+          <li><a href="https://github.com/orbitdb/orbit-db-access-controllers" target='blank' rel='noopener noreferrer'>access control</a></li>
+          <li>Encryption and privacy</li>
+        </ul>
+      </div>
     </StateProvider>
   );
 }
 
-export default App;
+export default App

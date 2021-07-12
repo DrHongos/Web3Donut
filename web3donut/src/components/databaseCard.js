@@ -69,7 +69,7 @@ function DBCard(props) {
           <ul>
           {(props?.entries?.length > 0)?
             <div>
-            <hr class="solid"></hr>
+            <hr className="solid"/>
             <p style={{fontSize:'14px'}} >latests {props.entries.length > 5 ? 5 : props.entries.length} events..</p> <br />
             {props.entries.map((x, item)=>
               {return (<li key={x.payload.value.timestamp}>
@@ -98,7 +98,7 @@ function DBCard(props) {
         </div>
         : null
       }
-        <hr class="solid"></hr>
+        <hr className="solid"/>
 
     </div>
 
