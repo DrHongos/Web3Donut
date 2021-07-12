@@ -3,9 +3,11 @@ import { dagPreparation } from '../libs/databaseLib';
 import ObjectCreator from './objectCreation';
 import {Button, ButtonGroup, Input, VStack, Checkbox, IconButton} from '@chakra-ui/react';
 import {AttachmentIcon} from '@chakra-ui/icons';
-
+import {useWeb3Context} from '../libs/Web3Context';
 function DBTools(props) {
   const [wrap, setWrap] = useState(true);
+  const {account} = useWeb3Context();
+  const [includeWeb3Account, setIncludeWeb3Account] = useState(false);
   const[caseSelected, setCaseSelected] = useState();
   // converge all input functions! manage different databases and inputs
   async function createEntry(key, value){
@@ -27,13 +29,24 @@ function DBTools(props) {
       }else{
         valueW = value;
       }
-      //  Metadata of the log
+        //  Metadata of the log
       let timestamp = new Date();
-      let ipfsCid = await dagPreparation({value:valueW,  timestamp:timestamp})
-      // console.log(ipfsCid.toString())
+      let obj;
+      if(includeWeb3Account){
+        obj = {value:valueW,  timestamp:timestamp, account:account}
+      }else{
+        obj = {value:valueW,  timestamp:timestamp}
+      }
+    // all is wrapped in a DAG
+      let ipfsCid = await dagPreparation(obj)
+      console.log(ipfsCid.toString())
       await db.add({key:key,value:ipfsCid.string})
     }else if(db.type === 'keyvalue'){
-      await db.set(key,{value:value})
+      if(includeWeb3Account){
+        await db.set(key, {value:value, account:account})
+      }else{
+        await db.set(key,{value:value})
+      }
     }else if(db.type === 'docstore'){
       await db.put({_id:key, value:value});
     }else if(db.type === 'counter'){
@@ -200,7 +213,10 @@ function DBTools(props) {
       <VStack>
         <Case />
         {caseSelected && caseSelected !=='GrantAccess'?
-          <Checkbox variant='outline' colorScheme='white' type='checkbox' value={wrap} isChecked={wrap} onChange={()=>setWrap(!wrap)}>Wrap value in a DAG</Checkbox>
+          <VStack>
+            <Checkbox variant='outline' colorScheme='white' type='checkbox' value={wrap} isChecked={wrap} onChange={()=>setWrap(!wrap)}>Wrap value in a DAG</Checkbox>
+            <Checkbox variant='outline' colorScheme='white' type='checkbox' value={includeWeb3Account} isChecked={includeWeb3Account} onChange={()=>setIncludeWeb3Account(!includeWeb3Account)}>Include web3 account</Checkbox>
+          </VStack>
           :null}
       </VStack>
     </div>

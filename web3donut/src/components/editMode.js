@@ -17,7 +17,6 @@ function EditModal(props) {
       return true
     }
   };
-  // (db) =>{};
 
   useEffect(async ()=>{ // eslint-disable-line react-hooks/exhaustive-deps
       setLoading(true);
@@ -53,9 +52,9 @@ function EditModal(props) {
         {loading? <Spinner />:
         <div>
         <DBTools
-        db = {db}
-        canWrite = {canWrite(db)}
-        setEntries = {setEntries}
+          db = {db}
+          canWrite = {canWrite(db)}
+          setEntries = {setEntries}
         />
         <CopyableText text={props.address} />
           {entries && entries.length > 0?

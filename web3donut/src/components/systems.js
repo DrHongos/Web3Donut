@@ -4,10 +4,12 @@ import { actions, useStateValue } from '../state'
 import { Spinner, HStack, VStack, Box, Text, IconButton } from "@chakra-ui/react"
 import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
 import CopyableText from './commons/copyableText';
+import {useWeb3Context} from '../libs/Web3Context';
 
 function Systems () {
   const [appState, dispatch] = useStateValue();
   const [completeUser, setCompleteUser] = useState(false);
+  const { providerChainId, account } = useWeb3Context();
 
   const fetchDB = async (address, type) => {
     const db = await getDB(address)
@@ -56,7 +58,7 @@ function Systems () {
     await fetchDB('/orbitdb/zdpuB2TjWHFxPnxng4EUYX3B6s67EjcfXGf2J6uFZE7PbazCF/ipfsObject', 'ipfsObject')
     await fetchDB('/orbitdb/zdpuAsWPoMa1tGvB83f8Kw17DzKnw7jQBE5NmfpFzRMJRE6Tk/ipfsDAG', 'ipfsDAG')
     await fetchDB("/orbitdb/zdpuAwtDbBCfDK7sDpxZn7Jgzj9WxfPgS8STaxWadKtnmTwrk/access.manager",'access.manager')
-    await fetchDB('/orbitdb/zdpuAypWrtsoRiL86ynFGfuEdhRJTEw4STd1RCSLKmzLUZU1b/OrbitDBAccess', 'kvTests')
+    await fetchDB('/orbitdb/zdpuB1HfZEqMk4Fu2M72Zef7tx3tpFJzcNdsUVCjfng6MtunB/kvTests', 'kvTests')
     }
 
 
@@ -137,6 +139,11 @@ function Systems () {
             isLoading = {!appState.db}
             data = 'Refresh'
             func = {true}
+            />
+          <SystemElement
+            name = 'Web3'
+            isLoading = {!account}
+            data = {providerChainId !== 100? 'Connect to xdai' : account}
             />
 
       </VStack>

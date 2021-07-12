@@ -1,35 +1,10 @@
 import IPFS from 'ipfs'
 import Config from './config'
 import OrbitDB from 'orbit-db'
-import OtherAccessController from './access_test';
+import DaoHausController from './access_test';
 const CID = require('cids')
 let AccessControllers = require('orbit-db-access-controllers')
-AccessControllers.addAccessController({ AccessController: OtherAccessController })
-
-// access control:
-//P2P
-//---
-// Owner user grants to user
-
-// Add web3 context, get user address and send it in each entry
-// Later that should be a signature that will be handled (and verifyied by the access control)
-// access control should look at the contract members and only allow those to make entries!
-
-// Contract based
-// ---
-// User can write if address in contract? => DAO!
-// Raid Guild cohort season 1 DAO : 0x10E31C10FB4912BC408Ce6C585074bd8693F2158
-// method: members(addres) >
-// delegateKey(address) shares(uint256) loot(uint256) exists(bool) highestIndexYesVote(uint256) jailed(uint256)
-// [
-// (address) : 0x08b3931b2ae83113c711c92e1bb87989f1fab004
-// (uint256) : 10
-// (uint256) : 0
-// (bool) : true
-// (uint256) : 0
-// (uint256) : 0
-// ]
-
+AccessControllers.addAccessController({ AccessController: DaoHausController })
 
 // const IpfsClient = require('ipfs-http-client') // for ipfs daemon cases??
 
@@ -103,15 +78,16 @@ export const addDatabase = async (address) => {
   })
 }
 
-export const createDatabase = async (name, type, permissions) => {
-  let accessController
 
+export const createDatabase = async (name, type, permissions, provider,extra) => {
+  let accessController
+  let options
   switch (permissions) {
     case 'public':
       accessController = { write: ['*'] }
       break
-    case 'access':
-      accessController = {type:'othertype', write: [orbitdb.identity.id]}
+    case 'daoHaus':
+      options={ipfs: ipfsNode, web3: provider, contractAddress:extra , accessController:{type:'daohausmember'}} //,defaultAccount: [orbitdb.identity.id]
       break
     case 'orbitdb':
       accessController = {type:'orbitdb', write: [orbitdb.identity.id]}
@@ -121,7 +97,12 @@ export const createDatabase = async (name, type, permissions) => {
       break
   }
 
-  const db = await orbitdb.create(name, type, { accessController })
+  let db;
+  if(options){
+    db = await orbitdb.create(name, type, {options})
+  }else{
+    db = await orbitdb.create(name, type, { accessController })
+  }
 
   return programs.add({
     name,

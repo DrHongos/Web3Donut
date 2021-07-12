@@ -2,16 +2,18 @@ import React, {useState} from "react";
 import {createDatabase, getAllDatabases} from "../libs/databaseLib";
 import {Button, Input,VStack, Select} from '@chakra-ui/react';
 // import {Search2Icon} from '@chakra-ui/icons';
-
+import {useWeb3Context} from '../libs/Web3Context';
 
 function DatabaseCreate(props) {
   const [createDB, setCreateDB] = useState(false);
+  const {provider} = useWeb3Context();
 
   async function createNewDB(){
     let nameDB = document.getElementById('nameDB').value
     let type = document.getElementById('type').value
     let permissions = document.getElementById('permissions').value
-    await createDatabase(nameDB,type,permissions).then((hash) => {
+    let extra = document.getElementById('extra').value
+    await createDatabase(nameDB,type,permissions, provider, extra).then((hash) => {
       console.log("Created", hash)
       getAllDatabases().then((data) => {
         console.log("Loaded programs", data)
@@ -34,9 +36,12 @@ function DatabaseCreate(props) {
                 <Select id="permissions">
                   <option value="public">Public</option>
                   <option value="" selected>Only me</option>
-                  <option value="access" >Access control</option>
+                  <option value="daoHaus" >DaoHaus control</option>
                   <option value="orbitdb" >Orbit DB identity</option>
                 </Select>
+                {createDB === 'dauHaus'?
+                  <Input id='extra' placeholder='for options'></Input>
+                :null}
                 <Button variant='outline' colorScheme='white' w='40%' onClick={()=>{createNewDB()}}>create!</Button>
               </VStack>
               :null}

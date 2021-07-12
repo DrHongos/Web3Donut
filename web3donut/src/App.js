@@ -8,6 +8,7 @@ import DatabaseForm from './components/databaseForm';
 import DatabaseLocal from './components/databaseLocal';
 import { ChakraProvider, Box } from '@chakra-ui/react/';
 import { Redirect, Route, Switch, BrowserRouter as Router } from 'react-router-dom';
+import Web3ContextProvider from "./libs/Web3Context";
 
 
 function App() {
@@ -105,20 +106,22 @@ function App() {
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
     <ChakraProvider>
-      <Box
-        backgroundColor='#303030'
-        color='white'
-      >
-        <Router>
-          <Header w='100%'/>
-          <Switch>
-            <Route exact path="/sharedDatabases" component={DatabaseForm} />
-            <Route exact path="/localDatabases" component={DatabaseLocal} />
-            <Route path="/" component={Filters} />
-            <Redirect to="/" />
-          </Switch>
-        </Router>
-      </Box>
+      <Web3ContextProvider>
+        <Box
+          backgroundColor='#303030'
+          color='white'
+        >
+          <Router>
+            <Header w='100%'/>
+            <Switch>
+              <Route exact path="/sharedDatabases" component={DatabaseForm} />
+              <Route exact path="/localDatabases" component={DatabaseLocal} />
+              <Route path="/" component={Filters} />
+              <Redirect to="/" />
+            </Switch>
+          </Router>
+        </Box>
+      </Web3ContextProvider>
 {/*
       <ul>
         <li>Add DB of guide, which is a follow up (with alerts? or toasts?) of different parts of the app</li>
