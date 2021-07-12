@@ -41,20 +41,17 @@ function App() {
           orbitdbStatus: action.orbitdbStatus
         }
       case actions.SYSTEMS.SET_IPFS:
-        console.info('IPFS', action)
         return {
           ...state,
           ipfsStatus: action.ipfsStatus
         }
       case actions.DB.SET_DB:
-        console.info('DB', action)
         return {
           ...state,
           db: action.db,
           entries: action.entries,
         }
       case actions.DBGUIDE.SET_DBGUIDE:
-        console.info('DBGUIDE', action)
         return {
           ...state,
           dbGuide: action.db,

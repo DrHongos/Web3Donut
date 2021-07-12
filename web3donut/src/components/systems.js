@@ -115,7 +115,7 @@ function Systems () {
       </div>
       <div>
         <span>Databases - </span>
-        {appState.db && <span>Not </span>}
+        {!appState.db && <span>Not </span>}
         <span>Connected</span>
       </div>
       <div>

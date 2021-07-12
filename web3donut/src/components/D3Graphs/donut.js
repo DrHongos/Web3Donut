@@ -65,7 +65,6 @@ function Donut(props) {
       .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
       .attr("d", d => arc(d.current))
       .on('mouseover', (evt, d) => {
-        console.info('EVT', evt.target)
         div.transition()
         .duration(200)
         .style("opacity", .9);
@@ -133,7 +132,6 @@ function Donut(props) {
       if(url) {
         return window.open(url, '_blank').focus();
       }
-      console.info('P', p)
       if(!p) return;
       parent.datum(p.parent || root);
       root.each(d => d.target = {

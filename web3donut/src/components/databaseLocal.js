@@ -42,29 +42,31 @@ function DatabaseLocal(props) {
           ) : (
             <div>
               <table>
-                <tr>
+                <thead><tr>
                   <th>Name</th>
                   <th>Type</th>
                   <th>Functions</th>
                   {/* Add views for entries */}
-                </tr>
-                {items.map((item) => {
-                  const { payload: { value: payload }} = item
-                  return (
-                    <tr>
-                      <td>{payload.name}</td>
-                      <td>{payload.type}</td>
-                      <td>
-                        <button onClick={() => setEditModal(payload.address)}>
-                          <img src={edit} alt="Open &amp; Edit" width={20} height={23}/>
-                        </button>
-                        <button onClick={()=>removeDatabase(item.hash)}>
-                          <img src={burn} alt='Delete' width={20} height={23}/>
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                })}
+                </tr></thead>
+                <tbody>
+                  {items.map((item, idx) => {
+                    const { payload: { value: payload }} = item
+                    return (
+                      <tr key={idx}>
+                        <td>{payload.name}</td>
+                        <td>{payload.type}</td>
+                        <td>
+                          <button onClick={() => setEditModal(payload.address)}>
+                            <img src={edit} alt="Open &amp; Edit" width={20} height={23}/>
+                          </button>
+                          <button onClick={()=>removeDatabase(item.hash)}>
+                            <img src={burn} alt='Delete' width={20} height={23}/>
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
               </table>
               {editModal && (
                 <div>

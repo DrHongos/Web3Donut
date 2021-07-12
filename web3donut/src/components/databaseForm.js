@@ -21,7 +21,6 @@ function DatabaseForm() {
         Databases
       </button>
       <hr className="solid"/>
-      <div>{open ? 'O' : 'N'}{console.info('AS', appState) ?? null}</div>
       {open && (
         <div>
           {appState.db && (

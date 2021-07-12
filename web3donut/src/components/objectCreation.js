@@ -45,8 +45,8 @@ function ObjectCreator(props) {
         {fields.length > 0 ? (
           <div>
             <ul>
-              {fields.map((x) => (
-                <li>key: {x.key} - value: {x.value} - <button onClick={()=>deleteItem(x.key)}>delete</button></li>
+              {fields.map((x, idx) => (
+                <li key={idx}>key: {x.key} - value: {x.value} - <button onClick={()=>deleteItem(x.key)}>delete</button></li>
               ))}
             </ul>
             <div>
